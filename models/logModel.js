@@ -44,12 +44,16 @@ module.exports.readAll = (site_id) => {
     })
 }
 
+// ===================
+//         DATE
+// ===================
+
 // view logs by date - all tables
-module.exports.readAllByDate = (site_id, date) => {
+module.exports.selectAllByDate = (site_id, date) => {
     let finalResult = {
+        creation_log: [],
         modification_log: [],
-        deletion_log: [],
-        creation_log: []
+        deletion_log: []
     }
 
     // retrieve from modification table
@@ -95,7 +99,7 @@ module.exports.readAllByDate = (site_id, date) => {
 }
 
 // view logs by date - creation table
-module.exports.readCreationByDate = (site_id, date) => {
+module.exports.selectCreationByDate = (site_id, date) => {
     const sql = `
     SELECT *
     FROM "um_creation_log"
@@ -119,7 +123,7 @@ module.exports.readModificationByDate = (site_id, date) => {
 }
 
 // view logs by date - deletion table
-module.exports.readDeletionByDate = (site_id, date) => {
+module.exports.selectDeletionByDate = (site_id, date) => {
     const sql = `
     SELECT *
     FROM "um_deletion_log"
@@ -128,6 +132,176 @@ module.exports.readDeletionByDate = (site_id, date) => {
     `
 
     return query(sql, [site_id, date])
+}
+
+// ===================
+//         IP
+// ===================
+
+// view all logs user_ip
+module.exports.selectAllIp = (ip) => {
+    let finalResult = {
+        creation_log: [],
+        modification_log: [],
+        deletion_log: []
+    }
+
+    // retrieve from modification table
+    const modificationSQL = `
+    SELECT modLog.log_id, modLog.user_id, modLog.site_id, modLog.user_ip, modDetail.*
+    FROM "UM_Modification_Log" modLog
+    INNER JOIN "UM_Modification_Log_Detail" modDetail
+    ON modLog.log_id = modDetail.log_id;
+    `
+    // retrieve from deletion table
+    const deletionSQL  = `
+    SELECT deletionLog.log_id, deletionLog.user_id, deletionLog.site_id, deletionLog.user_ip, deletionDetail.*
+    FROM "UM_Deletion_Log" deletionLog
+    INNER JOIN "UM_Deletion_Log_Detail" deletionDetail
+    ON deletionLog.log_id = deletionDetail.log_id;
+    `
+    // retrieve from creation table
+    const createSQL = `
+    SELECT log_id, user_id, site_id, user_ip
+    FROM "UM_Creation_Log";
+    `
+
+    return query(modificationSQL, [ip])
+        .then(result => {
+            finalResult.modification_log.push(...result.rows)
+
+            query(deletionSQL, [ip])
+                .then(result => {
+                    finalResult.deletion_log.push(...result.rows)
+
+                    query(createSQL, [ip])
+                        .then(result => {
+                            finalResult.creation_log.push(...result.rows)
+                        })
+                })
+        })
+}
+
+// select creation logs user_ip
+module.exports.selectCreationIp = (ip) => {
+    const sql = `
+    SELECT log_id, user_id, site_id, user_ip
+    FROM "UM_Creation_Log";
+    `
+
+    return query(sql, [ip])
+}
+
+// select modification logs user_ip
+module.exports.selectModificationIp = (ip) => {
+    const sql = `
+    SELECT modLog.log_id, modLog.user_id, modLog.site_id, modLog.user_ip, modDetail.*
+    FROM "UM_Modification_Log" modLog
+    INNER JOIN "UM_Modification_Log_Detail" modDetail
+    ON modLog.log_id = modDetail.log_id;
+    `
+
+    return query(sql, [ip])
+}
+
+// select deletion logs user_ip
+module.exports.selectDeletionIp = (ip) => {
+    const sql = `
+    SELECT deletionLog.log_id, deletionLog.user_id, deletionLog.site_id, deletionLog.user_ip, deletionDetail.*
+    FROM "UM_Deletion_Log" deletionLog
+    INNER JOIN "UM_Deletion_Log_Detail" deletionDetail
+    ON deletionLog.log_id = deletionDetail.log_id;
+    `
+
+    return query(sql, [ip])
+}
+
+// ===================
+//         OS
+// ===================
+
+// read all values os
+module.exports.selectAllOs = (os) => {
+    let finalResult = {
+        creation_log: [],
+        modification_log: [],
+        deletion_log: []
+    }
+
+    // retrieve from modification table
+    const modificationSQL = `
+    SELECT *
+    FROM "UM_Modification_Log" modLog
+    INNER JOIN "UM_Modification_Log_Detail" modDetail
+    ON modLog.log_id = modDetail.log_id
+    WHERE modLog.os = ?;
+    `
+    // retrieve from deletion table
+    const deletionSQL  = `
+    SELECT *
+    FROM "UM_Deletion_Log" deletionLog
+    INNER JOIN "UM_Deletion_Log_Detail" deletionDetail
+    ON deletionLog.log_id = deletionDetail.log_id
+    WHERE deletionLog.os = ?;
+    `
+    // retrieve from creation table
+    const createSQL = `
+    SELECT *
+    FROM "UM_Creation_Log"
+    WHERE os = ?;
+    `
+
+    return query(modificationSQL, [os])
+        .then(result => {
+            finalResult.modification_log.push(...result.rows)
+
+            query(deletionSQL, [os])
+                .then(result => {
+                    finalResult.deletion_log.push(...result.rows)
+
+                    query(createSQL, [os])
+                        .then(result => {
+                            finalResult.creation_log.push(...result.rows)
+                        })
+                })
+        })
+}
+
+// select creation logs os
+module.exports.selectCreationOs = (os) => {
+    const sql = `
+    SELECT log_id, user_id, site_id, os
+    FROM "UM_Creation_Log"
+    WHERE os = ?;
+    `
+
+    return query(sql, [os])
+}
+
+// select modification logs os
+module.exports.selectModificationOs = (os) => {
+    const sql = `
+    SELECT *
+    FROM "UM_Modification_Log" modLog
+    INNER JOIN "UM_Modification_Log_Detail" modDetail
+    ON modLog.log_id = modDetail.log_id
+    WHERE modLog.os = ?;
+    `
+
+    return query(sql, [os])
+}
+
+// select deletion logs os
+module.exports.selectDeletionOs = (os) => {
+    const sql = `
+    SELECT *
+    FROM "UM_Deletion_Log" deletionLog
+    INNER JOIN "UM_Deletion_Log_Detail" deletionDetail
+    ON deletionLog.log_id = deletionDetail.log_id
+    WHERE deletionLog.os = ?;
+    `
+
+    return query(sql, [os])
 }
 
 // Create
