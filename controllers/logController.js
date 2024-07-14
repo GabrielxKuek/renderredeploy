@@ -1,8 +1,9 @@
-const model = require(`../models/creationLog`)
+const model = require(`../models/log`)
 
 module.exports.readAll = (req, res) => {
+    const site_id = req.params.siteid
     // Get all from UM_Creation_Log
-    return model.readAll()
+    return model.readAll(site_id)
     .then( rows => {
         return res.status(200).json({creationLogs: rows})
     })
