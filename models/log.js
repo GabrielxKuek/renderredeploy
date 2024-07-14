@@ -1,5 +1,6 @@
 const {query} = require('../database')
 
+// read all
 module.exports.readAll = (site_id) => {
     let finalResult = {}
 
