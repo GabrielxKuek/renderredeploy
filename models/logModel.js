@@ -44,6 +44,10 @@ module.exports.readAll = (site_id) => {
     })
 }
 
+// ===================
+//         DATE
+// ===================
+
 // view logs by date - all tables
 module.exports.selectAllByDate = (site_id, date) => {
     let finalResult = {
@@ -129,6 +133,10 @@ module.exports.selectDeletionByDate = (site_id, date) => {
 
     return query(sql, [site_id, date])
 }
+
+// ===================
+//         IP
+// ===================
 
 // view all logs user_ip
 module.exports.selectAllIp = (ip) => {
