@@ -7,23 +7,23 @@ module.exports.readAll = (site_id) => {
     // SQL statement for retrieving all UM_Modification_Log with UM_Modification_Log_Detail
     const modificationSQL = `
     SELECT * 
-    FROM "UM_Modification_Log" modLog
-    INNER JOIN "UM_Modification_Log_Detail" modDetail
+    FROM "um_modification_log" modLog
+    INNER JOIN "um_modification_log_detail" modDetail
     ON modLog.log_id = modDetail.log_id
     WHERE modLog.site_id = ?;
     `
     // SQL statement for retrieving all UM_Deletion_Log with UM_Deletion_Log_Detail
     const deletionSQL  = `
     SELECT * 
-    FROM "UM_Deletion_Log" deletionLog
-    INNER JOIN "UM_Deletion_Log_Detail" deletionDetail
+    FROM "um_deletion_log" deletionLog
+    INNER JOIN "um_deletion_log_detail" deletionDetail
     ON deletionLog.log_id = deletionDetail.log_id
     WHERE deletionLog.site_id = ?;
     `
     // SQL statement for retrieving all UM_Creation_Log
     const createSQL = `
     SELECT *
-    FROM "UM_Creation_Log"
+    FROM "um_creation_log"
     WHERE site_id = ?;
     `
 
@@ -55,8 +55,8 @@ module.exports.readAllByDate = (site_id, date) => {
     // retrieve from modification table
     const modificationSQL = `
     SELECT * 
-    FROM "UM_Modification_Log" modLog
-    INNER JOIN "UM_Modification_Log_Detail" modDetail
+    FROM "um_modification_log" modLog
+    INNER JOIN "um_modification_log_detail" modDetail
     ON modLog.log_id = modDetail.log_id
     WHERE modLog.site_id = ?
     AND modLog.creation_at >= ?;
@@ -64,8 +64,8 @@ module.exports.readAllByDate = (site_id, date) => {
     // retrieve from deletion table
     const deletionSQL  = `
     SELECT * 
-    FROM "UM_Deletion_Log" deletionLog
-    INNER JOIN "UM_Deletion_Log_Detail" deletionDetail
+    FROM "um_deletion_log" deletionLog
+    INNER JOIN "um_deletion_log_detail" deletionDetail
     ON deletionLog.log_id = deletionDetail.log_id
     WHERE deletionLog.site_id = ?
     AND deletionLog.date >= ?;
@@ -73,7 +73,7 @@ module.exports.readAllByDate = (site_id, date) => {
     // retrieve from creation table
     const createSQL = `
     SELECT *
-    FROM "UM_Creation_Log"
+    FROM "um_creation_log"
     WHERE site_id = ?
     AND date >= ?;
     `
@@ -98,7 +98,7 @@ module.exports.readAllByDate = (site_id, date) => {
 module.exports.readCreationByDate = (site_id, date) => {
     const sql = `
     SELECT *
-    FROM "UM_Creation_Log"
+    FROM "um_creation_log"
     WHERE site_id = ?
     AND date >= ?;
     `
@@ -110,7 +110,7 @@ module.exports.readCreationByDate = (site_id, date) => {
 module.exports.readModificationByDate = (site_id, date) => {
     const sql = `
     SELECT *
-    FROM "UM_Modification_Log"
+    FROM "um_modification_log"
     WHERE site_id = ?
     AND date >= ?;
     `
@@ -122,10 +122,47 @@ module.exports.readModificationByDate = (site_id, date) => {
 module.exports.readDeletionByDate = (site_id, date) => {
     const sql = `
     SELECT *
-    FROM "UM_Deletion_Log"
+    FROM "um_deletion_log"
     WHERE site_id = ?
     AND date >= ?;
     `
 
     return query(sql, [site_id, date])
+}
+
+// Create
+module.exports.logNew = (table_name, user_id, site_id, record_id, user_ip, user_os) => {
+    const sql = `
+    INSERT INTO um_creation_log (table_name, user_id, site_id, record_id, user_ip, user_os)
+    VALUES (?, ?, ?, ?, ?, ?)
+    `;
+
+    return query(sql, [table_name, user_id, site_id, record_id, user_ip, user_os]);
+}
+
+module.exports.logChange = (table_name, user_id, site_id, record_id, user_ip, user_os) => {
+    const sql = `
+    INSERT INTO um_modification_log (table_name, user_id, site_id, record_id, user_ip, user_os)
+    VALUES (?, ?, ?, ?, ?, ?)
+    `;
+
+    return query(sql, [table_name, user_id, site_id, record_id, user_ip, user_os]);
+}
+
+module.exports.logChangeDetails = (log_id, field_name, old_value) => {
+    const sql = `
+    INSERT INTO um_modification_log_detail (log_id, field_name, old_value)
+    VALUES (?, ?, ?)
+    `;
+
+    return query(sql, [log_id, field_name, old_value]);
+}
+
+module.exports.logRemoveDetails = (log_id, field_name, value) => {
+    const sql = `
+    INSERT INTO um_deletion_log (log_id, field_name, value)
+    VALUES (?, ?, ?)
+    `;
+
+    return query(sql, [log_id, field_name, value]);
 }

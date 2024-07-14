@@ -8,6 +8,7 @@ const router = express.Router();
 router.use(jwtMiddleware.verifyToken, jwtMiddleware.verifyIsAdmin);
 
 router.get('/viewAll', logController.readAll)
-router.get('/', logController.readAll)
+router.get('/logNew/:table_name', logController.newCreationLog)
+router.get('/logChange/:table_name', logController.newModificationLog, logController.newModificationLogDetail)
 
 module.exports = router
