@@ -1,4 +1,4 @@
-const model = require(`../models/log`)
+const model = require(`../models/logModel`)
 
 module.exports.readAll = (req, res) => {
     const site_id = req.params.siteid

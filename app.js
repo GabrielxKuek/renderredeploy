@@ -1,22 +1,21 @@
 const express = require('express');
 const createHttpError = require('http-errors');
 
-const modulesRoute = require('./routes/modules');
-const reportsRoute = require('./routes/reports');
-const studentsRoute = require('./routes/students');
-const staffRoute = require('./routes/staff');
 const authRoute = require('./routes/auth');
+const mainRoutes = require('./routes/mainRoutes');
 
 //////////////////////////
 // Task 2 Related Routers
 //////////////////////////
-const logRoute = require('./routes/log')
+const logRoute = require('./routes/logRoutes')
 
 const app = express();
 app.use(express.json()); // to process JSON in request body
 
 
 app.use(express.static('public'));
+
+app.use("/task6", mainRoutes);
 
 app.use('/modules', modulesRoute);
 app.use('/reports', reportsRoute);
