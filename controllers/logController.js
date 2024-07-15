@@ -3,10 +3,52 @@ const model = require(`../models/logModel`)
 // read all values from tables controller
 module.exports.readAll = (req, res) => {
     const site_id = req.params.siteid
-    // Get all from UM_Creation_Log
+    // Get all logs from all 3 tables
     return model.readAll(site_id)
-    .then( rows => {
-        return res.status(200).json({creationLogs: rows})
+    .then( result => {
+        return res.status(200).json(result)
+    })
+    .catch( error => {
+        console.log(error)
+        return res.status(500).json({error: error.message})
+    })
+}
+
+// read all from creation table
+module.exports.readAllCreation = (req,res) => {
+    const site_id = req.params.siteid
+    // Get all creation logs from chosen site
+    return model.readCreation(site_id)
+    .then( result => {
+        return res.status(200).json(result)
+    })
+    .catch( error => {
+        console.log(error)
+        return res.status(500).json({error: error.message})
+    })
+}
+
+// read all from modification table
+module.exports.readAllModification = (req,res) => {
+    const site_id = req.params.siteid
+    // Get all modification logs from chosen site
+    return model.readModification(site_id)
+    .then( result => {
+        return res.status(200).json(result)
+    })
+    .catch( error => {
+        console.log(error)
+        return res.status(500).json({error: error.message})
+    })
+}
+
+// read all from deletion table
+module.exports.readAllDeletion = (req,res) => {
+    const site_id = req.params.siteid
+    // Get all deletion logs from chosen site
+    return model.readDeletion(site_id)
+    .then( result => {
+        return res.status(200).json(result)
     })
     .catch( error => {
         console.log(error)

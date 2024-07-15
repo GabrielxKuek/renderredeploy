@@ -1,8 +1,14 @@
 const {query} = require('../database')
 
-// read all
+// =========================
+//      READ ALL
+// =========================
 module.exports.readAll = (site_id) => {
-    let finalResult = {}
+    let finalResult = {
+        creation_log: [],
+        modification_log: [],
+        deletion_log: []
+    }
 
     // SQL statement for retrieving all UM_Modification_Log with UM_Modification_Log_Detail
     const modificationSQL = `
@@ -41,6 +47,41 @@ module.exports.readAll = (site_id) => {
                 return finalResult
             })
         })
+    })
+}
+
+module.exports.readCreation = (site_id) => {
+    const sql = `
+    SELECT * FROM "UM_Creation_Log" WHERE site_id = ?;
+    `
+    return query(sql, [site_id]).then(result => {
+        return result.rows
+    })
+}
+
+module.exports.readModification = (site_id) => {
+    const sql = `
+    SELECT * 
+    FROM "um_modification_log" modLog
+    INNER JOIN "um_modification_log_detail" modDetail
+    ON modLog.log_id = modDetail.log_id
+    WHERE modLog.site_id = ?;
+    `
+    return query(sql, [site_id]).then(result => {
+        return result.rows
+    })
+}
+
+module.exports.readDeletion = (site_id) => {
+    const sql = `
+    SELECT * 
+    FROM "um_deletion_log" deletionLog
+    INNER JOIN "um_deletion_log_detail" deletionDetail
+    ON deletionLog.log_id = deletionDetail.log_id
+    WHERE deletionLog.site_id = ?;
+    `
+    return query(sql, [site_id]).then(result => {
+        return result.rows
     })
 }
 
