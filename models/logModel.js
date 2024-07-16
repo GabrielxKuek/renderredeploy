@@ -149,7 +149,7 @@ module.exports.selectCreationByDate = (site_id, date) => {
     `
 
     return query(sql, [site_id, date])
-} // might have errors. table selection need to fix. discuss with teacher
+}
 
 // view logs by date - modification table
 module.exports.readModificationByDate = (site_id, date) => {
