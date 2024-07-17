@@ -3,7 +3,7 @@ const {query} = require('../database')
 // =========================
 //      READ ALL
 // =========================
-module.exports.readAll = (site_id) => {
+module.exports.readAll = async (site_id) => {
     let finalResult = {
         creation_log: [],
         modification_log: [],
@@ -33,21 +33,20 @@ module.exports.readAll = (site_id) => {
     WHERE site_id = ?;
     `
 
-    return query(modificationSQL, [site_id])
-    .then(result => {
-        finalResult.modification_log = result.rows
+    try {
+        const modResult = await query(modificationSQL, [site_id])
+        finalResult.modification_log = modResult.rows
 
-        return query(deletionSQL, [site_id])
-        .then(result => {
-            finalResult.deletion_log = result.rows
+        const delResult = await query(deletionSQL, [site_id])
+        finalResult.deletion_log = delResult.rows
 
-            return query(createSQL, [site_id])
-            .then(result => {
-                finalResult.creation_log = result.rows
-                return finalResult
-            })
-        })
-    })
+        const createResult = await query(createSQL, [site_id])
+        finalResult.creation_log = createResult.rows
+
+        return finalResult
+    } catch (err) {
+        throw new Error(`Error fetching logs: ${err.message}`)
+    }
 }
 
 module.exports.readCreation = (site_id) => {
@@ -90,7 +89,7 @@ module.exports.readDeletion = (site_id) => {
 // ===================
 
 // view logs by date - all tables
-module.exports.selectAllByDate = (site_id, date) => {
+module.exports.selectAllByDate = async (site_id, date) => {
     let finalResult = {
         creation_log: [],
         modification_log: [],
@@ -123,20 +122,20 @@ module.exports.selectAllByDate = (site_id, date) => {
     AND date >= ?;
     `
 
-    return query(modificationSQL, [site_id, date])
-        .then(result => {
-            finalResult.modification_log.push(...result.rows)
+    try {
+        const modResult = await query(modificationSQL, [site_id])
+        finalResult.modification_log = modResult.rows
 
-            query(deletionSQL, [site_id, date])
-                .then(result => {
-                    finalResult.deletion_log.push(...result.rows)
+        const delResult = await query(deletionSQL, [site_id])
+        finalResult.deletion_log = delResult.rows
 
-                    query(createSQL, [site_id, date])
-                        .then(result => {
-                            finalResult.creation_log.push(...result.rows)
-                        })
-                })
-        })
+        const createResult = await query(createSQL, [site_id])
+        finalResult.creation_log = createResult.rows
+
+        return finalResult
+    } catch (err) {
+        throw new Error(`Error fetching logs: ${err.message}`)
+    }
 }
 
 // view logs by date - creation table
@@ -180,7 +179,7 @@ module.exports.selectDeletionByDate = (site_id, date) => {
 // ===================
 
 // view all logs user_ip
-module.exports.selectAllIp = (ip) => {
+module.exports.selectAllIp = async (ip) => {
     let finalResult = {
         creation_log: [],
         modification_log: [],
@@ -207,20 +206,20 @@ module.exports.selectAllIp = (ip) => {
     FROM "UM_Creation_Log";
     `
 
-    return query(modificationSQL, [ip])
-        .then(result => {
-            finalResult.modification_log.push(...result.rows)
+    try {
+        const modResult = await query(modificationSQL, [site_id])
+        finalResult.modification_log = modResult.rows
 
-            query(deletionSQL, [ip])
-                .then(result => {
-                    finalResult.deletion_log.push(...result.rows)
+        const delResult = await query(deletionSQL, [site_id])
+        finalResult.deletion_log = delResult.rows
 
-                    query(createSQL, [ip])
-                        .then(result => {
-                            finalResult.creation_log.push(...result.rows)
-                        })
-                })
-        })
+        const createResult = await query(createSQL, [site_id])
+        finalResult.creation_log = createResult.rows
+
+        return finalResult
+    } catch (err) {
+        throw new Error(`Error fetching logs: ${err.message}`)
+    }
 }
 
 // select creation logs user_ip
@@ -262,7 +261,7 @@ module.exports.selectDeletionIp = (ip) => {
 // ===================
 
 // read all values os
-module.exports.selectAllOs = (os) => {
+module.exports.selectAllOs = async (os) => {
     let finalResult = {
         creation_log: [],
         modification_log: [],
@@ -292,20 +291,20 @@ module.exports.selectAllOs = (os) => {
     WHERE os = ?;
     `
 
-    return query(modificationSQL, [os])
-        .then(result => {
-            finalResult.modification_log.push(...result.rows)
+    try {
+        const modResult = await query(modificationSQL, [site_id])
+        finalResult.modification_log = modResult.rows
 
-            query(deletionSQL, [os])
-                .then(result => {
-                    finalResult.deletion_log.push(...result.rows)
+        const delResult = await query(deletionSQL, [site_id])
+        finalResult.deletion_log = delResult.rows
 
-                    query(createSQL, [os])
-                        .then(result => {
-                            finalResult.creation_log.push(...result.rows)
-                        })
-                })
-        })
+        const createResult = await query(createSQL, [site_id])
+        finalResult.creation_log = createResult.rows
+
+        return finalResult
+    } catch (err) {
+        throw new Error(`Error fetching logs: ${err.message}`)
+    }
 }
 
 // select creation logs os
