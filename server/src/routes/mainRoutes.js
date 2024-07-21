@@ -3,7 +3,7 @@ const router = express.Router();
 
 const jwtMiddleware = require("../middlewares/jwtMiddleware");
 const bcryptMiddleware = require("../middlewares/bcryptMiddleware");
-const exampleController = require("../controllers/exampleController");
+const exampleController = require("../server/controllers/exampleController");
 const logRoutes = require("./logRoutes");
 
 
