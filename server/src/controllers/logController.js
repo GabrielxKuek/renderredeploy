@@ -241,16 +241,35 @@ module.exports.readDeletionByOs = (req, res) => {
 }
 
 // Create log
+module.exports.newRequestLog = (req, res, next) => {
+    const user_id = req.body.user_id
+    const site_id = req.body.site_id
+    const request_method = req.body.request_method
+    const api_requested = req.body.api_requested
+    const user_ip = req.body.user_ip
+    const user_os = req.body.user_os
+    const request_success = req.body.equest_success
+
+    // read specific modification table by date
+    return model.logRequest(user_id, site_id, request_method,api_requested, user_ip, user_os, request_success)
+        .then(result => {
+            next()
+        })
+        .catch(error => {
+            console.error(error)
+            return res.status(500).json({error: error.message})
+    })
+};
+
+// Create log
 module.exports.newCreationLog = (req, res, next) => {
     const table_name = req.params.table_name
     const user_id = req.body.user_id
     const site_id = req.body.site_id
     const record_id = req.body.record_id
-    const user_ip = req.body.user_ip
-    const user_os = req.body.user_os
 
     // read specific modification table by date
-    return model.logNew(table_name, user_id, site_id, record_id, user_ip, user_os)
+    return model.logNew(user_id, site_id, table_name, record_id)
         .then(result => {
             next()
         })
@@ -265,11 +284,11 @@ module.exports.newModificationLog = (req, res, next) => {
     const user_id = req.body.user_id
     const site_id = req.body.site_id
     const record_id = req.body.record_id
-    const user_ip = req.body.user_ip
-    const user_os = req.body.user_os
+    const field_names = req.body.field_names
+    const old_values = req.body.old_values
 
     // read specific modification table by date
-    return model.logChange(table_name, user_id, site_id, record_id, user_ip, user_os)
+    return model.logChange(user_id, site_id, table_name, record_id, field_names, old_values)
         .then(result => {
             next()
         })
@@ -279,29 +298,16 @@ module.exports.newModificationLog = (req, res, next) => {
     })
 };
 
-module.exports.newModificationLogDetail = (req, res, next) => {
-    const log_id = req.body.log_id
+module.exports.newDeletionLog = (req, res, next) => {
+    const user_id = req.body.user_id
+    const site_id = req.body.site_id
+    const table_name = req.params.table_name
+    const record_id = req.body.record_id
     const field_name = req.body.field_name
-    const old_value = req.body.old_value
+    const values = req.body.values
 
     // read specific modification table by date
-    return model.logChangeDetails(log_id, field_name, old_value)
-        .then(result => {
-            next()
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-    })
-};
-
-module.exports.newDeletionLogDetail = (req, res, next) => {
-    const log_id = req.body.log_id
-    const field_name = req.body.field_name
-    const value = req.body.value
-
-    // read specific modification table by date
-    return model.logChangeDetails(log_id, field_name, value)
+    return model.logChangeDetails(user_id, site_id, table_name, record_id, field_name, values)
         .then(result => {
             next()
         })
