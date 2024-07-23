@@ -340,43 +340,40 @@ module.exports.selectDeletionOs = (os) => {
     ON deletionLog.log_id = deletionDetail.log_id
     WHERE deletionLog.os = ?;
     `
-
     return query(sql, [os])
 }
 
+// Request
+module.exports.logRequest = (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success) => {
+    const sql = `
+    CALL log_request(?, ?, ?, ?, ?, ?, ?);
+    `;
+
+    return query(sql, [user_id, site_id, request_method, api_requested, user_ip, user_os, request_success]);
+}
+
 // Create
-module.exports.logNew = (table_name, user_id, site_id, record_id, user_ip, user_os) => {
+module.exports.logNew = (user_id, site_id, table_name, record_id) => {
     const sql = `
-    INSERT INTO um_creation_log (table_name, user_id, site_id, record_id, user_ip, user_os)
-    VALUES (?, ?, ?, ?, ?, ?)
+    CALL log_creation(?, ?, ?, ?);
     `;
 
-    return query(sql, [table_name, user_id, site_id, record_id, user_ip, user_os]);
+    return query(sql, [user_id, site_id, table_name, record_id]);
 }
 
-module.exports.logChange = (table_name, user_id, site_id, record_id, user_ip, user_os) => {
+// Update
+module.exports.logChange = (user_id, site_id, table_name, record_id, field_names, old_values) => {
     const sql = `
-    INSERT INTO um_modification_log (table_name, user_id, site_id, record_id, user_ip, user_os)
-    VALUES (?, ?, ?, ?, ?, ?)
+    CALL log_modification(?, ?, ?, ?, ?, ?);
     `;
-
-    return query(sql, [table_name, user_id, site_id, record_id, user_ip, user_os]);
+    return query(sql, [user_id, site_id, table_name, record_id, field_names, old_values]);
 }
 
-module.exports.logChangeDetails = (log_id, field_name, old_value) => {
+// Delete
+module.exports.logRemove = (user_id, site_id, table_name, record_id, field_names , values) => {
     const sql = `
-    INSERT INTO um_modification_log_detail (log_id, field_name, old_value)
-    VALUES (?, ?, ?)
+    CALL log_deletion(?, ?, ?, ?, ?, ?);
     `;
 
-    return query(sql, [log_id, field_name, old_value]);
-}
-
-module.exports.logRemoveDetails = (log_id, field_name, value) => {
-    const sql = `
-    INSERT INTO um_deletion_log (log_id, field_name, value)
-    VALUES (?, ?, ?)
-    `;
-
-    return query(sql, [log_id, field_name, value]);
+    return query(sql, [user_id, site_id, table_name, record_id, field_names, values]);
 }
