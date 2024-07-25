@@ -35,6 +35,7 @@ router.post(
 );
 
 router.use("/logs", logRoutes);
+router.use("/requests", requestRoutes);
 
 
 module.exports = router;

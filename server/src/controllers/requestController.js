@@ -1,9 +1,9 @@
-const model = require(`../src/models/logModel`)
+const model = require(`../src/models/requestModel`)
 
 // read all values from tables controller
 module.exports.readAll = (req, res) => {
-    const site_id = req.params.siteid
-    // Get all logs from all 3 tables
+    const site_id=req.params.siteid
+    // Get all requests
     return model.readAll(site_id)
     .then( result => {
         return res.status(200).json(result)
@@ -14,54 +14,12 @@ module.exports.readAll = (req, res) => {
     })
 }
 
-// read all from creation table
-module.exports.readAllCreation = (req,res) => {
-    const site_id = req.params.siteid
-    // Get all creation logs from chosen site
-    return model.readCreation(site_id)
-    .then( result => {
-        return res.status(200).json(result)
-    })
-    .catch( error => {
-        console.log(error)
-        return res.status(500).json({error: error.message})
-    })
-}
-
-// read all from modification table
-module.exports.readAllModification = (req,res) => {
-    const site_id = req.params.siteid
-    // Get all modification logs from chosen site
-    return model.readModification(site_id)
-    .then( result => {
-        return res.status(200).json(result)
-    })
-    .catch( error => {
-        console.log(error)
-        return res.status(500).json({error: error.message})
-    })
-}
-
-// read all from deletion table
-module.exports.readAllDeletion = (req,res) => {
-    const site_id = req.params.siteid
-    // Get all deletion logs from chosen site
-    return model.readDeletion(site_id)
-    .then( result => {
-        return res.status(200).json(result)
-    })
-    .catch( error => {
-        console.log(error)
-        return res.status(500).json({error: error.message})
-    })
-}
-
 // read all values by date
-module.exports.readAllByDate = (req, res) => { // need to config so i combine the select models for read all values instead of a model that does it all at once
+module.exports.readAllByDate = (req, res) => { 
     const site_id = req.params.siteid
     const date = req.params.date
 
-    // read all logs by date
+    // read all requests by date
     return model.readAllByDate(site_id, date)
         .then(result => {
             return res.status(200).json(result)
@@ -72,12 +30,12 @@ module.exports.readAllByDate = (req, res) => { // need to config so i combine th
         })
 }
 
-// read creation table values by date
-module.exports.readCreationByDate = (req, res) => {
+// read create requests values by date
+module.exports.readCreationByDate = (req, res) => { 
     const site_id = req.params.site_id
     const date = req.params.date
 
-    // read specific table by date
+    // read by date
     return model.readCreationByDate(site_id, date)
         .then(result => {
             return res.status(200).json(result)
@@ -88,12 +46,12 @@ module.exports.readCreationByDate = (req, res) => {
         })
 } // we have a middleware that checks site_id and endpoints availability -> check with other guy
 
-// read modification table values by date
+// read update requests values by date
 module.exports.readModificationByDate = (req, res) => {
     const site_id = req.params.site_id
     const date = req.params.date
 
-    // read specific modification table by date
+    // read by date
     return model.readModificationByDate(site_id, date)
         .then(result => {
             return res.status(200).json(result)
@@ -104,12 +62,12 @@ module.exports.readModificationByDate = (req, res) => {
         })
 }
 
-// read deletion table values by date
+// read delete requests values by date
 module.exports.readDeletionByDate = (req, res) => {
     const site_id = req.params.site_id
     const date = req.params.date
 
-    // read specific modification table by date
+    // read by date
     return model.readDeletionByDate(site_id, date)
         .then(result => {
             return res.status(200).json(result)
@@ -124,7 +82,7 @@ module.exports.readDeletionByDate = (req, res) => {
 module.exports.readAllByip = (req, res) => {
     const ip = req.params.type
 
-    // read all logs by ip
+    // read all requests by ip
     return model.readAllByip(ip)
         .then(result => {
             return res.status(200).json(result)
@@ -135,11 +93,11 @@ module.exports.readAllByip = (req, res) => {
         })
 } 
 
-// read creation table values by ip
+// read create requests values by ip
 module.exports.readCreationByip = (req, res) => {
     const ip = req.params.type
 
-    // read specific table by ip
+    // read by ip
     return model.readCreationByip(ip)
         .then(result => {
             return res.status(200).json(result)
@@ -150,11 +108,11 @@ module.exports.readCreationByip = (req, res) => {
         })
 }
 
-// read modification table values by ip
+// read update requests values by ip
 module.exports.readModificationByip = (req, res) => {
     const ip = req.params.type
 
-    // read specific modification table by ip
+    // read by ip
     return model.readModificationByip(ip)
         .then(result => {
             return res.status(200).json(result)
@@ -165,11 +123,11 @@ module.exports.readModificationByip = (req, res) => {
         })
 }
 
-// read deletion table values by ip
+// read delete requests values by ip
 module.exports.readDeletionByip = (req, res) => {
     const ip = req.params.type
 
-    // read specific modification table by ip
+    // read by ip
     return model.readDeletionByip(ip)
         .then(result => {
             return res.status(200).json(result)
@@ -184,7 +142,7 @@ module.exports.readDeletionByip = (req, res) => {
 module.exports.readAllByOs = (req, res) => {
     const Os = req.params.type
 
-    // read all logs by Os
+    // read all requests by Os
     return model.readAllByOs(Os)
         .then(result => {
             return res.status(200).json(result)
@@ -195,11 +153,11 @@ module.exports.readAllByOs = (req, res) => {
         })
 }
 
-// read creation table values by Os
+// read create requests values by Os
 module.exports.readCreationByOs = (req, res) => {
     const Os = req.params.type
 
-    // read specific table by Os
+    // read by Os
     return model.readCreationByOs(Os)
         .then(result => {
             return res.status(200).json(result)
@@ -210,11 +168,11 @@ module.exports.readCreationByOs = (req, res) => {
         })
 }
 
-// read modification table values by Os
+// read update requests values by Os
 module.exports.readModificationByOs = (req, res) => {
     const Os = req.params.type
 
-    // read specific modification table by Os
+    // read by Os
     return model.readModificationByOs(Os)
         .then(result => {
             return res.status(200).json(result)
@@ -225,11 +183,11 @@ module.exports.readModificationByOs = (req, res) => {
         })
 }
 
-// read deletion table values by Os
+// read delete requests values by Os
 module.exports.readDeletionByOs = (req, res) => {
     const Os = req.params.type
 
-    // read specific modification table by Os
+    // read by Os
     return model.readDeletionByOs(Os)
         .then(result => {
             return res.status(200).json(result)
@@ -240,53 +198,18 @@ module.exports.readDeletionByOs = (req, res) => {
         })
 }
 
-// Create log
-module.exports.newCreationLog = (req, res, next) => {
-    const table_name = req.params.table_name
+// Create reuqests
+module.exports.newRequestLog = (req, res, next) => {
     const user_id = req.body.user_id
     const site_id = req.body.site_id
-    const record_id = req.body.record_id
+    const request_method = req.body.request_method
+    const api_requested = req.body.api_requested
+    const user_ip = req.body.user_ip
+    const user_os = req.body.user_os
+    const request_success = req.body.request_success
 
     // read specific modification table by date
-    return model.logNew(user_id, site_id, table_name, record_id)
-        .then(result => {
-            next()
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-    })
-};
-
-module.exports.newModificationLog = (req, res, next) => {
-    const table_name = req.params.table_name
-    const user_id = req.body.user_id
-    const site_id = req.body.site_id
-    const record_id = req.body.record_id
-    const field_names = req.body.field_names
-    const old_values = req.body.old_values
-
-    // read specific modification table by date
-    return model.logChange(user_id, site_id, table_name, record_id, field_names, old_values)
-        .then(result => {
-            next()
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-    })
-};
-
-module.exports.newDeletionLog = (req, res, next) => {
-    const user_id = req.body.user_id
-    const site_id = req.body.site_id
-    const table_name = req.params.table_name
-    const record_id = req.body.record_id
-    const field_name = req.body.field_name
-    const values = req.body.values
-
-    // read specific modification table by date
-    return model.logChangeDetails(user_id, site_id, table_name, record_id, field_name, values)
+    return model.logRequest(user_id, site_id, request_method,api_requested, user_ip, user_os, request_success)
         .then(result => {
             next()
         })

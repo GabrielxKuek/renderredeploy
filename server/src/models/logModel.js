@@ -139,7 +139,7 @@ module.exports.selectAllByDate = async (site_id, date) => {
 }
 
 // view logs by date - creation table
-module.exports.selectCreationByDate = (site_id, date) => {
+module.exports.readCreationByDate = (site_id, date) => {
     const sql = `
     SELECT *
     FROM "um_creation_log"
