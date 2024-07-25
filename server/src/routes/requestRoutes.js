@@ -1,5 +1,5 @@
 const express = require('express');
-const requestController = require('../../controllers/requestController');
+const requestController = require('../controllers/requestController');
 const jwtMiddleware = require('../middleware/jwtMiddleware');
 
 

@@ -1,4 +1,4 @@
-const model = require(`../src/models/logModel`)
+const model = require(`../models/logModel`)
 
 // read all values from tables controller
 module.exports.readAll = (req, res) => {
