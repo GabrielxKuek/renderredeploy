@@ -1,5 +1,30 @@
 const deletionModel = require('../models/deletionModel');
 
+// insert
+
+async function insertDeletion(req, res) {
+    try {
+        const { user_id, site_id, table_name, record_id, field_names, values } = req.body;
+
+        if (!user_id || !site_id || !table_name || !record_id || !field_names || !values) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        const result = await deletionModel.insertDeletion(user_id, site_id, table_name, record_id, field_names, values);
+        res.status(200).json({ message: 'Deletion logged successfully', result });
+    } catch (error) {
+        console.error('Error logging deletion:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+/*
+    gabriel note
+    im just assuming we get all our values from the body. will work on this later
+*/
+
+// read
+
 async function readDeletion(req, res) {
   try {
     const { site_id } = req.params;
@@ -45,8 +70,9 @@ async function selectDeletionOs(req, res) {
 }
 
 module.exports = {
-  readDeletion,
-  selectDeletionByDate,
-  selectDeletionIp,
-  selectDeletionOs,
+    insertDeletion,
+    readDeletion,
+    selectDeletionByDate,
+    selectDeletionIp,
+    selectDeletionOs,
 };

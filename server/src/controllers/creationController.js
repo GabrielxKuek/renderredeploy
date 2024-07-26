@@ -1,5 +1,30 @@
 const creationModel = require('../models/creationModel');
 
+// insert
+
+async function insertCreation(req, res) {
+    try {
+        const { user_id, site_id, table_name, record_id } = req.body;
+
+        if (!user_id || !site_id || !table_name || !record_id) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        const result = await creationModel.insertCreation(user_id, site_id, table_name, record_id);
+        res.status(200).json({ message: 'Creation logged successfully', result });
+    } catch (error) {
+        console.error('Error logging creation:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+/*
+    gabriel note
+    im just assuming we get all our values from the body. will work on this later
+*/
+
+// read
+
 async function readCreation(req, res) {
   try {
     const { site_id } = req.params;
@@ -45,8 +70,9 @@ async function selectCreationOs(req, res) {
 }
 
 module.exports = {
-  readCreation,
-  readCreationByDate,
-  selectCreationIp,
-  selectCreationOs,
+    insertCreation,
+    readCreation,
+    readCreationByDate,
+    selectCreationIp,
+    selectCreationOs,
 };

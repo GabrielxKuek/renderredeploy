@@ -1,5 +1,5 @@
 const express = require('express');
-const logController = require('../controllers/logController');
+const logController = require('../controllers/oldLogControllerForReference');
 const jwtMiddleware = require('../middleware/jwtMiddleware');
 
 

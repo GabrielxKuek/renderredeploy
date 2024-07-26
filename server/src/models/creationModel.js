@@ -18,9 +18,9 @@ export const insertCreation = async (user_id, site_id, table_name, record_id) =>
     }
   };
 
-// read
+// select
 
-export const readCreation = async (site_id) => {
+export const selectCreation = async (site_id) => {
   try {
     const result = await prisma.um_creation_log.findMany({
       where: {
@@ -29,12 +29,12 @@ export const readCreation = async (site_id) => {
     });
     return result;
   } catch (error) {
-    console.error('Error reading creation logs:', error);
+    console.error('Error selecting creation logs:', error);
     throw error;
   }
 };
 
-export const readCreationByDate = async (site_id, date) => {
+export const selectCreationByDate = async (site_id, date) => {
   try {
     const result = await prisma.um_creation_log.findMany({
       where: {
@@ -46,7 +46,7 @@ export const readCreationByDate = async (site_id, date) => {
     });
     return result;
   } catch (error) {
-    console.error('Error reading creation logs by date:', error);
+    console.error('Error selecting creation logs by date:', error);
     throw error;
   }
 };

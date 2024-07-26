@@ -18,9 +18,9 @@ export const insertDeletion = async (user_id, site_id, table_name, record_id, fi
     }
 };
 
-// read
+// select
 
-export const readDeletion = async (site_id) => {
+export const selectDeletion = async (site_id) => {
   try {
     const result = await prisma.um_deletion_log.findMany({
       where: {
@@ -32,7 +32,7 @@ export const readDeletion = async (site_id) => {
     });
     return result;
   } catch (error) {
-    console.error('Error reading deletion logs:', error);
+    console.error('Error selecting deletion logs:', error);
     throw error;
   }
 };
@@ -49,7 +49,7 @@ export const selectDeletionByDate = async (site_id, date) => {
     });
     return result;
   } catch (error) {
-    console.error('Error reading deletion logs by date:', error);
+    console.error('Error selecting deletion logs by date:', error);
     throw error;
   }
 };

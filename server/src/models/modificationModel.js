@@ -18,213 +18,79 @@ export const insertModification = async (user_id, site_id, table_name, record_id
     }
 };
 
-// read
+// select
 
-module.exports.readAll = async (site_id) => {
+export const selectModification = async (site_id) => {
   try {
-    const result = await prisma.um_request_log.findMany({
-      where: { site_id },
-    });
-    return result;
-  } catch (error) {
-    console.error('Error reading all logs:', error);
-    throw error;
-  }
-};
-
-module.exports.readAllByDate = async (site_id, date) => {
-  try {
-    const result = await prisma.um_request_log.findMany({
+    const result = await prisma.um_modification_log.findMany({
       where: {
         site_id,
-        created_at: { gte: new Date(date) },
+      },
+      include: {
+        um_modification_log_detail: true,
       },
     });
     return result;
   } catch (error) {
-    console.error('Error reading logs by date:', error);
+    console.error('Error selecting modification logs:', error);
     throw error;
   }
 };
 
-module.exports.readCreationByDate = async (site_id, date) => {
+export const selectModificationByDate = async (site_id, date) => {
   try {
-    const result = await prisma.um_request_log.findMany({
+    const result = await prisma.um_modification_log.findMany({
       where: {
         site_id,
-        created_at: { gte: new Date(date) },
-        request_method: 'POST',
+        date: {
+          gte: date,
+        },
       },
     });
     return result;
   } catch (error) {
-    console.error('Error reading creation logs by date:', error);
+    console.error('Error selecting modification logs by date:', error);
     throw error;
   }
 };
 
-module.exports.readModificationByDate = async (site_id, date) => {
+export const selectModificationIp = async (ip) => {
   try {
-    const result = await prisma.um_request_log.findMany({
-      where: {
-        site_id,
-        created_at: { gte: new Date(date) },
-        request_method: 'PUT',
-      },
-    });
-    return result;
-  } catch (error) {
-    console.error('Error reading modification logs by date:', error);
-    throw error;
-  }
-};
-
-module.exports.readDeletionByDate = async (site_id, date) => {
-  try {
-    const result = await prisma.um_request_log.findMany({
-      where: {
-        site_id,
-        created_at: { gte: new Date(date) },
-        request_method: 'DELETE',
-      },
-    });
-    return result;
-  } catch (error) {
-    console.error('Error reading deletion logs by date:', error);
-    throw error;
-  }
-};
-
-module.exports.readAllByIp = async (ip) => {
-  try {
-    const result = await prisma.um_request_log.findMany({
-      where: { user_ip: ip },
-    });
-    return result;
-  } catch (error) {
-    console.error('Error reading logs by IP:', error);
-    throw error;
-  }
-};
-
-module.exports.readCreationByIp = async (ip) => {
-  try {
-    const result = await prisma.um_request_log.findMany({
+    const result = await prisma.um_modification_log.findMany({
       where: {
         user_ip: ip,
-        request_method: 'POST',
+      },
+      include: {
+        um_modification_log_detail: true,
+      },
+      select: {
+        log_id: true,
+        user_id: true,
+        site_id: true,
+        user_ip: true,
+        um_modification_log_detail: true,
       },
     });
     return result;
   } catch (error) {
-    console.error('Error reading creation logs by IP:', error);
+    console.error('Error selecting modification logs by IP:', error);
     throw error;
   }
 };
 
-module.exports.readModificationByIp = async (ip) => {
+export const selectModificationOs = async (os) => {
   try {
-    const result = await prisma.um_request_log.findMany({
+    const result = await prisma.um_modification_log.findMany({
       where: {
-        user_ip: ip,
-        request_method: 'PUT',
+        os,
+      },
+      include: {
+        um_modification_log_detail: true,
       },
     });
     return result;
   } catch (error) {
-    console.error('Error reading modification logs by IP:', error);
-    throw error;
-  }
-};
-
-module.exports.readDeletionByIp = async (ip) => {
-  try {
-    const result = await prisma.um_request_log.findMany({
-      where: {
-        user_ip: ip,
-        request_method: 'DELETE',
-      },
-    });
-    return result;
-  } catch (error) {
-    console.error('Error reading deletion logs by IP:', error);
-    throw error;
-  }
-};
-
-module.exports.readAllByOs = async (os) => {
-  try {
-    const result = await prisma.um_request_log.findMany({
-      where: { user_os: os },
-    });
-    return result;
-  } catch (error) {
-    console.error('Error reading logs by OS:', error);
-    throw error;
-  }
-};
-
-module.exports.readCreationByOs = async (os) => {
-  try {
-    const result = await prisma.um_request_log.findMany({
-      where: {
-        user_os: os,
-        request_method: 'POST',
-      },
-    });
-    return result;
-  } catch (error) {
-    console.error('Error reading creation logs by OS:', error);
-    throw error;
-  }
-};
-
-module.exports.readModificationByOs = async (os) => {
-  try {
-    const result = await prisma.um_request_log.findMany({
-      where: {
-        user_os: os,
-        request_method: 'PUT',
-      },
-    });
-    return result;
-  } catch (error) {
-    console.error('Error reading modification logs by OS:', error);
-    throw error;
-  }
-};
-
-module.exports.readDeletionByOs = async (os) => {
-  try {
-    const result = await prisma.um_request_log.findMany({
-      where: {
-        user_os: os,
-        request_method: 'DELETE',
-      },
-    });
-    return result;
-  } catch (error) {
-    console.error('Error reading deletion logs by OS:', error);
-    throw error;
-  }
-};
-
-module.exports.logRequest = async (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success) => {
-  try {
-    const result = await prisma.um_request_log.create({
-      data: {
-        user_id,
-        site_id,
-        request_method,
-        api_requested,
-        user_ip,
-        user_os,
-        request_success,
-      },
-    });
-    return result;
-  } catch (error) {
-    console.error('Error logging request:', error);
+    console.error('Error selecting modification logs by OS:', error);
     throw error;
   }
 };
