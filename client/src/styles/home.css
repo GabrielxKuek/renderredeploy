@@ -1,0 +1,130 @@
+/*
+body,
+html,
+#root {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: black;
+}
+
+.home {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    color: black;
+    border-radius: 20px;
+    min-height: 50vh;
+}
+
+.full-height {
+    min-height: 50vh;
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-message {
+    max-width: 32rem;
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+    letter-spacing: -0.025em;
+}
+
+@media (min-width: 640px) {
+    .welcome-message {
+        font-size: 4.5rem;
+        /* equivalent to sm:text-7xl in Tailwind */
+    }
+}
+
+@media (min-width: 1024px) {
+    .welcome-message {
+        font-size: 3.75rem;
+        /* equivalent to lg:text-6xl in Tailwind */
+    }
+}
+
+@media (min-width: 1280px) {
+    .welcome-message {
+        font-size: 4.5rem;
+        /* equivalent to xl:text-7xl in Tailwind */
+    }
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        /* End with opacity 1 */
+    }
+}
+
+.announcements {
+    margin: 20px 0;
+    color: black;
+    border-radius: 20px;
+    min-height: 50vh;
+}
+
+.announcements h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: black;
+}
+
+.announcements ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    color: black;
+}
+
+.stat-card {
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: black;
+}
+
+.stat-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: black;
+}
+
+.stat-card p {
+    font-size: 16px;
+    margin: 0;
+    color: black;
+}
+
+.recent-activities {
+    margin: 20px 0;
+    color: black;
+}
+
+.recent-activities h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: black;
+}
+
+.recent-activities ul {
+    list-style-type: none;
+    padding-left: 0;
+    color: black;
+}
+
+.recent-activities ul li {
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    color: black;
+} */

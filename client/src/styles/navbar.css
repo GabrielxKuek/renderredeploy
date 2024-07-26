@@ -1,0 +1,80 @@
+/* .navbar {
+    overflow: hidden;
+}
+
+.custom-close-button .btn-close {
+    background-color: white;
+    opacity: 1;
+}
+
+.custom-close-button .btn-close:hover {
+    background-color: white;
+}
+
+.nav-link {
+    position: relative;
+}
+
+.subnav {
+    float: left;
+    overflow: hidden;
+}
+
+.subnav .subnavbtn {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+}
+
+.navbar a:hover,
+.subnav:hover .subnavbtn {
+    background-color: grey;
+}
+
+.subnav-content a:hover {
+    background-color: #eee;
+    color: black;
+}
+
+.subnav:hover .subnav-content {
+    display: block;
+}
+
+.header-title {
+    font-size: 2rem;
+    color: #fff;
+    font-family: monospace;
+    border-right: 0.15em solid white;
+    white-space: nowrap;
+    margin: 0;
+    letter-spacing: 0.15em;
+    overflow: hidden;
+    animation: typing 3.5s steps(30, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 12ch;
+    }
+}
+
+@keyframes blink-caret {
+
+    from,
+    to {
+        border-color: transparent;
+    }
+
+    50% {
+        border-color: orange;
+    }
+} */
