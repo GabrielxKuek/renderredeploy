@@ -1,42 +1,74 @@
-// select all from creation log table
-module.exports.readCreation = (site_id) => {
-    const sql = `
-    SELECT * FROM "UM_Creation_Log" WHERE site_id = ?;
-    `
-    return query(sql, [site_id]).then(result => {
-        return result.rows
-    })
-}
+import { PrismaClient } from '@prisma/client';
 
-// select all from creation log detail table by date
-module.exports.readCreationByDate = (site_id, date) => {
-    const sql = `
-    SELECT *
-    FROM "um_creation_log"
-    WHERE site_id = ?
-    AND date >= ?;
-    `
+const prisma = new PrismaClient();
 
-    return query(sql, [site_id, date])
-}
+export const readCreation = async (site_id) => {
+  try {
+    const result = await prisma.um_creation_log.findMany({
+      where: {
+        site_id,
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error('Error reading creation logs:', error);
+    throw error;
+  }
+};
 
-// select creation logs user_ip
-module.exports.selectCreationIp = (ip) => {
-    const sql = `
-    SELECT log_id, user_id, site_id, user_ip
-    FROM "UM_Creation_Log";
-    `
+export const readCreationByDate = async (site_id, date) => {
+  try {
+    const result = await prisma.um_creation_log.findMany({
+      where: {
+        site_id,
+        date: {
+          gte: date,
+        },
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error('Error reading creation logs by date:', error);
+    throw error;
+  }
+};
 
-    return query(sql, [ip])
-}
+export const selectCreationIp = async (ip) => {
+  try {
+    const result = await prisma.um_creation_log.findMany({
+      where: {
+        user_ip: ip,
+      },
+      select: {
+        log_id: true,
+        user_id: true,
+        site_id: true,
+        user_ip: true,
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error('Error selecting creation logs by IP:', error);
+    throw error;
+  }
+};
 
-// select creation logs os
-module.exports.selectCreationOs = (os) => {
-    const sql = `
-    SELECT log_id, user_id, site_id, os
-    FROM "UM_Creation_Log"
-    WHERE os = ?;
-    `
-
-    return query(sql, [os])
-}
+export const selectCreationOs = async (os) => {
+  try {
+    const result = await prisma.um_creation_log.findMany({
+      where: {
+        os,
+      },
+      select: {
+        log_id: true,
+        user_id: true,
+        site_id: true,
+        os: true,
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error('Error selecting creation logs by OS:', error);
+    throw error;
+  }
+};

@@ -1,49 +1,71 @@
-// select all from deletion log table
-module.exports.readDeletion = (site_id) => {
-    const sql = `
-    SELECT * 
-    FROM "um_deletion_log" deletionLog
-    INNER JOIN "um_deletion_log_detail" deletionDetail
-    ON deletionLog.log_id = deletionDetail.log_id
-    WHERE deletionLog.site_id = ?;
-    `
-    return query(sql, [site_id]).then(result => {
-        return result.rows
-    })
-}
+import { PrismaClient } from '@prisma/client';
 
-// view logs by date - deletion table
-module.exports.selectDeletionByDate = (site_id, date) => {
-    const sql = `
-    SELECT *
-    FROM "um_deletion_log"
-    WHERE site_id = ?
-    AND date >= ?;
-    `
+const prisma = new PrismaClient();
 
-    return query(sql, [site_id, date])
-}
+export const readDeletion = async (site_id) => {
+  try {
+    const result = await prisma.um_deletion_log.findMany({
+      where: {
+        site_id,
+      },
+      include: {
+        um_deletion_log_detail: true,
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error('Error reading deletion logs:', error);
+    throw error;
+  }
+};
 
-// select deletion logs user_ip
-module.exports.selectDeletionIp = (ip) => {
-    const sql = `
-    SELECT deletionLog.log_id, deletionLog.user_id, deletionLog.site_id, deletionLog.user_ip, deletionDetail.*
-    FROM "UM_Deletion_Log" deletionLog
-    INNER JOIN "UM_Deletion_Log_Detail" deletionDetail
-    ON deletionLog.log_id = deletionDetail.log_id;
-    `
+export const selectDeletionByDate = async (site_id, date) => {
+  try {
+    const result = await prisma.um_deletion_log.findMany({
+      where: {
+        site_id,
+        date: {
+          gte: date,
+        },
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error('Error reading deletion logs by date:', error);
+    throw error;
+  }
+};
 
-    return query(sql, [ip])
-}
+export const selectDeletionIp = async (ip) => {
+  try {
+    const result = await prisma.um_deletion_log.findMany({
+      where: {
+        user_ip: ip,
+      },
+      include: {
+        um_deletion_log_detail: true,
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error('Error selecting deletion logs by IP:', error);
+    throw error;
+  }
+};
 
-// select deletion logs os
-module.exports.selectDeletionOs = (os) => {
-    const sql = `
-    SELECT *
-    FROM "UM_Deletion_Log" deletionLog
-    INNER JOIN "UM_Deletion_Log_Detail" deletionDetail
-    ON deletionLog.log_id = deletionDetail.log_id
-    WHERE deletionLog.os = ?;
-    `
-    return query(sql, [os])
-}
+export const selectDeletionOs = async (os) => {
+  try {
+    const result = await prisma.um_deletion_log.findMany({
+      where: {
+        os,
+      },
+      include: {
+        um_deletion_log_detail: true,
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error('Error selecting deletion logs by OS:', error);
+    throw error;
+  }
+};
