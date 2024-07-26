@@ -1,42 +1,40 @@
-remember to cd to 
-```
-cd client/
-```
-when you want to run react server
+# AUTHINC Boiler Template
 
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=15369267)
-# DBS Practical
+## Introduction
 
-## Setup
+AUTHINC is a robust authentication service, providing a comprehensive user management solution for your applications. It offers a streamlined and secure way to handle user registration, login, authentication, and authorization. This repository serves as a boiler template for the AY23/24 ProjectINC to start development. This template is done by **Group 4: Authentication and Authorization**.
 
-1. Clone this repository
+## Tech Stack
 
-2. Create a .env file with the following content
+### Frontend
+- React + Vite
+- Shadcn
+- Tailwind
 
-    ```
-    DB_USER=
-    DB_PASSWORD=
-    DB_HOST=
-    DB_DATABASE=
-    DB_CONNECTION_LIMIT=1
-    PORT=3000
-    
-    JWT_SECRET_KEY=your-secret-key
-    JWT_EXPIRES_IN=1d
-    JWT_ALGORITHM=HS256
-    ```
+### Backend
+- NodeJS
+- Express
+- JWT Token
+- PostgreSQL
+- Prisma ORM
 
-3. Update the .env content with your database credentials accordingly.
+## Getting Started
 
-4. Install dependencies by running `npm install`
+1. Run **npm i** at the client and server root directories respectively to install all dependencies.
 
-5. Start the app by running `npm start`. Alternatively to use hot reload, start the app by running `npm run dev`.
+2. Add **.env** file at the server directory and add in the the usable port and shared Neon databaseURL. 
 
-6. You should see `App listening on port 3000`
+3. Run **npm run dev** for nodemon, or **npm start** for node to start server for both frontend and backend.
 
-8. (Optional) install the plugins recommended in `.vscode/extensions.json`
+4. To start the database, run **npm run init_tables** at the server directory.
 
-## Instructions
+5. After building the postgreSQL schema, run **npx prisma db pull** to convert to prisma schema. Check prisma.schema file for changes under *primsa* folder.
 
-Open the page, `http://localhost:3000`, replace the port number accordingly if you app is not listening to port 3000
+6. Run **npx prisma generate** to generate a new prisma client to apply changes and interact with the database.
 
+7. If a schema is to be made directly with prisma syntax, update the model in schema.prisma file and run **prisma migrate dev** to keep logs and revert back to the previous model. 
+
+8. Run **npx prisma db push** to apply changes in the main database: postgreSQL.
+
+### Note
+Changes to schema models will wipe out all data if **npx prisma db pull** is implemented. Do make sure to backup database or restart database.
