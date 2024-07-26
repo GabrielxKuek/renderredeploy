@@ -7,7 +7,7 @@ import NavBarGroup1 from "./Navbar.jsx";
 const logsHome = () => {
     return (
         <>
-            <NavBarGroup1/ >
+            <NavBarGroup1 />
             <NavBarReyes />
             
             <div className="flex flex-col justify-center items-center h-screen bg-gray-800">
