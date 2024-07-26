@@ -1,157 +1,196 @@
-const {query} = require('../database')
-
-// =================================
-//  READ ALL
-// =================================
-module.exports.readAll = (site_id) => {
+// Request
+module.exports.logRequest = (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success) => {
     const sql = `
-    SELECT * FROM "um_request_log" WHERE site_id = ?;`
+    CALL log_request(?, ?, ?, ?, ?, ?, ?);
+    `;
 
-    return query(sql,[site_id]).then(result => {
-        return result.rows
-    })
+    return query(sql, [user_id, site_id, request_method, api_requested, user_ip, user_os, request_success]);
 }
 
-module.exports.readAllByDate = (site_id, date) => {
+// Create
+module.exports.logNew = (user_id, site_id, table_name, record_id) => {
     const sql = `
-    SELECT * FROM "um_request_log" WHERE site_id = ?
-    AND created_at >= ?;
-    `
+    CALL log_creation(?, ?, ?, ?);
+    `;
 
-    return query(sql, [site_id, date]).then(result => {
-        return result.rows
-    })
+    return query(sql, [user_id, site_id, table_name, record_id]);
 }
 
-module.exports.readCreationByDate = (site_id, date) => {
+// Update
+module.exports.logChange = (user_id, site_id, table_name, record_id, field_names, old_values) => {
     const sql = `
-    SELECT * FROM "um_request_log" WHERE site_id = ?
-    AND created_at >= ?
-    AND request_method = 'POST';`
-
-    return query(sql, [site_id, date]).then(result => {
-        return result.rows
-    })
+    CALL log_modification(?, ?, ?, ?, ?, ?);
+    `;
+    return query(sql, [user_id, site_id, table_name, record_id, field_names, old_values]);
 }
 
-module.exports.readModificationByDate = (site_id, date) => {
+// Delete
+module.exports.logRemove = (user_id, site_id, table_name, record_id, field_names , values) => {
     const sql = `
-    SELECT * FROM "um_request_log" WHERE site_id = ?
-    AND created_at >= ?
-    AND request_method = 'PUT';`
+    CALL log_deletion(?, ?, ?, ?, ?, ?);
+    `;
 
-    return query(sql, [site_id, date]).then(result => {
-        return result.rows
-    })
+    return query(sql, [user_id, site_id, table_name, record_id, field_names, values]);
 }
 
-module.exports.readDeletionByDate = (site_id, date) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE site_id = ?
-    AND created_at >= ?
-    AND request_method = 'DELETE';`
+// ================================= //
+// cast into oblivion                //
+// ================================= //
 
-    return query(sql, [site_id, date]).then(result => {
-        return result.rows
-    })
-}
+// const {query} = require('../database')
 
-module.exports.readAllByip = (ip) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_ip = ?;
-    `
+// // =================================
+// //  READ ALL
+// // =================================
+// module.exports.readAll = (site_id) => {
+//     const sql = `
+//     SELECT * FROM "um_request_log" WHERE site_id = ?;`
 
-    return query(sql, [ip]).then(result => {
-        return result.rows
-    })
-}
+//     return query(sql,[site_id]).then(result => {
+//         return result.rows
+//     })
+// }
 
-module.exports.readCreationByip = (ip) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_ip = ?
-    AND request_method = 'POST';
-    `
+// module.exports.readAllByDate = (site_id, date) => {
+//     const sql = `
+//     SELECT * FROM "um_request_log" WHERE site_id = ?
+//     AND created_at >= ?;
+//     `
 
-    return query(sql, [ip]).then(result => {
-        return result.rows
-    })
-}
+//     return query(sql, [site_id, date]).then(result => {
+//         return result.rows
+//     })
+// }
 
-module.exports.readModificationByip = (ip) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_ip = ?
-    AND request_method = 'PUT';
-    `
+// module.exports.readCreationByDate = (site_id, date) => {
+//     const sql = `
+//     SELECT * FROM "um_request_log" WHERE site_id = ?
+//     AND created_at >= ?
+//     AND request_method = 'POST';`
 
-    return query(sql, [ip]).then(result => {
-        return result.rows
-    })
-}
+//     return query(sql, [site_id, date]).then(result => {
+//         return result.rows
+//     })
+// }
 
-module.exports.readDeletionByip = (ip) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_ip = ?
-    AND request_method = 'DELETE';
-    `
+// module.exports.readModificationByDate = (site_id, date) => {
+//     const sql = `
+//     SELECT * FROM "um_request_log" WHERE site_id = ?
+//     AND created_at >= ?
+//     AND request_method = 'PUT';`
 
-    return query(sql, [ip]).then(result => {
-        return result.rows
-    })
-}
+//     return query(sql, [site_id, date]).then(result => {
+//         return result.rows
+//     })
+// }
 
-module.exports.readAllByOs = (Os) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_os = ?;
-    `
+// module.exports.readDeletionByDate = (site_id, date) => {
+//     const sql = `
+//     SELECT * FROM "um_request_log" WHERE site_id = ?
+//     AND created_at >= ?
+//     AND request_method = 'DELETE';`
 
-    return query(sql, [Os]).then(result => {
-        return result.rows
-    })
-}
+//     return query(sql, [site_id, date]).then(result => {
+//         return result.rows
+//     })
+// }
 
-module.exports.readCreationByOs = (Os) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_os = ?
-    AND request_method = 'POST';
-    `
+// module.exports.readAllByip = (ip) => {
+//     const sql = `
+//     SELECT * FROM "um_request_log" WHERE user_ip = ?;
+//     `
 
-    return query(sql, [Os]).then(result => {
-        return result.rows
-    })
-}
+//     return query(sql, [ip]).then(result => {
+//         return result.rows
+//     })
+// }
 
-module.exports.readModificationByOs = (Os) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_os = ?
-    AND request_method = 'PUT';
-    `
+// module.exports.readCreationByip = (ip) => {
+//     const sql = `
+//     SELECT * FROM "um_request_log" WHERE user_ip = ?
+//     AND request_method = 'POST';
+//     `
 
-    return query(sql, [Os]).then(result => {
-        return result.rows
-    })
-}
+//     return query(sql, [ip]).then(result => {
+//         return result.rows
+//     })
+// }
 
-module.exports.readDeletionByOs = (Os) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_os = ?
-    AND request_method = 'DELETE';
-    `
+// module.exports.readModificationByip = (ip) => {
+//     const sql = `
+//     SELECT * FROM "um_request_log" WHERE user_ip = ?
+//     AND request_method = 'PUT';
+//     `
 
-    return query(sql, [Os]).then(result => {
-        return result.rows
-    })
-}
+//     return query(sql, [ip]).then(result => {
+//         return result.rows
+//     })
+// }
 
-module.exports.logRequest = (user_id, site_id, request_method,api_requested, user_ip, user_os, request_success) => {
-    const sql = `
-    INSERT INTO "um_request_log" 
-    (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success)
-    VALUES
-    (?,?,?,?,?,?,?);
-    `
-    const data = [user_id, site_id, request_method, api_requested, user_ip, user_os, request_success]
+// module.exports.readDeletionByip = (ip) => {
+//     const sql = `
+//     SELECT * FROM "um_request_log" WHERE user_ip = ?
+//     AND request_method = 'DELETE';
+//     `
 
-    return query(sql, data).then(result => {
-        return result
-    })
-}
+//     return query(sql, [ip]).then(result => {
+//         return result.rows
+//     })
+// }
+
+// module.exports.readAllByOs = (Os) => {
+//     const sql = `
+//     SELECT * FROM "um_request_log" WHERE user_os = ?;
+//     `
+
+//     return query(sql, [Os]).then(result => {
+//         return result.rows
+//     })
+// }
+
+// module.exports.readCreationByOs = (Os) => {
+//     const sql = `
+//     SELECT * FROM "um_request_log" WHERE user_os = ?
+//     AND request_method = 'POST';
+//     `
+
+//     return query(sql, [Os]).then(result => {
+//         return result.rows
+//     })
+// }
+
+// module.exports.readModificationByOs = (Os) => {
+//     const sql = `
+//     SELECT * FROM "um_request_log" WHERE user_os = ?
+//     AND request_method = 'PUT';
+//     `
+
+//     return query(sql, [Os]).then(result => {
+//         return result.rows
+//     })
+// }
+
+// module.exports.readDeletionByOs = (Os) => {
+//     const sql = `
+//     SELECT * FROM "um_request_log" WHERE user_os = ?
+//     AND request_method = 'DELETE';
+//     `
+
+//     return query(sql, [Os]).then(result => {
+//         return result.rows
+//     })
+// }
+
+// module.exports.logRequest = (user_id, site_id, request_method,api_requested, user_ip, user_os, request_success) => {
+//     const sql = `
+//     INSERT INTO "um_request_log" 
+//     (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success)
+//     VALUES
+//     (?,?,?,?,?,?,?);
+//     `
+//     const data = [user_id, site_id, request_method, api_requested, user_ip, user_os, request_success]
+
+//     return query(sql, data).then(result => {
+//         return result
+//     })
+// }
