@@ -15,7 +15,7 @@ CREATE TABLE um_creation_log (
     user_id INT,
     site_id INT,
     table_name VARCHAR(50),
-    record_id INT,
+    record_id VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -24,7 +24,7 @@ CREATE TABLE um_modification_log (
     user_id INT,
     site_id INT,
     table_name VARCHAR(50),
-    record_id INT,
+    record_id VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -33,7 +33,7 @@ CREATE TABLE um_deletion_log (
     user_id INT,
     site_id INT,
     table_name VARCHAR(50),
-    record_id INT,
+    record_id VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -51,19 +51,18 @@ CREATE TABLE um_deletion_log_detail (
     old_value JSONB
 );
 
--- FOREIGN KEYS
 ALTER TABLE um_request_log
-    ADD CONSTRAINT fk_request_user_id FOREIGN KEY (user_id) REFERENCES "um_user"(user_id),
-    ADD CONSTRAINT fk_request_site_id FOREIGN KEY (site_id) REFERENCES "um_site"(site_id);
+    ADD CONSTRAINT fk_request_user_id FOREIGN KEY (user_id) REFERENCES ""um_user""(user_id),
+    ADD CONSTRAINT fk_request_site_id FOREIGN KEY (site_id) REFERENCES ""um_site""(site_id);
 
 ALTER TABLE um_creation_log
-    ADD CONSTRAINT fk_creation_user_id FOREIGN KEY (user_id) REFERENCES "um_user"(user_id),
-    ADD CONSTRAINT fk_creation_site_id FOREIGN KEY (site_id) REFERENCES "um_site"(site_id);
+    ADD CONSTRAINT fk_creation_user_id FOREIGN KEY (user_id) REFERENCES ""um_user""(user_id),
+    ADD CONSTRAINT fk_creation_site_id FOREIGN KEY (site_id) REFERENCES ""um_site""(site_id);
 
 ALTER TABLE um_modification_log
-    ADD CONSTRAINT fk_modification_user_id FOREIGN KEY (user_id) REFERENCES "um_user"(user_id),
-    ADD CONSTRAINT fk_modification_site_id FOREIGN KEY (site_id) REFERENCES "um_site"(site_id);
+    ADD CONSTRAINT fk_modification_user_id FOREIGN KEY (user_id) REFERENCES ""um_user""(user_id),
+    ADD CONSTRAINT fk_modification_site_id FOREIGN KEY (site_id) REFERENCES ""um_site""(site_id);
 
 ALTER TABLE um_deletion_log
-    ADD CONSTRAINT fk_deletion_user_id FOREIGN KEY (user_id) REFERENCES "um_user"(user_id),
-    ADD CONSTRAINT fk_deletion_site_id FOREIGN KEY (site_id) REFERENCES "um_site"(site_id);
+    ADD CONSTRAINT fk_deletion_user_id FOREIGN KEY (user_id) REFERENCES ""um_user""(user_id),
+    ADD CONSTRAINT fk_deletion_site_id FOREIGN KEY (site_id) REFERENCES ""um_site""(site_id);
