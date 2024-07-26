@@ -1,220 +1,246 @@
-const model = require(`../models/requestModel`)
+const requestModel = require('../models/requestModel');
 
-// read all values from tables controller
-module.exports.readAll = (req, res) => {
-    const site_id=req.params.siteid
-    // Get all requests
-    return model.readAll(site_id)
-    .then( result => {
-        return res.status(200).json(result)
-    })
-    .catch( error => {
-        console.log(error)
-        return res.status(500).json({error: error.message})
-    })
+// create
+
+async function createRequest(req, res) {
+  try {
+    const { user_id, site_id, request_method, api_requested, user_ip, user_os, request_success } = req.body;
+
+    if (!user_id || !site_id || !request_method || !api_requested || !user_ip || !user_os || request_success === undefined) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const result = await requestModel.insertRequest(user_id, site_id, request_method, api_requested, user_ip, user_os, request_success);
+    res.status(200).json({ message: 'Request logged successfully', result });
+  } catch (error) {
+    console.error('Error logging request:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 }
 
-// read all values by date
-module.exports.readAllByDate = (req, res) => { 
-    const site_id = req.params.siteid
-    const date = req.params.date
+// read
 
-    // read all requests by date
-    return model.readAllByDate(site_id, date)
-        .then(result => {
-            return res.status(200).json(result)
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-        })
+async function readAll(req, res) {
+  try {
+    const { site_id } = req.body;
+
+    if (!site_id) {
+      return res.status(400).json({ error: 'Missing site_id' });
+    }
+
+    const result = await requestModel.selectAll(site_id);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error selecting all logs:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 }
 
-// read create requests values by date
-module.exports.readCreationByDate = (req, res) => { 
-    const site_id = req.params.site_id
-    const date = req.params.date
+async function readAllByDate(req, res) {
+  try {
+    const { site_id, date } = req.body;
 
-    // read by date
-    return model.readCreationByDate(site_id, date)
-        .then(result => {
-            return res.status(200).json(result)
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-        })
-} // we have a middleware that checks site_id and endpoints availability -> check with other guy
+    if (!site_id || !date) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
 
-// read update requests values by date
-module.exports.readModificationByDate = (req, res) => {
-    const site_id = req.params.site_id
-    const date = req.params.date
-
-    // read by date
-    return model.readModificationByDate(site_id, date)
-        .then(result => {
-            return res.status(200).json(result)
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-        })
+    const result = await requestModel.selectAllByDate(site_id, date);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error selecting logs by date:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 }
 
-// read delete requests values by date
-module.exports.readDeletionByDate = (req, res) => {
-    const site_id = req.params.site_id
-    const date = req.params.date
+async function readCreationByDate(req, res) {
+  try {
+    const { site_id, date } = req.body;
 
-    // read by date
-    return model.readDeletionByDate(site_id, date)
-        .then(result => {
-            return res.status(200).json(result)
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-        })
+    if (!site_id || !date) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const result = await requestModel.selectCreationByDate(site_id, date);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error selecting creation logs by date:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 }
 
-// read all values ip
-module.exports.readAllByip = (req, res) => {
-    const ip = req.params.type
+async function readModificationByDate(req, res) {
+  try {
+    const { site_id, date } = req.body;
 
-    // read all requests by ip
-    return model.readAllByip(ip)
-        .then(result => {
-            return res.status(200).json(result)
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-        })
-} 
+    if (!site_id || !date) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
 
-// read create requests values by ip
-module.exports.readCreationByip = (req, res) => {
-    const ip = req.params.type
-
-    // read by ip
-    return model.readCreationByip(ip)
-        .then(result => {
-            return res.status(200).json(result)
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-        })
+    const result = await requestModel.selectModificationByDate(site_id, date);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error selecting modification logs by date:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 }
 
-// read update requests values by ip
-module.exports.readModificationByip = (req, res) => {
-    const ip = req.params.type
+async function readDeletionByDate(req, res) {
+  try {
+    const { site_id, date } = req.body;
 
-    // read by ip
-    return model.readModificationByip(ip)
-        .then(result => {
-            return res.status(200).json(result)
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-        })
+    if (!site_id || !date) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const result = await requestModel.selectDeletionByDate(site_id, date);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error selecting deletion logs by date:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 }
 
-// read delete requests values by ip
-module.exports.readDeletionByip = (req, res) => {
-    const ip = req.params.type
+async function readAllByIp(req, res) {
+  try {
+    const { ip } = req.body;
 
-    // read by ip
-    return model.readDeletionByip(ip)
-        .then(result => {
-            return res.status(200).json(result)
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-        })
+    if (!ip) {
+      return res.status(400).json({ error: 'Missing IP address' });
+    }
+
+    const result = await requestModel.selectAllByIp(ip);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error selecting logs by IP:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 }
 
-// read all values Os
-module.exports.readAllByOs = (req, res) => {
-    const Os = req.params.type
+async function readCreationByIp(req, res) {
+  try {
+    const { ip } = req.body;
 
-    // read all requests by Os
-    return model.readAllByOs(Os)
-        .then(result => {
-            return res.status(200).json(result)
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-        })
+    if (!ip) {
+      return res.status(400).json({ error: 'Missing IP address' });
+    }
+
+    const result = await requestModel.selectCreationByIp(ip);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error selecting creation logs by IP:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 }
 
-// read create requests values by Os
-module.exports.readCreationByOs = (req, res) => {
-    const Os = req.params.type
+async function readModificationByIp(req, res) {
+  try {
+    const { ip } = req.body;
 
-    // read by Os
-    return model.readCreationByOs(Os)
-        .then(result => {
-            return res.status(200).json(result)
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-        })
+    if (!ip) {
+      return res.status(400).json({ error: 'Missing IP address' });
+    }
+
+    const result = await requestModel.selectModificationByIp(ip);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error selecting modification logs by IP:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 }
 
-// read update requests values by Os
-module.exports.readModificationByOs = (req, res) => {
-    const Os = req.params.type
+async function readDeletionByIp(req, res) {
+  try {
+    const { ip } = req.body;
 
-    // read by Os
-    return model.readModificationByOs(Os)
-        .then(result => {
-            return res.status(200).json(result)
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-        })
+    if (!ip) {
+      return res.status(400).json({ error: 'Missing IP address' });
+    }
+
+    const result = await requestModel.selectDeletionByIp(ip);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error selecting deletion logs by IP:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 }
 
-// read delete requests values by Os
-module.exports.readDeletionByOs = (req, res) => {
-    const Os = req.params.type
+async function readAllByOs(req, res) {
+  try {
+    const { os } = req.body;
 
-    // read by Os
-    return model.readDeletionByOs(Os)
-        .then(result => {
-            return res.status(200).json(result)
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-        })
+    if (!os) {
+      return res.status(400).json({ error: 'Missing OS' });
+    }
+
+    const result = await requestModel.selectAllByOs(os);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error selecting logs by OS:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 }
 
-// Create reuqests
-module.exports.newRequestLog = (req, res, next) => {
-    const user_id = req.body.user_id
-    const site_id = req.body.site_id
-    const request_method = req.body.request_method
-    const api_requested = req.body.api_requested
-    const user_ip = req.body.user_ip
-    const user_os = req.body.user_os
-    const request_success = req.body.request_success
+async function readCreationByOs(req, res) {
+  try {
+    const { os } = req.body;
 
-    // read specific modification table by date
-    return model.logRequest(user_id, site_id, request_method,api_requested, user_ip, user_os, request_success)
-        .then(result => {
-            next()
-        })
-        .catch(error => {
-            console.error(error)
-            return res.status(500).json({error: error.message})
-    })
+    if (!os) {
+      return res.status(400).json({ error: 'Missing OS' });
+    }
+
+    const result = await requestModel.selectCreationByOs(os);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error selecting creation logs by OS:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+async function readModificationByOs(req, res) {
+  try {
+    const { os } = req.body;
+
+    if (!os) {
+      return res.status(400).json({ error: 'Missing OS' });
+    }
+
+    const result = await requestModel.selectModificationByOs(os);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error selecting modification logs by OS:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+async function readDeletionByOs(req, res) {
+  try {
+    const { os } = req.body;
+
+    if (!os) {
+      return res.status(400).json({ error: 'Missing OS' });
+    }
+
+    const result = await requestModel.selectDeletionByOs(os);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error selecting deletion logs by OS:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+module.exports = {
+  createRequest,
+  readAll,
+  readAllByDate,
+  readCreationByDate,
+  readModificationByDate,
+  readDeletionByDate,
+  readAllByIp,
+  readCreationByIp,
+  readModificationByIp,
+  readDeletionByIp,
+  readAllByOs,
+  readCreationByOs,
+  readModificationByOs,
+  readDeletionByOs
 };

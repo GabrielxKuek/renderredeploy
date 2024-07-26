@@ -1,8 +1,8 @@
 const creationModel = require('../models/creationModel');
 
-// insert
+// create
 
-async function insertCreation(req, res) {
+async function createCreation(req, res) {
     try {
         const { user_id, site_id, table_name, record_id } = req.body;
 
@@ -28,7 +28,7 @@ async function insertCreation(req, res) {
 async function readCreation(req, res) {
   try {
     const { site_id } = req.params;
-    const result = await creationModel.readCreation(site_id);
+    const result = await creationModel.selectCreation(site_id);
     res.json(result);
   } catch (error) {
     console.error('Error reading creation logs:', error);
@@ -39,7 +39,7 @@ async function readCreation(req, res) {
 async function readCreationByDate(req, res) {
   try {
     const { site_id, date } = req.params;
-    const result = await creationModel.readCreationByDate(site_id, date);
+    const result = await creationModel.selectCreationByDate(site_id, date);
     res.json(result);
   } catch (error) {
     console.error('Error reading creation logs by date:', error);
@@ -47,7 +47,7 @@ async function readCreationByDate(req, res) {
   }
 }
 
-async function selectCreationIp(req, res) {
+async function readCreationIp(req, res) {
   try {
     const { ip } = req.params;
     const result = await creationModel.selectCreationIp(ip);
@@ -58,7 +58,7 @@ async function selectCreationIp(req, res) {
   }
 }
 
-async function selectCreationOs(req, res) {
+async function readCreationOs(req, res) {
   try {
     const { os } = req.params;
     const result = await creationModel.selectCreationOs(os);
@@ -70,9 +70,9 @@ async function selectCreationOs(req, res) {
 }
 
 module.exports = {
-    insertCreation,
+    createCreation,
     readCreation,
     readCreationByDate,
-    selectCreationIp,
-    selectCreationOs,
+    readCreationIp,
+    readCreationOs,
 };

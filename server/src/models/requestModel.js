@@ -207,23 +207,3 @@ module.exports.selectDeletionByOs = async (os) => {
         throw error;
     }
 };
-
-module.exports.logRequest = async (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success) => {
-    try {
-        const result = await prisma.um_request_log.create({
-            data: {
-            user_id,
-            site_id,
-            request_method,
-            api_requested,
-            user_ip,
-            user_os,
-            request_success,
-            },
-        });
-        return result;
-    } catch (error) {
-        console.error('Error logging request:', error);
-        throw error;
-    }
-};

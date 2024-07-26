@@ -16,7 +16,7 @@ export const insertModification = async (user_id, site_id, table_name, record_id
       console.error('Error executing logChange:', error);
       throw error;
     }
-};
+  };
 
 // select
 
@@ -32,7 +32,7 @@ export const selectModification = async (site_id) => {
     });
     return result;
   } catch (error) {
-    console.error('Error selecting modification logs:', error);
+    console.error('Error reading modification logs:', error);
     throw error;
   }
 };
@@ -49,7 +49,7 @@ export const selectModificationByDate = async (site_id, date) => {
     });
     return result;
   } catch (error) {
-    console.error('Error selecting modification logs by date:', error);
+    console.error('Error reading modification logs by date:', error);
     throw error;
   }
 };

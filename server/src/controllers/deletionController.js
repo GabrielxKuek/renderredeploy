@@ -1,8 +1,8 @@
 const deletionModel = require('../models/deletionModel');
 
-// insert
+// create
 
-async function insertDeletion(req, res) {
+async function createDeletion(req, res) {
     try {
         const { user_id, site_id, table_name, record_id, field_names, values } = req.body;
 
@@ -28,7 +28,7 @@ async function insertDeletion(req, res) {
 async function readDeletion(req, res) {
   try {
     const { site_id } = req.params;
-    const result = await deletionModel.readDeletion(site_id);
+    const result = await deletionModel.selectDeletion(site_id);
     res.json(result);
   } catch (error) {
     console.error('Error reading deletion logs:', error);
@@ -36,7 +36,7 @@ async function readDeletion(req, res) {
   }
 }
 
-async function selectDeletionByDate(req, res) {
+async function readDeletionByDate(req, res) {
   try {
     const { site_id, date } = req.params;
     const result = await deletionModel.selectDeletionByDate(site_id, date);
@@ -47,7 +47,7 @@ async function selectDeletionByDate(req, res) {
   }
 }
 
-async function selectDeletionIp(req, res) {
+async function readDeletionIp(req, res) {
   try {
     const { ip } = req.params;
     const result = await deletionModel.selectDeletionIp(ip);
@@ -58,7 +58,7 @@ async function selectDeletionIp(req, res) {
   }
 }
 
-async function selectDeletionOs(req, res) {
+async function readDeletionOs(req, res) {
   try {
     const { os } = req.params;
     const result = await deletionModel.selectDeletionOs(os);
@@ -70,9 +70,9 @@ async function selectDeletionOs(req, res) {
 }
 
 module.exports = {
-    insertDeletion,
+    createDeletion,
     readDeletion,
-    selectDeletionByDate,
-    selectDeletionIp,
-    selectDeletionOs,
+    readDeletionByDate,
+    readDeletionIp,
+    readDeletionOs,
 };
