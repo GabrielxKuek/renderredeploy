@@ -20,10 +20,10 @@ async function createModification(req, res) {
 
 // read
 
-async function readModification(req, res) {
+async function readModificationByAll(req, res) {
   try {
     const { site_id } = req.params;
-    const result = await modificationModel.selectModification(site_id);
+    const result = await modificationModel.selectModificationByAll(site_id);
     res.json(result);
   } catch (error) {
     console.error('Error reading modification logs:', error);
@@ -42,10 +42,10 @@ async function readModificationByDate(req, res) {
   }
 }
 
-async function readModificationIp(req, res) {
+async function readModificationByIp(req, res) {
   try {
     const { ip } = req.params;
-    const result = await modificationModel.selectModificationIp(ip);
+    const result = await modificationModel.selectModificationByIp(ip);
     res.json(result);
   } catch (error) {
     console.error('Error selecting modification logs by IP:', error);
@@ -53,10 +53,10 @@ async function readModificationIp(req, res) {
   }
 }
 
-async function readModificationOs(req, res) {
+async function readModificationByOs(req, res) {
   try {
     const { os } = req.params;
-    const result = await modificationModel.selectModificationOs(os);
+    const result = await modificationModel.selectModificationByOs(os);
     res.json(result);
   } catch (error) {
     console.error('Error selecting modification logs by OS:', error);
@@ -66,8 +66,8 @@ async function readModificationOs(req, res) {
 
 module.exports = {
     createModification,
-    readModification,
+    readModificationByAll,
     readModificationByDate,
-    readModificationIp,
-    readModificationOs,
+    readModificationByIp,
+    readModificationByOs,
 };

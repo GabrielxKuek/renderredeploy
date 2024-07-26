@@ -25,10 +25,10 @@ async function createDeletion(req, res) {
 
 // read
 
-async function readDeletion(req, res) {
+async function readDeletionByAll(req, res) {
   try {
     const { site_id } = req.params;
-    const result = await deletionModel.selectDeletion(site_id);
+    const result = await deletionModel.selectDeletionByAll(site_id);
     res.json(result);
   } catch (error) {
     console.error('Error reading deletion logs:', error);
@@ -47,10 +47,10 @@ async function readDeletionByDate(req, res) {
   }
 }
 
-async function readDeletionIp(req, res) {
+async function readDeletionByIp(req, res) {
   try {
     const { ip } = req.params;
-    const result = await deletionModel.selectDeletionIp(ip);
+    const result = await deletionModel.selectDeletionByIp(ip);
     res.json(result);
   } catch (error) {
     console.error('Error selecting deletion logs by IP:', error);
@@ -58,10 +58,10 @@ async function readDeletionIp(req, res) {
   }
 }
 
-async function readDeletionOs(req, res) {
+async function readDeletionByOs(req, res) {
   try {
     const { os } = req.params;
-    const result = await deletionModel.selectDeletionOs(os);
+    const result = await deletionModel.selectDeletionByOs(os);
     res.json(result);
   } catch (error) {
     console.error('Error selecting deletion logs by OS:', error);
@@ -71,8 +71,8 @@ async function readDeletionOs(req, res) {
 
 module.exports = {
     createDeletion,
-    readDeletion,
+    readDeletionByAll,
     readDeletionByDate,
-    readDeletionIp,
-    readDeletionOs,
+    readDeletionByIp,
+    readDeletionByOs,
 };

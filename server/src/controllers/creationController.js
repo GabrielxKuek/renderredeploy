@@ -25,10 +25,10 @@ async function createCreation(req, res) {
 
 // read
 
-async function readCreation(req, res) {
+async function readCreationByAll (req, res) {
   try {
     const { site_id } = req.params;
-    const result = await creationModel.selectCreation(site_id);
+    const result = await creationModel.selectCreationByAll(site_id);
     res.json(result);
   } catch (error) {
     console.error('Error reading creation logs:', error);
@@ -36,7 +36,7 @@ async function readCreation(req, res) {
   }
 }
 
-async function readCreationByDate(req, res) {
+async function readCreationByDate (req, res) {
   try {
     const { site_id, date } = req.params;
     const result = await creationModel.selectCreationByDate(site_id, date);
@@ -47,10 +47,10 @@ async function readCreationByDate(req, res) {
   }
 }
 
-async function readCreationIp(req, res) {
+async function readCreationByIp (req, res) {
   try {
     const { ip } = req.params;
-    const result = await creationModel.selectCreationIp(ip);
+    const result = await creationModel.selectCreationByIp(ip);
     res.json(result);
   } catch (error) {
     console.error('Error selecting creation logs by IP:', error);
@@ -58,10 +58,10 @@ async function readCreationIp(req, res) {
   }
 }
 
-async function readCreationOs(req, res) {
+async function readCreationByOs (req, res) {
   try {
     const { os } = req.params;
-    const result = await creationModel.selectCreationOs(os);
+    const result = await creationModel.selectCreationByOs(os);
     res.json(result);
   } catch (error) {
     console.error('Error selecting creation logs by OS:', error);
@@ -71,8 +71,8 @@ async function readCreationOs(req, res) {
 
 module.exports = {
     createCreation,
-    readCreation,
+    readCreationByAll,
     readCreationByDate,
-    readCreationIp,
-    readCreationOs,
+    readCreationByIp,
+    readCreationByOs,
 };

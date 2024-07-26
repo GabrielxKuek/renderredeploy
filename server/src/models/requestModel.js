@@ -1,7 +1,9 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// insert
+// ========================
+// insert to request logs table
+// ========================
 
 module.exports.insertRequest = async (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success) => {
     const sql = `
@@ -17,9 +19,11 @@ module.exports.insertRequest = async (user_id, site_id, request_method, api_requ
     }
   };
 
-// select
+// ========================
+// select all request
+// ========================
 
-module.exports.selectAll = async (site_id) => {
+module.exports.selectAllRequestBySite = async (site_id) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: { site_id },
@@ -31,7 +35,7 @@ module.exports.selectAll = async (site_id) => {
     }
 };
 
-module.exports.selectAllByDate = async (site_id, date) => {
+module.exports.selectAllRequestByDate = async (site_id, date) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {
@@ -46,7 +50,35 @@ module.exports.selectAllByDate = async (site_id, date) => {
     }
 };
 
-module.exports.selectCreationByDate = async (site_id, date) => {
+module.exports.selectAllRequestByIp = async (ip) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: { user_ip: ip },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting logs by IP:', error);
+        throw error;
+    }
+};
+
+module.exports.selectAllRequestByOs = async (os) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: { user_os: os },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting logs by OS:', error);
+        throw error;
+    }
+};
+
+// ========================
+// select post request
+// ========================
+
+module.exports.selectPostRequestByDate = async (site_id, date) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {
@@ -62,7 +94,42 @@ module.exports.selectCreationByDate = async (site_id, date) => {
     }
 };
 
-module.exports.selectModificationByDate = async (site_id, date) => {
+
+module.exports.selectPostRequestByIp = async (ip) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: {
+            user_ip: ip,
+            request_method: 'POST',
+            },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting creation logs by IP:', error);
+        throw error;
+    }
+};
+
+module.exports.selectPostRequestByOs = async (os) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: {
+            user_os: os,
+            request_method: 'POST',
+            },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting creation logs by OS:', error);
+        throw error;
+    }
+};
+
+// ========================
+// select put request
+// ========================
+
+module.exports.selectPutRequestByDate = async (site_id, date) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {
@@ -78,7 +145,41 @@ module.exports.selectModificationByDate = async (site_id, date) => {
     }
 };
 
-module.exports.selectDeletionByDate = async (site_id, date) => {
+module.exports.selectPutRequestByIp = async (ip) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: {
+            user_ip: ip,
+            request_method: 'PUT',
+            },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting modification logs by IP:', error);
+        throw error;
+    }
+};
+
+module.exports.selectPutRequestByOs = async (os) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: {
+            user_os: os,
+            request_method: 'PUT',
+            },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting modification logs by OS:', error);
+        throw error;
+    }
+};
+
+// ========================
+// select delete request
+// ========================
+
+module.exports.selectDeleteRequestByDate = async (site_id, date) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {
@@ -94,49 +195,7 @@ module.exports.selectDeletionByDate = async (site_id, date) => {
     }
 };
 
-module.exports.selectAllByIp = async (ip) => {
-    try {
-        const result = await prisma.um_request_log.findMany({
-            where: { user_ip: ip },
-        });
-        return result;
-    } catch (error) {
-        console.error('Error selecting logs by IP:', error);
-        throw error;
-    }
-};
-
-module.exports.selectCreationByIp = async (ip) => {
-    try {
-        const result = await prisma.um_request_log.findMany({
-            where: {
-            user_ip: ip,
-            request_method: 'POST',
-            },
-        });
-        return result;
-    } catch (error) {
-        console.error('Error selecting creation logs by IP:', error);
-        throw error;
-    }
-};
-
-module.exports.selectModificationByIp = async (ip) => {
-    try {
-        const result = await prisma.um_request_log.findMany({
-            where: {
-            user_ip: ip,
-            request_method: 'PUT',
-            },
-        });
-        return result;
-    } catch (error) {
-        console.error('Error selecting modification logs by IP:', error);
-        throw error;
-    }
-};
-
-module.exports.selectDeletionByIp = async (ip) => {
+module.exports.selectDeleteRequestByIp = async (ip) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {
@@ -151,49 +210,7 @@ module.exports.selectDeletionByIp = async (ip) => {
     }
 };
 
-module.exports.selectAllByOs = async (os) => {
-    try {
-        const result = await prisma.um_request_log.findMany({
-            where: { user_os: os },
-        });
-        return result;
-    } catch (error) {
-        console.error('Error selecting logs by OS:', error);
-        throw error;
-    }
-};
-
-module.exports.selectCreationByOs = async (os) => {
-    try {
-        const result = await prisma.um_request_log.findMany({
-            where: {
-            user_os: os,
-            request_method: 'POST',
-            },
-        });
-        return result;
-    } catch (error) {
-        console.error('Error selecting creation logs by OS:', error);
-        throw error;
-    }
-};
-
-module.exports.selectModificationByOs = async (os) => {
-    try {
-        const result = await prisma.um_request_log.findMany({
-            where: {
-            user_os: os,
-            request_method: 'PUT',
-            },
-        });
-        return result;
-    } catch (error) {
-        console.error('Error selecting modification logs by OS:', error);
-        throw error;
-    }
-};
-
-module.exports.selectDeletionByOs = async (os) => {
+module.exports.selectDeleteRequestByOs = async (os) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {

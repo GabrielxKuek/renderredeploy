@@ -20,7 +20,7 @@ export const insertDeletion = async (user_id, site_id, table_name, record_id, fi
 
 // select
 
-export const selectDeletion = async (site_id) => {
+export const selectDeletionByAll = async (site_id) => {
   try {
     const result = await prisma.um_deletion_log.findMany({
       where: {
@@ -54,7 +54,7 @@ export const selectDeletionByDate = async (site_id, date) => {
   }
 };
 
-export const selectDeletionIp = async (ip) => {
+export const selectDeletionByIp = async (ip) => {
   try {
     const result = await prisma.um_deletion_log.findMany({
       where: {
@@ -71,7 +71,7 @@ export const selectDeletionIp = async (ip) => {
   }
 };
 
-export const selectDeletionOs = async (os) => {
+export const selectDeletionByOs = async (os) => {
   try {
     const result = await prisma.um_deletion_log.findMany({
       where: {

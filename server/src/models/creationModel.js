@@ -20,7 +20,7 @@ export const insertCreation = async (user_id, site_id, table_name, record_id) =>
 
 // select
 
-export const selectCreation = async (site_id) => {
+export const selectCreationByAll = async (site_id) => {
   try {
     const result = await prisma.um_creation_log.findMany({
       where: {
@@ -51,7 +51,7 @@ export const selectCreationByDate = async (site_id, date) => {
   }
 };
 
-export const selectCreationIp = async (ip) => {
+export const selectCreationByIp = async (ip) => {
   try {
     const result = await prisma.um_creation_log.findMany({
       where: {
@@ -71,7 +71,7 @@ export const selectCreationIp = async (ip) => {
   }
 };
 
-export const selectCreationOs = async (os) => {
+export const selectCreationByOs = async (os) => {
   try {
     const result = await prisma.um_creation_log.findMany({
       where: {
