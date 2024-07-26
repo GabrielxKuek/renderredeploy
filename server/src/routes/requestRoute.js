@@ -1,11 +1,6 @@
 const express = require('express');
-const requestController = require('../controllers/requestController');
-const jwtMiddleware = require('../middleware/jwtMiddleware');
-
-
 const router = express.Router();
-
-router.use(jwtMiddleware.verifyToken, jwtMiddleware.verifyIsAdmin);
+const requestController = require('../controllers/requestController');
 
 router.get('/viewAll', requestController.readAll);
 

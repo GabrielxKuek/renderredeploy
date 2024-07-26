@@ -2,6 +2,24 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// insert
+
+export const insertCreation = async (user_id, site_id, table_name, record_id) => {
+    const sql = `
+      CALL log_creation($1, $2, $3, $4);
+    `;
+  
+    try {
+      const result = await prisma.$executeRaw(sql, user_id, site_id, table_name, record_id);
+      return result;
+    } catch (error) {
+      console.error('Error executing logNew:', error);
+      throw error;
+    }
+  };
+
+// read
+
 export const readCreation = async (site_id) => {
   try {
     const result = await prisma.um_creation_log.findMany({

@@ -2,6 +2,24 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// insert
+
+export const insertModification = async (user_id, site_id, table_name, record_id, field_names, old_values) => {
+    const sql = `
+      CALL log_modification($1, $2, $3, $4, $5, $6);
+    `;
+  
+    try {
+      const result = await prisma.$executeRaw(sql, user_id, site_id, table_name, record_id, field_names, old_values);
+      return result;
+    } catch (error) {
+      console.error('Error executing logChange:', error);
+      throw error;
+    }
+};
+
+// read
+
 export const readModification = async (site_id) => {
   try {
     const result = await prisma.um_modification_log.findMany({

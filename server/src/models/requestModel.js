@@ -2,7 +2,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// insert row into request table
+// insert
 module.exports.logRequest = async (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success) => {
   const sql = `
     CALL log_request($1, $2, $3, $4, $5, $6, $7);
@@ -13,48 +13,6 @@ module.exports.logRequest = async (user_id, site_id, request_method, api_request
     return result;
   } catch (error) {
     console.error('Error executing logRequest:', error);
-    throw error;
-  }
-};
-
-module.exports.logCreation = async (user_id, site_id, table_name, record_id) => {
-  const sql = `
-    CALL log_creation($1, $2, $3, $4);
-  `;
-
-  try {
-    const result = await prisma.$executeRaw(sql, user_id, site_id, table_name, record_id);
-    return result;
-  } catch (error) {
-    console.error('Error executing logNew:', error);
-    throw error;
-  }
-};
-
-module.exports.logModification = async (user_id, site_id, table_name, record_id, field_names, old_values) => {
-  const sql = `
-    CALL log_modification($1, $2, $3, $4, $5, $6);
-  `;
-
-  try {
-    const result = await prisma.$executeRaw(sql, user_id, site_id, table_name, record_id, field_names, old_values);
-    return result;
-  } catch (error) {
-    console.error('Error executing logChange:', error);
-    throw error;
-  }
-};
-
-module.exports.logDeletion = async (user_id, site_id, table_name, record_id, field_names, values) => {
-  const sql = `
-    CALL log_deletion($1, $2, $3, $4, $5, $6);
-  `;
-
-  try {
-    const result = await prisma.$executeRaw(sql, user_id, site_id, table_name, record_id, field_names, values);
-    return result;
-  } catch (error) {
-    console.error('Error executing logRemove:', error);
     throw error;
   }
 };
