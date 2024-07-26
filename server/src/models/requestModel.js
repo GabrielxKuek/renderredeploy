@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 // ========================
-// insert to request logs table
+// insert request
 // ========================
 
 module.exports.insertRequest = async (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success) => {

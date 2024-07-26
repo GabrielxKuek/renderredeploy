@@ -2,21 +2,30 @@ const express = require('express');
 const router = express.Router();
 const requestController = require('../controllers/requestController');
 
-router.get('/viewAll', requestController.readAll);
+// insert request
 
-router.get('/viewByDate', requestController.readAllByDate);
-router.get('/viewCreateByDate', requestController.readCreationByDate);
-router.get('/viewUpdateByDate', requestController.readModificationByDate);
-router.get('/viewDeleteByDate', requestController.readDeletionByDate);
+router.get('/insert', requestController.createRequest);
 
-router.get('/viewByIp', requestController.readAllByip);
-router.get('/viewCreateByIp', requestController.readCreationByip);
-router.get('/viewUpdateByIp', requestController.readModificationByip);
-router.get('/viewDeleteByIp', requestController.readDeletionByip);
+// select all request
 
-router.get('/viewByOs', requestController.readAllByOs);
-router.get('/viewCreateByOs', requestController.readCreationByOs);
-router.get('/viewUpdateByOs', requestController.readModificationByOs);
-router.get('/viewDeleteByOs', requestController.readDeletionByOs);
+router.get('/viewAllBySite', requestController.readAllRequestBySite);
+router.get('/viewAllByDate', requestController.readAllRequestByDate);
+router.get('/viewAllByIp', requestController.readAllRequestByIp);
+router.get('/viewAllByOs', requestController.readAllRequestByOs);
+
+// select post request
+router.get('/viewPostByDate', requestController.readPostRequestByDate);
+router.get('/viewPostByIp', requestController.readPostRequestByIp);
+router.get('/viewPostByOs', requestController.readPostRequestByOs);
+
+// select put request
+router.get('/viewPutByDate', requestController.readPutRequestByDate);
+router.get('/viewPutByIp', requestController.readPutRequestByIp);
+router.get('/viewPutByOs', requestController.readPutRequestByOs);
+
+// select delete request
+router.get('/viewDeleteByDate', requestController.readDeleteRequestByDate);
+router.get('/viewDeleteByIp', requestController.readDeleteRequestByIp);
+router.get('/viewDeleteByOs', requestController.readDeleteRequestByOs);
 
 module.exports = router 

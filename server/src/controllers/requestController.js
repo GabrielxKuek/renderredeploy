@@ -1,6 +1,10 @@
 const requestModel = require('../models/requestModel');
 
-async function insertRequest(req, res) {
+// ========================
+// insert request
+// ========================
+
+async function createRequest(req, res) {
   try {
     const { user_id, site_id, request_method, api_requested, user_ip, user_os, request_success } = req.body;
 
@@ -20,7 +24,7 @@ async function insertRequest(req, res) {
 // select all request
 // ========================
 
-async function selectAllRequestBySite(req, res) {
+async function readAllRequestBySite(req, res) {
   try {
     const { site_id } = req.body;
 
@@ -36,7 +40,7 @@ async function selectAllRequestBySite(req, res) {
   }
 }
 
-async function selectAllRequestByDate(req, res) {
+async function readAllRequestByDate(req, res) {
   try {
     const { site_id, date } = req.body;
 
@@ -52,7 +56,7 @@ async function selectAllRequestByDate(req, res) {
   }
 }
 
-async function selectAllRequestByIp(req, res) {
+async function readAllRequestByIp(req, res) {
   try {
     const { ip } = req.body;
 
@@ -68,7 +72,7 @@ async function selectAllRequestByIp(req, res) {
   }
 }
 
-async function selectAllRequestByOs(req, res) {
+async function readAllRequestByOs(req, res) {
   try {
     const { os } = req.body;
 
@@ -88,7 +92,7 @@ async function selectAllRequestByOs(req, res) {
 // select post request
 // ========================
 
-async function selectPostRequestByDate(req, res) {
+async function readPostRequestByDate(req, res) {
   try {
     const { site_id, date } = req.body;
 
@@ -104,7 +108,7 @@ async function selectPostRequestByDate(req, res) {
   }
 }
 
-async function selectPostRequestByIp(req, res) {
+async function readPostRequestByIp(req, res) {
   try {
     const { ip } = req.body;
 
@@ -120,7 +124,7 @@ async function selectPostRequestByIp(req, res) {
   }
 }
 
-async function selectPostRequestByOs(req, res) {
+async function readPostRequestByOs(req, res) {
   try {
     const { os } = req.body;
 
@@ -140,7 +144,7 @@ async function selectPostRequestByOs(req, res) {
 // select put request
 // ========================
 
-async function selectPutRequestByDate(req, res) {
+async function readPutRequestByDate(req, res) {
   try {
     const { site_id, date } = req.body;
 
@@ -156,7 +160,7 @@ async function selectPutRequestByDate(req, res) {
   }
 }
 
-async function selectPutRequestByIp(req, res) {
+async function readPutRequestByIp(req, res) {
   try {
     const { ip } = req.body;
 
@@ -172,7 +176,7 @@ async function selectPutRequestByIp(req, res) {
   }
 }
 
-async function selectPutRequestByOs(req, res) {
+async function readPutRequestByOs(req, res) {
   try {
     const { os } = req.body;
 
@@ -192,7 +196,7 @@ async function selectPutRequestByOs(req, res) {
 // select delete request
 // ========================
 
-async function selectDeleteRequestByDate(req, res) {
+async function readDeleteRequestByDate(req, res) {
   try {
     const { site_id, date } = req.body;
 
@@ -208,7 +212,7 @@ async function selectDeleteRequestByDate(req, res) {
   }
 }
 
-async function selectDeleteRequestByIp(req, res) {
+async function readDeleteRequestByIp(req, res) {
   try {
     const { ip } = req.body;
 
@@ -224,7 +228,7 @@ async function selectDeleteRequestByIp(req, res) {
   }
 }
 
-async function selectDeleteRequestByOs(req, res) {
+async function readDeleteRequestByOs(req, res) {
   try {
     const { os } = req.body;
 
@@ -241,18 +245,18 @@ async function selectDeleteRequestByOs(req, res) {
 }
 
 module.exports = {
-  insertRequest,
-  selectAllRequestBySite,
-  selectAllRequestByDate,
-  selectAllRequestByIp,
-  selectAllRequestByOs,
-  selectPostRequestByDate,
-  selectPostRequestByIp,
-  selectPostRequestByOs,
-  selectPutRequestByDate,
-  selectPutRequestByIp,
-  selectPutRequestByOs,
-  selectDeleteRequestByDate,
-  selectDeleteRequestByIp,
-  selectDeleteRequestByOs,
+  createRequest,
+  readAllRequestBySite,
+  readAllRequestByDate,
+  readAllRequestByIp,
+  readAllRequestByOs,
+  readPostRequestByDate,
+  readPostRequestByIp,
+  readPostRequestByOs,
+  readPutRequestByDate,
+  readPutRequestByIp,
+  readPutRequestByOs,
+  readDeleteRequestByDate,
+  readDeleteRequestByIp,
+  readDeleteRequestByOs,
 };
