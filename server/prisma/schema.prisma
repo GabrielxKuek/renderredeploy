@@ -6,3 +6,86 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model um_request_log {
+  log_id          Int      @id @default(autoincrement())
+  user_id         Int
+  site_id         Int
+  request_method  String   @db.VarChar(10)
+  api_requested   Json
+  user_ip         String   @db.VarChar(16)
+  user_os         String   @db.VarChar(10)
+  request_success Boolean
+  created_at      DateTime @db.Timestamp()
+
+  // Define relations
+  // Add user relation if users table exists
+  // user  User  @relation(fields: [user_id], references: [id])
+  // site  Site  @relation(fields: [site_id], references: [id])
+}
+
+model um_creation_log {
+  log_id     Int      @id @default(autoincrement())
+  user_id    Int
+  site_id    Int
+  table_name String   @db.VarChar(50)
+  record_id  Int
+  created_at DateTime @db.Timestamp()
+
+  // Define relations
+  // Add user relation if users table exists
+  // user  User  @relation(fields: [user_id], references: [id])
+  // site  Site  @relation(fields: [site_id], references: [id])
+}
+
+model um_modification_log {
+  log_id     Int      @id @default(autoincrement())
+  user_id    Int
+  site_id    Int
+  table_name String   @db.VarChar(50)
+  record_id  Int
+  created_at DateTime @db.Timestamp()
+
+  // Define relations
+  details um_modification_log_detail[] @relation("ModificationLogDetails")
+
+  // Add user relation if users table exists
+  // user  User  @relation(fields: [user_id], references: [id])
+  // site  Site  @relation(fields: [site_id], references: [id])
+}
+
+model um_modification_log_detail {
+  field_modification_id Int    @id @default(autoincrement())
+  log_id                Int
+  field_name            String @db.VarChar(50)
+  old_value             Json
+
+  // Define relations
+  um_modification_log um_modification_log @relation(fields: [log_id], references: [log_id], name: "ModificationLogDetails")
+}
+
+model um_deletion_log {
+  log_id     Int      @id @default(autoincrement())
+  user_id    Int
+  site_id    Int
+  table_name String   @db.VarChar(50)
+  record_id  Int
+  created_at DateTime @db.Timestamp()
+
+  // Define relations
+  details um_deletion_log_detail[] @relation("DeletionLogDetails")
+
+  // Add user relation if users table exists
+  // user  User  @relation(fields: [user_id], references: [id])
+  // site  Site  @relation(fields: [site_id], references: [id])
+}
+
+model um_deletion_log_detail {
+  field_deletion_id Int    @id @default(autoincrement())
+  log_id            Int
+  field_name        String @db.VarChar(50)
+  value             Json
+
+  // Define relations
+  um_deletion_log um_deletion_log @relation(fields: [log_id], references: [log_id], name: "DeletionLogDetails")
+}
