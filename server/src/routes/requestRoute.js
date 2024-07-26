@@ -4,7 +4,7 @@ const requestController = require('../controllers/requestController');
 
 // insert request
 
-router.get('/insert', requestController.createRequest);
+router.get('/input', requestController.createRequest);
 
 // select all request
 
