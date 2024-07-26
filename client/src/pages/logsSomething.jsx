@@ -41,12 +41,12 @@ const logsSomething = () => {
 
                 {isPlaying && (
                     <div className="flex flex-col justify-center items-center space-y-4">
-                        <div className="strobe-text text-4xl font-bold">
+                        <div className="bounce-text text-4xl font-bold">
                             Herobrain is Coming
                         </div>
                         <div className="flex justify-between items-center space-x-96">
                             <img src="assets/herobrain.jpg" alt="herobrain" />
-                            <img src="assets/Untitled.jpg" alt="herobrine" />
+                            <img src="assets/Untitled.jpg" alt="herobrine" className="scale-image" />
                             <img src="assets/herobrian.jpg" alt="herobrain" />
                         </div>
                     </div>
@@ -68,6 +68,29 @@ const logsSomething = () => {
                 .strobe-text {
                     font-family: 'Comic Sans MS', cursive, sans-serif;
                     font-weight: bold;
+                }
+
+                @keyframes bounce {
+                    0%, 100% { transform: translate(0, 0); }
+                    25% { transform: translate(80vw, 20vh); }
+                    50% { transform: translate(-80vw, 40vh); }
+                    75% { transform: translate(40vw, -20vh); }
+                }
+
+                .bounce-text {
+                    font-family: 'Comic Sans MS', cursive, sans-serif;
+                    font-weight: bold;
+                    animation: bounce 3s infinite;
+                    position: absolute;
+                }
+
+                @keyframes scale {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.5); }
+                }
+
+                .scale-image {
+                    animation: scale 2s infinite;
                 }
             `}</style>
         </>
