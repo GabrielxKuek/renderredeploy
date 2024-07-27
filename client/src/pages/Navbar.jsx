@@ -86,9 +86,15 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className="nav-link text-white hover:bg-gray-700 p-2 text-base" to="/" onClick={handleClose}>Home</Link>
             </li>
+
             <li className="nav-item">
               <Link className="nav-link text-white hover:bg-gray-700 p-2 text-base" to="/user-management" onClick={handleClose}>User Management</Link>
             </li>
+
+            <li className="nav-item">
+              <Link className="nav-link text-white hover:bg-gray-700 p-2 text-base" to="/logsHome" onClick={handleClose}>Log Board</Link>
+            </li>
+
             <li className="nav-item relative group">
               <Link className="nav-link text-white hover:bg-gray-700 p-2 text-base" to="/site" onClick={handleClose}>
                 Site
@@ -107,6 +113,7 @@ const Navbar = () => {
                 </ul>
               </div>
             </li>
+
             <li className="nav-item">
               <Link className="nav-link text-white hover:bg-gray-700 p-2 text-base" to="/settings" onClick={handleClose}>Settings</Link>
             </li>

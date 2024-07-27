@@ -9,7 +9,9 @@ import Site from "./pages/Site.jsx";
 import Profile from "./pages/Profile.jsx";
 import Role from "./pages/Role.jsx";
 import Group from "./pages/Group.jsx";
-import Setting from "./pages/Setting.jsx"
+import Setting from "./pages/Setting.jsx";
+import LogsHome from "./pages/logsHome.jsx";
+import LogsSomething from "./pages/logsSomething.jsx";
 
 function App() {
   const [headerWidth, setHeaderWidth] = useState("0");
@@ -30,6 +32,8 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/site" element={<Site />} />
         <Route path="/user" element={<User />} />
+        <Route path="/logsHome" element={<LogsHome />} />
+        <Route path="/logsSomething" element={<LogsSomething />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/Role" element={<Role />} />
         <Route path="/Group" element={<Group />} />

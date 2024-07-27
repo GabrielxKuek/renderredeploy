@@ -1,41 +1,25 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
-const jwtMiddleware = require("../middlewares/jwtMiddleware");
-const bcryptMiddleware = require("../middlewares/bcryptMiddleware");
-const exampleController = require("../server/controllers/exampleController");
-const logRoutes = require("./logRoutes");
+//==============================================================//
+//                     Importing Routes                         //
+//==============================================================//
 
+import creationRoutes from "./creationRoute.js";
+import deletionRoutes from "./deletionRoute.js";
+import modificationRoutes from "./modificationRoute.js";
+import requestRoutes from "./requestRoute.js";
 
-router.post(
-  "/jwt/generate",
-  exampleController.preTokenGenerate,
-  jwtMiddleware.generateToken,
-  exampleController.beforeSendToken,
-  jwtMiddleware.sendToken
-);
+//==============================================================//
+//                     Defining Routes                          //
+//==============================================================//
 
-router.get(
-  "/jwt/verify",
-  jwtMiddleware.verifyToken,
-  exampleController.showTokenVerified
-);
+router.use("/creation", creationRoutes);
 
-router.post(
-  "/bcrypt/compare",
-  exampleController.preCompare,
-  bcryptMiddleware.comparePassword,
-  exampleController.showCompareSuccess
-);
+router.use("/deletion", deletionRoutes);
 
-router.post(
-  "/bcrypt/hash",
-  bcryptMiddleware.hashPassword,
-  exampleController.showHashing
-);
+router.use("/modification", modificationRoutes);
 
-router.use("/logs", logRoutes);
-router.use("/requests", requestRoutes);
+router.use("/request", requestRoutes);
 
-
-module.exports = router;
+export default router;

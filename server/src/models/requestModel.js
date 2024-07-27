@@ -1,157 +1,226 @@
-const {query} = require('../database')
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
-// =================================
-//  READ ALL
-// =================================
-module.exports.readAll = (site_id) => {
+// ========================
+// insert request
+// ========================
+
+export const insertRequest = async (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success) => {
     const sql = `
-    SELECT * FROM "um_request_log" WHERE site_id = ?;`
+      CALL log_request($1, $2, $3, $4, $5, $6, $7);
+    `;
+  
+    try {
+      const result = await prisma.$executeRaw(sql, user_id, site_id, request_method, api_requested, user_ip, user_os, request_success);
+      return result;
+    } catch (error) {
+      console.error('Error executing logRequest:', error);
+      throw error;
+    }
+};
 
-    return query(sql,[site_id]).then(result => {
-        return result.rows
-    })
-}
+// ========================
+// select all request
+// ========================
 
-module.exports.readAllByDate = (site_id, date) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE site_id = ?
-    AND created_at >= ?;
-    `
+export const selectAllRequestBySite = async (site_id) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: { site_id },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting all logs:', error);
+        throw error;
+    }
+};
 
-    return query(sql, [site_id, date]).then(result => {
-        return result.rows
-    })
-}
+export const selectAllRequestByDate = async (site_id, date) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: {
+            site_id,
+            created_at: { gte: new Date(date) },
+            },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting logs by date:', error);
+        throw error;
+    }
+};
 
-module.exports.readCreationByDate = (site_id, date) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE site_id = ?
-    AND created_at >= ?
-    AND request_method = 'POST';`
+export const selectAllRequestByIp = async (ip) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: { user_ip: ip },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting logs by IP:', error);
+        throw error;
+    }
+};
 
-    return query(sql, [site_id, date]).then(result => {
-        return result.rows
-    })
-}
+export const selectAllRequestByOs = async (os) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: { user_os: os },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting logs by OS:', error);
+        throw error;
+    }
+};
 
-module.exports.readModificationByDate = (site_id, date) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE site_id = ?
-    AND created_at >= ?
-    AND request_method = 'PUT';`
+// ========================
+// select post request
+// ========================
 
-    return query(sql, [site_id, date]).then(result => {
-        return result.rows
-    })
-}
+export const selectPostRequestByDate = async (site_id, date) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: {
+            site_id,
+            created_at: { gte: new Date(date) },
+            request_method: 'POST',
+            },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting creation logs by date:', error);
+        throw error;
+    }
+};
 
-module.exports.readDeletionByDate = (site_id, date) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE site_id = ?
-    AND created_at >= ?
-    AND request_method = 'DELETE';`
 
-    return query(sql, [site_id, date]).then(result => {
-        return result.rows
-    })
-}
+export const selectPostRequestByIp = async (ip) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: {
+            user_ip: ip,
+            request_method: 'POST',
+            },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting creation logs by IP:', error);
+        throw error;
+    }
+};
 
-module.exports.readAllByip = (ip) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_ip = ?;
-    `
+export const selectPostRequestByOs = async (os) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: {
+            user_os: os,
+            request_method: 'POST',
+            },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting creation logs by OS:', error);
+        throw error;
+    }
+};
 
-    return query(sql, [ip]).then(result => {
-        return result.rows
-    })
-}
+// ========================
+// select put request
+// ========================
 
-module.exports.readCreationByip = (ip) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_ip = ?
-    AND request_method = 'POST';
-    `
+export const selectPutRequestByDate = async (site_id, date) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: {
+            site_id,
+            created_at: { gte: new Date(date) },
+            request_method: 'PUT',
+            },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting modification logs by date:', error);
+        throw error;
+    }
+};
 
-    return query(sql, [ip]).then(result => {
-        return result.rows
-    })
-}
+export const selectPutRequestByIp = async (ip) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: {
+            user_ip: ip,
+            request_method: 'PUT',
+            },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting modification logs by IP:', error);
+        throw error;
+    }
+};
 
-module.exports.readModificationByip = (ip) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_ip = ?
-    AND request_method = 'PUT';
-    `
+export const selectPutRequestByOs = async (os) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: {
+            user_os: os,
+            request_method: 'PUT',
+            },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting modification logs by OS:', error);
+        throw error;
+    }
+};
 
-    return query(sql, [ip]).then(result => {
-        return result.rows
-    })
-}
+// ========================
+// select delete request
+// ========================
 
-module.exports.readDeletionByip = (ip) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_ip = ?
-    AND request_method = 'DELETE';
-    `
+export const selectDeleteRequestByDate = async (site_id, date) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: {
+            site_id,
+            created_at: { gte: new Date(date) },
+            request_method: 'DELETE',
+            },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting deletion logs by date:', error);
+        throw error;
+    }
+};
 
-    return query(sql, [ip]).then(result => {
-        return result.rows
-    })
-}
+export const selectDeleteRequestByIp = async (ip) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: {
+            user_ip: ip,
+            request_method: 'DELETE',
+            },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting deletion logs by IP:', error);
+        throw error;
+    }
+};
 
-module.exports.readAllByOs = (Os) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_os = ?;
-    `
-
-    return query(sql, [Os]).then(result => {
-        return result.rows
-    })
-}
-
-module.exports.readCreationByOs = (Os) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_os = ?
-    AND request_method = 'POST';
-    `
-
-    return query(sql, [Os]).then(result => {
-        return result.rows
-    })
-}
-
-module.exports.readModificationByOs = (Os) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_os = ?
-    AND request_method = 'PUT';
-    `
-
-    return query(sql, [Os]).then(result => {
-        return result.rows
-    })
-}
-
-module.exports.readDeletionByOs = (Os) => {
-    const sql = `
-    SELECT * FROM "um_request_log" WHERE user_os = ?
-    AND request_method = 'DELETE';
-    `
-
-    return query(sql, [Os]).then(result => {
-        return result.rows
-    })
-}
-
-module.exports.logRequest = (user_id, site_id, request_method,api_requested, user_ip, user_os, request_success) => {
-    const sql = `
-    INSERT INTO "um_request_log" 
-    (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success)
-    VALUES
-    (?,?,?,?,?,?,?);
-    `
-    const data = [user_id, site_id, request_method, api_requested, user_ip, user_os, request_success]
-
-    return query(sql, data).then(result => {
-        return result
-    })
-}
+export const selectDeleteRequestByOs = async (os) => {
+    try {
+        const result = await prisma.um_request_log.findMany({
+            where: {
+            user_os: os,
+            request_method: 'DELETE',
+            },
+        });
+        return result;
+    } catch (error) {
+        console.error('Error selecting deletion logs by OS:', error);
+        throw error;
+    }
+};
