@@ -50,6 +50,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Use main routes for API endpoints
-app.use('/api/creation/', mainRoutes);
+app.use('/api/', mainRoutes);
 
 export default app;
