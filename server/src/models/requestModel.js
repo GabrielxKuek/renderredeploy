@@ -1,11 +1,11 @@
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 // ========================
 // insert request
 // ========================
 
-module.exports.insertRequest = async (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success) => {
+export const insertRequest = async (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success) => {
     const sql = `
       CALL log_request($1, $2, $3, $4, $5, $6, $7);
     `;
@@ -17,13 +17,13 @@ module.exports.insertRequest = async (user_id, site_id, request_method, api_requ
       console.error('Error executing logRequest:', error);
       throw error;
     }
-  };
+};
 
 // ========================
 // select all request
 // ========================
 
-module.exports.selectAllRequestBySite = async (site_id) => {
+export const selectAllRequestBySite = async (site_id) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: { site_id },
@@ -35,7 +35,7 @@ module.exports.selectAllRequestBySite = async (site_id) => {
     }
 };
 
-module.exports.selectAllRequestByDate = async (site_id, date) => {
+export const selectAllRequestByDate = async (site_id, date) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {
@@ -50,7 +50,7 @@ module.exports.selectAllRequestByDate = async (site_id, date) => {
     }
 };
 
-module.exports.selectAllRequestByIp = async (ip) => {
+export const selectAllRequestByIp = async (ip) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: { user_ip: ip },
@@ -62,7 +62,7 @@ module.exports.selectAllRequestByIp = async (ip) => {
     }
 };
 
-module.exports.selectAllRequestByOs = async (os) => {
+export const selectAllRequestByOs = async (os) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: { user_os: os },
@@ -78,7 +78,7 @@ module.exports.selectAllRequestByOs = async (os) => {
 // select post request
 // ========================
 
-module.exports.selectPostRequestByDate = async (site_id, date) => {
+export const selectPostRequestByDate = async (site_id, date) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {
@@ -95,7 +95,7 @@ module.exports.selectPostRequestByDate = async (site_id, date) => {
 };
 
 
-module.exports.selectPostRequestByIp = async (ip) => {
+export const selectPostRequestByIp = async (ip) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {
@@ -110,7 +110,7 @@ module.exports.selectPostRequestByIp = async (ip) => {
     }
 };
 
-module.exports.selectPostRequestByOs = async (os) => {
+export const selectPostRequestByOs = async (os) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {
@@ -129,7 +129,7 @@ module.exports.selectPostRequestByOs = async (os) => {
 // select put request
 // ========================
 
-module.exports.selectPutRequestByDate = async (site_id, date) => {
+export const selectPutRequestByDate = async (site_id, date) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {
@@ -145,7 +145,7 @@ module.exports.selectPutRequestByDate = async (site_id, date) => {
     }
 };
 
-module.exports.selectPutRequestByIp = async (ip) => {
+export const selectPutRequestByIp = async (ip) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {
@@ -160,7 +160,7 @@ module.exports.selectPutRequestByIp = async (ip) => {
     }
 };
 
-module.exports.selectPutRequestByOs = async (os) => {
+export const selectPutRequestByOs = async (os) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {
@@ -179,7 +179,7 @@ module.exports.selectPutRequestByOs = async (os) => {
 // select delete request
 // ========================
 
-module.exports.selectDeleteRequestByDate = async (site_id, date) => {
+export const selectDeleteRequestByDate = async (site_id, date) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {
@@ -195,7 +195,7 @@ module.exports.selectDeleteRequestByDate = async (site_id, date) => {
     }
 };
 
-module.exports.selectDeleteRequestByIp = async (ip) => {
+export const selectDeleteRequestByIp = async (ip) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {
@@ -210,7 +210,7 @@ module.exports.selectDeleteRequestByIp = async (ip) => {
     }
 };
 
-module.exports.selectDeleteRequestByOs = async (os) => {
+export const selectDeleteRequestByOs = async (os) => {
     try {
         const result = await prisma.um_request_log.findMany({
             where: {

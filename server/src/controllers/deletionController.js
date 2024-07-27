@@ -69,7 +69,7 @@ async function readDeletionByOs(req, res) {
   }
 }
 
-module.exports = {
+export {
     createDeletion,
     readDeletionByAll,
     readDeletionByDate,
