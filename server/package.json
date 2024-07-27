@@ -34,6 +34,8 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
-    "sanitize-html": "^2.13.0"
+    "morgan": "^1.10.0",
+    "sanitize-html": "^2.13.0",
+    "winston": "^3.13.1"
   }
 }
