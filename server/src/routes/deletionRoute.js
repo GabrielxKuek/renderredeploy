@@ -1,11 +1,12 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const deletionController = require("../controllers/deletionController");
+import * as deletionController from "../controllers/deletionController.js";
 
 router.post("/input", deletionController.createDeletion);
+
 router.get("/viewAll", deletionController.readDeletionByAll);
 router.get("/viewByDate", deletionController.readDeletionByDate);
 router.get("/viewByIp", deletionController.readDeletionByIp);
 router.get("/viewByOs", deletionController.readDeletionByOs);
 
-module.exports = router;
+export default router;

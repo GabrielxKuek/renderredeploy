@@ -39,9 +39,9 @@
 
 // module.exports = app;
 
-const express = require('express');
+import express from 'express';
 
-const mainRoutes = require('./routes/mainRoutes');
+import mainRoutes from './routes/mainRoutes.js';
 
 const app = express();
 
@@ -50,6 +50,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Use main routes for API endpoints
-app.use('/api', mainRoutes);
+app.use('/api/creation/', mainRoutes);
 
-module.exports = app;
+export default app;

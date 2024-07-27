@@ -1,14 +1,14 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
 //==============================================================//
 //                     Importing Routes                         //
 //==============================================================//
 
-const creationRoutes = require("./creationRoute");
-const deletionRoutes = require("./deletionRoute");
-const modificationRoutes = require("./modificationRoute");
-const requestRoutes = require("./requestRoute");
+import creationRoutes from "./creationRoute.js";
+import deletionRoutes from "./deletionRoute.js";
+import modificationRoutes from "./modificationRoute.js";
+import requestRoutes from "./requestRoute.js";
 
 //==============================================================//
 //                     Defining Routes                          //
@@ -22,4 +22,4 @@ router.use("/modification", modificationRoutes);
 
 router.use("/request", requestRoutes);
 
-module.exports = router;
+export default router;

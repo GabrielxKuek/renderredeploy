@@ -1,8 +1,8 @@
-const deletionModel = require('../models/deletionModel');
+import * as deletionModel from '../models/deletionModel.js';
 
 // create
 
-async function createDeletion(req, res) {
+export async function createDeletion(req, res) {
     try {
         const { user_id, site_id, table_name, record_id, field_names, values } = req.body;
 
@@ -25,7 +25,7 @@ async function createDeletion(req, res) {
 
 // read
 
-async function readDeletionByAll(req, res) {
+export async function readDeletionByAll(req, res) {
   try {
     const { site_id } = req.params;
     const result = await deletionModel.selectDeletionByAll(site_id);
@@ -36,7 +36,7 @@ async function readDeletionByAll(req, res) {
   }
 }
 
-async function readDeletionByDate(req, res) {
+export async function readDeletionByDate(req, res) {
   try {
     const { site_id, date } = req.params;
     const result = await deletionModel.selectDeletionByDate(site_id, date);
@@ -47,7 +47,7 @@ async function readDeletionByDate(req, res) {
   }
 }
 
-async function readDeletionByIp(req, res) {
+export async function readDeletionByIp(req, res) {
   try {
     const { ip } = req.params;
     const result = await deletionModel.selectDeletionByIp(ip);
@@ -58,7 +58,7 @@ async function readDeletionByIp(req, res) {
   }
 }
 
-async function readDeletionByOs(req, res) {
+export async function readDeletionByOs(req, res) {
   try {
     const { os } = req.params;
     const result = await deletionModel.selectDeletionByOs(os);
@@ -68,11 +68,3 @@ async function readDeletionByOs(req, res) {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
-
-export {
-    createDeletion,
-    readDeletionByAll,
-    readDeletionByDate,
-    readDeletionByIp,
-    readDeletionByOs,
-};

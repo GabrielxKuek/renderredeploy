@@ -1,10 +1,10 @@
-const requestModel = require('../models/requestModel');
+import * as requestModel from '../models/requestModel.js';
 
 // ========================
 // insert request
 // ========================
 
-async function createRequest(req, res) {
+export async function createRequest(req, res) {
   try {
     const { user_id, site_id, request_method, api_requested, user_ip, user_os, request_success } = req.body;
 
@@ -24,7 +24,7 @@ async function createRequest(req, res) {
 // select all request
 // ========================
 
-async function readAllRequestBySite(req, res) {
+export async function readAllRequestBySite(req, res) {
   try {
     const { site_id } = req.body;
 
@@ -40,7 +40,7 @@ async function readAllRequestBySite(req, res) {
   }
 }
 
-async function readAllRequestByDate(req, res) {
+export async function readAllRequestByDate(req, res) {
   try {
     const { site_id, date } = req.body;
 
@@ -56,7 +56,7 @@ async function readAllRequestByDate(req, res) {
   }
 }
 
-async function readAllRequestByIp(req, res) {
+export async function readAllRequestByIp(req, res) {
   try {
     const { ip } = req.body;
 
@@ -72,7 +72,7 @@ async function readAllRequestByIp(req, res) {
   }
 }
 
-async function readAllRequestByOs(req, res) {
+export async function readAllRequestByOs(req, res) {
   try {
     const { os } = req.body;
 
@@ -92,7 +92,7 @@ async function readAllRequestByOs(req, res) {
 // select post request
 // ========================
 
-async function readPostRequestByDate(req, res) {
+export async function readPostRequestByDate(req, res) {
   try {
     const { site_id, date } = req.body;
 
@@ -108,7 +108,7 @@ async function readPostRequestByDate(req, res) {
   }
 }
 
-async function readPostRequestByIp(req, res) {
+export async function readPostRequestByIp(req, res) {
   try {
     const { ip } = req.body;
 
@@ -124,7 +124,7 @@ async function readPostRequestByIp(req, res) {
   }
 }
 
-async function readPostRequestByOs(req, res) {
+export async function readPostRequestByOs(req, res) {
   try {
     const { os } = req.body;
 
@@ -144,7 +144,7 @@ async function readPostRequestByOs(req, res) {
 // select put request
 // ========================
 
-async function readPutRequestByDate(req, res) {
+export async function readPutRequestByDate(req, res) {
   try {
     const { site_id, date } = req.body;
 
@@ -160,7 +160,7 @@ async function readPutRequestByDate(req, res) {
   }
 }
 
-async function readPutRequestByIp(req, res) {
+export async function readPutRequestByIp(req, res) {
   try {
     const { ip } = req.body;
 
@@ -176,7 +176,7 @@ async function readPutRequestByIp(req, res) {
   }
 }
 
-async function readPutRequestByOs(req, res) {
+export async function readPutRequestByOs(req, res) {
   try {
     const { os } = req.body;
 
@@ -196,7 +196,7 @@ async function readPutRequestByOs(req, res) {
 // select delete request
 // ========================
 
-async function readDeleteRequestByDate(req, res) {
+export async function readDeleteRequestByDate(req, res) {
   try {
     const { site_id, date } = req.body;
 
@@ -212,7 +212,7 @@ async function readDeleteRequestByDate(req, res) {
   }
 }
 
-async function readDeleteRequestByIp(req, res) {
+export async function readDeleteRequestByIp(req, res) {
   try {
     const { ip } = req.body;
 
@@ -228,7 +228,7 @@ async function readDeleteRequestByIp(req, res) {
   }
 }
 
-async function readDeleteRequestByOs(req, res) {
+export async function readDeleteRequestByOs(req, res) {
   try {
     const { os } = req.body;
 
@@ -243,20 +243,3 @@ async function readDeleteRequestByOs(req, res) {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
-
-module.exports = {
-  createRequest,
-  readAllRequestBySite,
-  readAllRequestByDate,
-  readAllRequestByIp,
-  readAllRequestByOs,
-  readPostRequestByDate,
-  readPostRequestByIp,
-  readPostRequestByOs,
-  readPutRequestByDate,
-  readPutRequestByIp,
-  readPutRequestByOs,
-  readDeleteRequestByDate,
-  readDeleteRequestByIp,
-  readDeleteRequestByOs,
-};

@@ -1,8 +1,8 @@
-const creationModel = require('../models/creationModel');
+import * as creationModel from '../models/creationModel.js';
 
 // create
 
-async function createCreation(req, res) {
+export async function createCreation(req, res) {
     try {
         const { user_id, site_id, table_name, record_id } = req.body;
 
@@ -25,7 +25,7 @@ async function createCreation(req, res) {
 
 // read
 
-async function readCreationByAll (req, res) {
+export async function readCreationByAll (req, res) {
   try {
     const { site_id } = req.params;
     const result = await creationModel.selectCreationByAll(site_id);
@@ -36,7 +36,7 @@ async function readCreationByAll (req, res) {
   }
 }
 
-async function readCreationByDate (req, res) {
+export async function readCreationByDate (req, res) {
   try {
     const { site_id, date } = req.params;
     const result = await creationModel.selectCreationByDate(site_id, date);
@@ -47,7 +47,7 @@ async function readCreationByDate (req, res) {
   }
 }
 
-async function readCreationByIp (req, res) {
+export async function readCreationByIp (req, res) {
   try {
     const { ip } = req.params;
     const result = await creationModel.selectCreationByIp(ip);
@@ -58,7 +58,7 @@ async function readCreationByIp (req, res) {
   }
 }
 
-async function readCreationByOs (req, res) {
+export async function readCreationByOs (req, res) {
   try {
     const { os } = req.params;
     const result = await creationModel.selectCreationByOs(os);
@@ -68,11 +68,3 @@ async function readCreationByOs (req, res) {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
-
-module.exports = {
-    createCreation,
-    readCreationByAll,
-    readCreationByDate,
-    readCreationByIp,
-    readCreationByOs,
-};

@@ -1,11 +1,12 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const modificationController = require("../controllers/modificationController");
+import * as modificationController from "../controllers/modificationController.js";
 
 router.post("/input", modificationController.createModification);
+
 router.get("/viewAll", modificationController.readModificationByAll);
 router.get("/viewByDate", modificationController.readModificationByDate);
 router.get("/viewByIp", modificationController.readModificationByIp);
 router.get("/viewByOs", modificationController.readModificationByOs);
 
-module.exports = router;
+export default router;

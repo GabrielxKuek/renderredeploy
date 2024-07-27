@@ -1,10 +1,10 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const requestController = require('../controllers/requestController');
+import * as requestController from '../controllers/requestController.js';
 
 // insert request
 
-router.get('/input', requestController.createRequest);
+router.post('/input', requestController.createRequest);
 
 // select all request
 
@@ -28,4 +28,4 @@ router.get('/viewDeleteByDate', requestController.readDeleteRequestByDate);
 router.get('/viewDeleteByIp', requestController.readDeleteRequestByIp);
 router.get('/viewDeleteByOs', requestController.readDeleteRequestByOs);
 
-module.exports = router 
+export default router;

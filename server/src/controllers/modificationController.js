@@ -1,8 +1,8 @@
-const modificationModel = require('../models/modificationModel');
+import * as modificationModel from '../models/modificationModel.js';
 
 // create
 
-async function createModification(req, res) {
+export async function createModification(req, res) {
     try {
       const { user_id, site_id, table_name, record_id, field_names, old_values } = req.body;
   
@@ -20,7 +20,7 @@ async function createModification(req, res) {
 
 // read
 
-async function readModificationByAll(req, res) {
+export async function readModificationByAll(req, res) {
   try {
     const { site_id } = req.params;
     const result = await modificationModel.selectModificationByAll(site_id);
@@ -31,7 +31,7 @@ async function readModificationByAll(req, res) {
   }
 }
 
-async function readModificationByDate(req, res) {
+export async function readModificationByDate(req, res) {
   try {
     const { site_id, date } = req.params;
     const result = await modificationModel.selectModificationByDate(site_id, date);
@@ -42,7 +42,7 @@ async function readModificationByDate(req, res) {
   }
 }
 
-async function readModificationByIp(req, res) {
+export async function readModificationByIp(req, res) {
   try {
     const { ip } = req.params;
     const result = await modificationModel.selectModificationByIp(ip);
@@ -53,7 +53,7 @@ async function readModificationByIp(req, res) {
   }
 }
 
-async function readModificationByOs(req, res) {
+export async function readModificationByOs(req, res) {
   try {
     const { os } = req.params;
     const result = await modificationModel.selectModificationByOs(os);
@@ -63,11 +63,3 @@ async function readModificationByOs(req, res) {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
-
-module.exports = {
-    createModification,
-    readModificationByAll,
-    readModificationByDate,
-    readModificationByIp,
-    readModificationByOs,
-};
