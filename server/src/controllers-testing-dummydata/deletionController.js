@@ -1,22 +1,20 @@
-import * as deletionModel from '../models/deletionModel.js';
+/*
+ALL THIS DATA IS DUMMY. hardcoded outputs so we can test the front end. just change directory in routes to the correct 
+controllers file to use the correct code
+*/
+
+import { fakedb } from './fakedb.js';
 
 // create
 
 export async function createDeletion(req, res) {
     try {
-        const { user_id, site_id, table_name, record_id, field_names, values } = req.body;
-
-        if (!user_id || !site_id || !table_name || !record_id || !field_names || !values) {
-            return res.status(400).json({ error: 'Missing required fields' });
-        }
-
-        const result = await deletionModel.insertDeletion(user_id, site_id, table_name, record_id, field_names, values);
-        res.status(200).json({ message: 'Deletion logged successfully', result });
+      res.send("broken please stay on hold. beep beep boop.");
     } catch (error) {
         console.error('Error logging deletion:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
-}
+} // dummy create doesnt work. just wanna test displaying logs only, just change if uw work on this one
 
 /*
     gabriel note
@@ -28,8 +26,12 @@ export async function createDeletion(req, res) {
 export async function readDeletionByAll(req, res) {
   try {
     const { site_id } = req.body;
-    const result = await deletionModel.selectDeletionByAll(site_id);
-    res.json(result);
+
+    const result = fakedb.deletionLogs.filter((element) => {
+      return element.site_id == site_id;
+    })
+
+    res.status(200).send(result);
   } catch (error) {
     console.error('Error reading deletion logs:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -38,14 +40,21 @@ export async function readDeletionByAll(req, res) {
 
 export async function readDeletionByDate(req, res) {
   try {
-    const { site_id, date } = req.params;
-    const result = await deletionModel.selectDeletionByDate(site_id, date);
-    res.json(result);
+    const { site_id } = req.params;
+    const { date } = req.body;
+
+    const result = fakedb.deletionLogs.filter((element) => {
+      return element.site_id == site_id && element.created_at >= date;
+    })
+
+    res.status(200).send(result);
   } catch (error) {
     console.error('Error reading deletion logs by date:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 }
+
+// ignore this la because we need ot figure out ip and os
 
 export async function readDeletionByIp(req, res) {
   try {

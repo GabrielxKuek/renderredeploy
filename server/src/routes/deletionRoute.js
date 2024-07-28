@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
-import * as deletionController from "../controllers/deletionController.js";
+// import * as deletionController from "../controllers/deletionController.js";
+import * as deletionController from "../controllers-testing-dummydata/deletionController.js";
 
 router.post("/input", deletionController.createDeletion);
 

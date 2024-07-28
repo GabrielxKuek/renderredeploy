@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
-import * as modificationController from "../controllers/modificationController.js";
+// import * as modificationController from "../controllers/modificationController.js";
+import * as modificationController from "../controllers-testing-dummydata/modificationController.js";
 
 router.post("/input", modificationController.createModification);
 

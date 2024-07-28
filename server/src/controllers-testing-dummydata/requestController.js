@@ -32,7 +32,7 @@ export async function createRequest(req, res, next) {
     console.error('Error logging request:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-}
+}  // dummy create doesnt work. just wanna test displaying logs only, just change if uw work on this one
 
 // ========================
 // insert request
