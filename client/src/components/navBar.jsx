@@ -12,8 +12,13 @@ const NavBar = () => {
           <Link to="/logsHome" className="text-gray-300 hover:text-white">
             LogsHome
           </Link>
+
           <Link to="/logsSomething" className="text-gray-300 hover:text-white">
             Something
+          </Link>
+          
+          <Link to="/logsBoard" className="text-gray-300 hover:text-white">
+            Board
           </Link>
         </div>
       </div>

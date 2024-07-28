@@ -12,6 +12,7 @@ import Group from "./pages/Group.jsx";
 import Setting from "./pages/Setting.jsx";
 import LogsHome from "./pages/logsHome.jsx";
 import LogsSomething from "./pages/logsSomething.jsx";
+import LogsBoard from "./pages/logsBoard.jsx";
 
 function App() {
   const [headerWidth, setHeaderWidth] = useState("0");
@@ -34,6 +35,7 @@ function App() {
         <Route path="/user" element={<User />} />
         <Route path="/logsHome" element={<LogsHome />} />
         <Route path="/logsSomething" element={<LogsSomething />} />
+        <Route path="/logsBoard" element={<LogsBoard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/Role" element={<Role />} />
         <Route path="/Group" element={<Group />} />

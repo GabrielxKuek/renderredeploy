@@ -3,7 +3,7 @@ ALL THIS DATA IS DUMMY. hardcoded outputs so we can test the front end. just cha
 controllers file to use the correct code
 */
 
-import { fakedb } from './fakedb.js';
+import fakedb from './fakedb.js';
 
 export async function createCreation(req, res) {
     try {
@@ -31,8 +31,10 @@ export async function createCreation(req, res) {
 
 export async function readCreationByAll(req, res) {
   try {
-    const { site_id } = req.params;
-    const result = fakedb.creationLogs.filter((element) => {
+    const site_id = 2;
+    console.log(site_id)
+
+    const result = fakedb.um_creation_log.filter((element) => {
       return element.site_id == site_id;
     })
 
@@ -48,7 +50,7 @@ export async function readCreationByDate (req, res) {
     const { site_id } = req.params;
     const { date } = req.body;
 
-    const result = fakedb.creationLogs.filter((element) => {
+    const result = fakedb.um_creation_log.filter((element) => {
       return element.site_id == site_id && element.created_at >= date;
     })
 
@@ -75,7 +77,7 @@ export async function readCreationByOs (req, res) {
     const { site_id } = req.params;
     const { os } = req.body;
 
-    const result = fakedb.creationLogs.filter((element) => {
+    const result = fakedb.um_creation_log.filter((element) => {
       return element.site_id == site_id && element.os == os;
     })
 

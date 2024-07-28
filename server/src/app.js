@@ -41,18 +41,20 @@
 
 import express from 'express'
 import logger from "./logger.js";
-import morgan from "morgan";;
+import morgan from "morgan";
+import cors from 'cors';
 
 import mainRoutes from './routes/mainRoutes.js';
 
 const app = express();
+app.use(cors());
 
 // Middleware to parse JSON and urlencoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Use main routes for API endpoints
-app.use('/api/', mainRoutes);
+app.use('/api/s/:site_id', mainRoutes);
 
 const morganFormat = ":method :url :status :response-time ms";
 

@@ -3,7 +3,7 @@ ALL THIS DATA IS DUMMY. hardcoded outputs so we can test the front end. just cha
 controllers file to use the correct code
 */
 
-export default fake_db = {
+const fakedb = {
     um_request_log: [
       {
         request_id: 1,
@@ -23,7 +23,7 @@ export default fake_db = {
         site_id: 2,
         table_name: 'um_user',
         record_id: 3,
-        created_at: '2021-08-01',
+        created_at: '2020-08-01',
       },
       {
         log_id: 2,
@@ -31,7 +31,7 @@ export default fake_db = {
         site_id: 2,
         table_name: 'um_user',
         record_id: 4,
-        created_at: '2021-08-01',
+        created_at: '2022-08-01',
       },
       {
         log_id: 3,
@@ -39,8 +39,24 @@ export default fake_db = {
         site_id: 2,
         table_name: 'um_user',
         record_id: 5,
-        created_at: '2021-08-01',
+        created_at: '2023-10-01',
       },
+      {
+        log_id: 4,
+        user_id: 103,
+        site_id: 2,
+        table_name: 'um_user',
+        record_id: 6,
+        created_at: '2024-08-01',
+      },
+      {
+        log_id: 5,
+        user_id: 104,
+        site_id: 2,
+        table_name: 'um_user',
+        record_id: 7,
+        created_at: '2024-08-01',
+      }
     ],
   
     um_deletion_log: [
@@ -138,4 +154,6 @@ export default fake_db = {
         old_value: 'Tae Kwon Do',
       }
     ]
-  }
+}
+
+export default fakedb;

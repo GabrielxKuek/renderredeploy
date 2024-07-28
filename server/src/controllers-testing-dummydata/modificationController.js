@@ -3,7 +3,7 @@ ALL THIS DATA IS DUMMY. hardcoded outputs so we can test the front end. just cha
 controllers file to use the correct code
 */
 
-import { fakedb } from './fakedb.js';
+import fakedb from './fakedb.js';
 
 // create
 
@@ -30,7 +30,7 @@ export async function readModificationByAll(req, res) {
   try {
     const { site_id } = req.params;
     
-    const result = fakedb.modificationlogs.filter((element) => {
+    const result = fakedb.um_modification_log.filter((element) => {
       return element.site_id == site_id;
     })
 
@@ -46,7 +46,7 @@ export async function readModificationByDate(req, res) {
     const { site_id } = req.params;
     const { date } = req.body;
 
-    const result = fakedb.modificationlogs.filter((element) => {
+    const result = fakedb.um_modification_log.filter((element) => {
       return element.site_id == site_id && element.created_at >= date;
     })
 
