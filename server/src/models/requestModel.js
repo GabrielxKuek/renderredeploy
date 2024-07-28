@@ -6,14 +6,19 @@ const prisma = new PrismaClient();
 // ========================
 
 export const insertRequest = async (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success) => {
-    /*
-    const sql = `
-      CALL log_request($1, $2, $3, $4, $5, $6, $7);
-    `; */
-    const sql = `CALL log_request(${user_id}, ${site_id}, ${request_method}, ${api_requested}, ${user_ip}, ${user_os}, ${request_success});`
   
     try {
-      const result = await prisma.$executeRaw`CALL log_request(${user_id}, ${site_id}, ${request_method}, ${api_requested}, ${user_ip}, ${user_os}, ${request_success});`
+      const result = await prisma.um_request_log.create({
+        data: {
+            user_id: user_id,
+            site_id: site_id,
+            request_method: request_method,
+            api_requested: api_requested,
+            user_ip: user_ip,
+            user_os: user_os,
+            request_success: request_success
+        }
+      })
       //const result = await prisma.$executeRaw(sql, user_id, site_id, request_method, api_requested, user_ip, user_os, request_success);
       return result;
     } catch (error) {
