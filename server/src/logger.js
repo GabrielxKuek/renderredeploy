@@ -9,6 +9,17 @@ const consoleLogFormat = format.combine(
   })
 );
 
+// // Define the Winston logger
+// const logger = createLogger({
+//   level: 'info',
+//   format: combine(colorize(), timestamp(), json()),
+//   transports: [
+//     new transports.Console(),
+//     new transports.File({ filename: 'app.log' }),
+//     // Add custom transport if needed
+//   ],
+// });
+
 // Create a Winston logger
 const logger = createLogger({
   level: "info",
@@ -20,5 +31,6 @@ const logger = createLogger({
     new transports.File({ filename: "app.log" }),
   ],
 });
+
 
 export default logger;

@@ -1,24 +1,59 @@
 import * as requestModel from '../models/requestModel.js';
+import logger from '../logger.js'
 
-// ========================
-// insert request
-// ========================
-
-export async function createRequest(req, res) {
+export async function createRequest(req, res, next) {
   try {
-    const { user_id, site_id, request_method, api_requested, user_ip, user_os, request_success } = req.body;
+    const { user_id, site_id, request_method, api_requested, user_ip, user_os } = req.body;
 
-    if (!user_id || !site_id || !request_method || !api_requested || !user_ip || !user_os || request_success === undefined) {
+    if (!user_id || !site_id || !request_method || !api_requested || !user_ip || !user_os === undefined) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    // Log request data using Winston
+    logger.info('Request received', {
+      user_id,
+      site_id,
+      request_method,
+      api_requested,
+      user_ip,
+      user_os,
+      request_success,
+      timestamp: new Date().toISOString(),
+    });
+
+    console.log(logger.info)
+
+    // Insert request into the database
     const result = await requestModel.insertRequest(user_id, site_id, request_method, api_requested, user_ip, user_os, request_success);
     res.status(200).json({ message: 'Request logged successfully', result });
+
+    next(); // Proceed to the next middleware or route handler
   } catch (error) {
     console.error('Error logging request:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 }
+
+// ========================
+// insert request
+// ========================
+
+// export async function createRequest(req, res) {
+//   try {
+
+//     const { user_id, site_id, request_method, api_requested, user_ip, user_os, request_success } = req.body;
+
+//     if (!user_id || !site_id || !request_method || !api_requested || !user_ip || !user_os || request_success === undefined) {
+//       return res.status(400).json({ error: 'Missing required fields' });
+//     }
+
+//     const result = await requestModel.insertRequest(user_id, site_id, request_method, api_requested, user_ip, user_os, request_success);
+//     res.status(200).json({ message: 'Request logged successfully', result });
+//   } catch (error) {
+//     console.error('Error logging request:', error);
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
+// }
 
 // ========================
 // select all request
