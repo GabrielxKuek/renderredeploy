@@ -24,7 +24,7 @@ export const selectModification = async (site_id) => {
   try {
     const result = await prisma.um_modification_log.findMany({
       where: {
-        site_id,
+        site_id: site_id,
       },
       include: {
         um_modification_log_detail: true,
@@ -41,7 +41,7 @@ export const selectModificationByDate = async (site_id, date) => {
   try {
     const result = await prisma.um_modification_log.findMany({
       where: {
-        site_id,
+        site_id: site_id,
         date: {
           gte: date,
         },
@@ -82,7 +82,7 @@ export const selectModificationOs = async (os) => {
   try {
     const result = await prisma.um_modification_log.findMany({
       where: {
-        os,
+        os: os,
       },
       include: {
         um_modification_log_detail: true,

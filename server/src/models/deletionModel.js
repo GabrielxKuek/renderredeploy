@@ -20,28 +20,51 @@ export const insertDeletion = async (user_id, site_id, table_name, record_id, fi
 
 // select
 
+// export const selectDeletionByAll = async (site_id) => {
+//   try {
+//     const result = await prisma.um_deletion_log.findMany({
+//       where: {
+//         site_id: site_id,
+//       },
+//       include: {
+//         um_deletion_log_detail: true,
+//       },
+//     });
+//     return result;
+//   } catch (error) {
+//     console.error('Error selecting deletion logs:', error);
+//     throw error;
+//   }
+// };
+
 export const selectDeletionByAll = async (site_id) => {
   try {
     const result = await prisma.um_deletion_log.findMany({
-      where: {
-        site_id,
-      },
-      include: {
-        um_deletion_log_detail: true,
-      },
+      select: {
+        table_name: true,
+        um_deletion_log_detail: {
+          select: {
+            log_id: true,
+          },
+          where: {
+            site_id: site_id,
+          },
+        },
+      }
     });
+
     return result;
   } catch (error) {
     console.error('Error selecting deletion logs:', error);
     throw error;
   }
-};
+}
 
 export const selectDeletionByDate = async (site_id, date) => {
   try {
     const result = await prisma.um_deletion_log.findMany({
       where: {
-        site_id,
+        site_id: site_id,
         date: {
           gte: date,
         },
@@ -75,7 +98,7 @@ export const selectDeletionByOs = async (os) => {
   try {
     const result = await prisma.um_deletion_log.findMany({
       where: {
-        os,
+        os: os,
       },
       include: {
         um_deletion_log_detail: true,
