@@ -56,6 +56,7 @@ app.use('/api/', mainRoutes);
 
 const morganFormat = ":method :url :status :response-time ms";
 
+
 app.use(
   morgan(morganFormat, {
     stream: {
@@ -71,5 +72,22 @@ app.use(
     },
   })
 );
+
+const morganMiddleware = morgan((tokens, req, res) => {
+  const logObject = {
+    method: tokens.method(req, res),
+    url: tokens.url(req, res),
+    status: tokens.status(req, res),
+    responseTime: tokens['response-time'](req, res),
+  };
+
+  req.logData = logObject;
+
+  logger.info(JSON.stringify(logObject));
+
+  return null; // Prevent morgan from outputting to console directly
+});
+
+app.use(morganMiddleware);
 
 export default app;

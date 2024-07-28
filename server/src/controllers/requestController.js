@@ -3,9 +3,12 @@ import logger from '../logger.js'
 
 export async function createRequest(req, res, next) {
   try {
-    const { user_id, site_id, request_method, api_requested, user_ip, user_os } = req.body;
+    const { method: request_method, url: api_requested, status, responseTime, remoteAddr: user_ip } = req.logData;
+    const user_id = req.user.id; // Assuming req.user is set after JWT authentication
+    const site_id = req.params.site_id;
+    const user_os = res.locals.user_os;
 
-    if (!user_id || !site_id || !request_method || !api_requested || !user_ip || !user_os === undefined) {
+    if (!user_id || !site_id || !request_method || !api_requested || !user_ip || !user_os) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -17,14 +20,11 @@ export async function createRequest(req, res, next) {
       api_requested,
       user_ip,
       user_os,
-      request_success,
       timestamp: new Date().toISOString(),
     });
 
-    console.log(logger.info)
-
     // Insert request into the database
-    const result = await requestModel.insertRequest(user_id, site_id, request_method, api_requested, user_ip, user_os, request_success);
+    const result = await requestModel.insertRequest(user_id, site_id, request_method, api_requested, user_ip, user_os);
     res.status(200).json({ message: 'Request logged successfully', result });
 
     next(); // Proceed to the next middleware or route handler
