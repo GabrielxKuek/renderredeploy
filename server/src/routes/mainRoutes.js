@@ -20,6 +20,7 @@ router.use("/deletion", deletionRoutes);
 
 router.use("/modification", modificationRoutes);
 
+// request logs
 router.use("/request", requestRoutes);
 
 export default router;
