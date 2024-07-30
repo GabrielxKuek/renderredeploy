@@ -5,23 +5,18 @@ const prisma = new PrismaClient();
 // insert
 
 export const insertCreation = async (user_id, site_id, table_name, record_id) => {
+  const sql = `
+  CALL log_creation($1, $2, $3, $4, $5, $6);
+  `;
 
-  
-    try {
-      const result = await prisma.um_creation_log.create({
-        data: {
-          user_id: user_id,
-          site_id: site_id,
-          table_name: table_name,
-          record_id: record_id
-        }
-      })
-      return result;
-    } catch (error) {
-      console.error('Error executing insertCreation:', error);
-      throw error;
-    }
-  };
+  try {
+    const result = await prisma.$executeRaw(sql, user_id, site_id, table_name, record_id);
+    return result;
+  } catch (error) {
+    console.error('Error executing logRemove:', error);
+    throw error;
+  }
+};
 
 // select
 

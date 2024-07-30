@@ -8,17 +8,7 @@ const prisma = new PrismaClient();
 export const insertRequest = async (user_id, site_id, request_method, api_requested, user_ip, user_os, request_success) => {
   
     try {
-      const result = await prisma.um_request_log.create({
-        data: {
-            user_id: user_id,
-            site_id: site_id,
-            request_method: request_method,
-            api_requested: api_requested,
-            user_ip: user_ip,
-            user_os: user_os,
-            request_success: request_success
-        }
-      })
+      const result = await prisma.$executeRaw`CALL log_request(${user_id}, ${site_id}, ${request_method}, ${api_requested}, ${user_ip}, ${user_os}, ${request_success});`
       //const result = await prisma.$executeRaw(sql, user_id, site_id, request_method, api_requested, user_ip, user_os, request_success);
       return result;
     } catch (error) {
@@ -33,9 +23,7 @@ export const insertRequest = async (user_id, site_id, request_method, api_reques
 
 export const selectAllRequestBySite = async (site_id) => {
     try {
-        const result = await prisma.um_request_log.findMany({
-            where: { site_id },
-        });
+        const result = await prisma.$executeRaw`CALL viewRequest(${site_id});`
         return result;
     } catch (error) {
         console.error('Error selecting all logs:', error);
@@ -45,12 +33,7 @@ export const selectAllRequestBySite = async (site_id) => {
 
 export const selectAllRequestByDate = async (site_id, date) => {
     try {
-        const result = await prisma.um_request_log.findMany({
-            where: {
-            site_id,
-            created_at: { gte: new Date(date) },
-            },
-        });
+        const result = await prisma.$executeRaw`CALL viewRequestByDate(${site_id}, ${date});`
         return result;
     } catch (error) {
         console.error('Error selecting logs by date:', error);
@@ -60,9 +43,7 @@ export const selectAllRequestByDate = async (site_id, date) => {
 
 export const selectAllRequestByIp = async (ip) => {
     try {
-        const result = await prisma.um_request_log.findMany({
-            where: { user_ip: ip },
-        });
+        const result = await prisma.$executeRaw`CALL viewRequestByIp(${ip});`
         return result;
     } catch (error) {
         console.error('Error selecting logs by IP:', error);
@@ -72,9 +53,7 @@ export const selectAllRequestByIp = async (ip) => {
 
 export const selectAllRequestByOs = async (os) => {
     try {
-        const result = await prisma.um_request_log.findMany({
-            where: { user_os: os },
-        });
+        const result = await prisma.$executeRaw`CALL viewRequestByOs(${os});`
         return result;
     } catch (error) {
         console.error('Error selecting logs by OS:', error);
@@ -88,13 +67,7 @@ export const selectAllRequestByOs = async (os) => {
 
 export const selectPostRequestByDate = async (site_id, date) => {
     try {
-        const result = await prisma.um_request_log.findMany({
-            where: {
-            site_id,
-            created_at: { gte: new Date(date) },
-            request_method: 'POST',
-            },
-        });
+        const result = await prisma.$executeRaw`CALL viewRequestTypeByDate(${site_id}, ${date}, 'POST');`
         return result;
     } catch (error) {
         console.error('Error selecting creation logs by date:', error);
@@ -105,12 +78,7 @@ export const selectPostRequestByDate = async (site_id, date) => {
 
 export const selectPostRequestByIp = async (ip) => {
     try {
-        const result = await prisma.um_request_log.findMany({
-            where: {
-            user_ip: ip,
-            request_method: 'POST',
-            },
-        });
+        const result = await prisma.$executeRaw`CALL viewRequestTypeByIp(${ip}, 'POST');`
         return result;
     } catch (error) {
         console.error('Error selecting creation logs by IP:', error);
@@ -120,12 +88,7 @@ export const selectPostRequestByIp = async (ip) => {
 
 export const selectPostRequestByOs = async (os) => {
     try {
-        const result = await prisma.um_request_log.findMany({
-            where: {
-            user_os: os,
-            request_method: 'POST',
-            },
-        });
+        const result = await prisma.$executeRaw`CALL viewRequestTypeByOs(${os}, 'POST');`
         return result;
     } catch (error) {
         console.error('Error selecting creation logs by OS:', error);
@@ -139,13 +102,7 @@ export const selectPostRequestByOs = async (os) => {
 
 export const selectPutRequestByDate = async (site_id, date) => {
     try {
-        const result = await prisma.um_request_log.findMany({
-            where: {
-            site_id,
-            created_at: { gte: new Date(date) },
-            request_method: 'PUT',
-            },
-        });
+        const result = await prisma.$executeRaw`CALL viewRequestTypeByDate(${site_id}, ${date}, 'PUT');`
         return result;
     } catch (error) {
         console.error('Error selecting modification logs by date:', error);
@@ -155,12 +112,7 @@ export const selectPutRequestByDate = async (site_id, date) => {
 
 export const selectPutRequestByIp = async (ip) => {
     try {
-        const result = await prisma.um_request_log.findMany({
-            where: {
-            user_ip: ip,
-            request_method: 'PUT',
-            },
-        });
+        const result = await prisma.$executeRaw`CALL viewRequestTypeByIp(${ip}, 'PUT');`
         return result;
     } catch (error) {
         console.error('Error selecting modification logs by IP:', error);
@@ -170,12 +122,7 @@ export const selectPutRequestByIp = async (ip) => {
 
 export const selectPutRequestByOs = async (os) => {
     try {
-        const result = await prisma.um_request_log.findMany({
-            where: {
-            user_os: os,
-            request_method: 'PUT',
-            },
-        });
+        const result = await prisma.$executeRaw`CALL viewRequestTypeByOs(${os}, 'PUT');`
         return result;
     } catch (error) {
         console.error('Error selecting modification logs by OS:', error);
@@ -189,13 +136,7 @@ export const selectPutRequestByOs = async (os) => {
 
 export const selectDeleteRequestByDate = async (site_id, date) => {
     try {
-        const result = await prisma.um_request_log.findMany({
-            where: {
-            site_id,
-            created_at: { gte: new Date(date) },
-            request_method: 'DELETE',
-            },
-        });
+        const result = await prisma.$executeRaw`CALL viewRequestTypeByDate(${site_id}, ${date}, 'DELETE');`
         return result;
     } catch (error) {
         console.error('Error selecting deletion logs by date:', error);
@@ -205,12 +146,7 @@ export const selectDeleteRequestByDate = async (site_id, date) => {
 
 export const selectDeleteRequestByIp = async (ip) => {
     try {
-        const result = await prisma.um_request_log.findMany({
-            where: {
-            user_ip: ip,
-            request_method: 'DELETE',
-            },
-        });
+        const result = await prisma.$executeRaw`CALL viewRequestTypeByIp(${ip}, 'DELETE');`
         return result;
     } catch (error) {
         console.error('Error selecting deletion logs by IP:', error);
@@ -220,12 +156,7 @@ export const selectDeleteRequestByIp = async (ip) => {
 
 export const selectDeleteRequestByOs = async (os) => {
     try {
-        const result = await prisma.um_request_log.findMany({
-            where: {
-            user_os: os,
-            request_method: 'DELETE',
-            },
-        });
+        const result = await prisma.$executeRaw`CALL viewRequestTypeByOs(${os}, 'DELETE');`
         return result;
     } catch (error) {
         console.error('Error selecting deletion logs by OS:', error);

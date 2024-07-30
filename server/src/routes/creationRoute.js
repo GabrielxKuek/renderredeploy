@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
-// import * as creationController from "../controllers/creationController.js";
-import * as creationController from "../controllers-testing-dummydata/creationController.js";
+import * as creationController from "../controllers/creationController.js";
+//import * as creationController from "../controllers-testing-dummydata/creationController.js";
 
 router.post("/input", creationController.createCreation);
 
