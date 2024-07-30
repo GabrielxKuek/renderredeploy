@@ -5,7 +5,7 @@ export async function createRequest(req, res, next) {
   try {
     const { method: request_method, url: api_requested, status, responseTime, remoteAddr: user_ip } = req.logData;
     const user_id = req.user.id; // Assuming req.user is set after JWT authentication
-    const site_id = req.params.site_id;
+    const site_id = req.params.site_id;a
     const user_os = res.locals.user_os;
 
     if (!user_id || !site_id || !request_method || !api_requested || !user_ip || !user_os) {
@@ -26,8 +26,7 @@ export async function createRequest(req, res, next) {
     // Insert request into the database
     const result = await requestModel.insertRequest(user_id, site_id, request_method, api_requested, user_ip, user_os);
     res.status(200).json({ message: 'Request logged successfully', result });
-
-    next(); // Proceed to the next middleware or route handler
+ // Proceed to the next middleware or route handler
   } catch (error) {
     console.error('Error logging request:', error);
     res.status(500).json({ error: 'Internal server error' });

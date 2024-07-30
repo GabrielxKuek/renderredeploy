@@ -84,6 +84,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./Navbar.jsx";
 
 function Home() {
+
     const [username, setUsername] = useState("");
     const [userStats, setUserStats] = useState({
         // To be changed according to the database
@@ -165,4 +166,3 @@ function Home() {
 }
 
 export default Home;
-

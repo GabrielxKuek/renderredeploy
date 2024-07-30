@@ -56,7 +56,7 @@ app.use(express.urlencoded({ extended: false }));
 // Use main routes for API endpoints
 app.use('/api/s/:site_id', mainRoutes);
 
-const morganFormat = ":method :url :status :response-time ms";
+const morganFormat = ":method :url :status :remote-addr :response-time ms";
 
 
 app.use(
@@ -67,7 +67,8 @@ app.use(
           method: message.split(" ")[0],
           url: message.split(" ")[1],
           status: message.split(" ")[2],
-          responseTime: message.split(" ")[3],
+          responseTime: message.split(" ")[4],
+          ip: message.split(" ")[3]
         };
         logger.info(JSON.stringify(logObject));
       },
@@ -84,8 +85,6 @@ const morganMiddleware = morgan((tokens, req, res) => {
   };
 
   req.logData = logObject;
-
-  logger.info(JSON.stringify(logObject));
 
   return null; // Prevent morgan from outputting to console directly
 });
