@@ -4,7 +4,7 @@ import logger from '../logger.js'
 export async function createRequest(req, res, next) {
   try {
     const { method: request_method, url: api_requested, status, responseTime, remoteAddr: user_ip } = req.logData;
-    const user_id = req.user.id; // Assuming req.user is set after JWT authentication
+    const user_id = req.user.id; 
     const site_id = req.params.site_id;
     const user_os = res.locals.user_os;
 
