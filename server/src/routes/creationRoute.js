@@ -12,11 +12,11 @@ router.get("/viewAll", creationController.readCreationByAll);
 // View creation log by date
 router.get("/viewByDate", creationController.readCreationByDate);
 
-// View creation log by date
-router.get("/viewByIp", creationController.readCreationByIp);
+// // View creation log by ip
+// router.get("/viewByIp", creationController.readCreationByIp);
 
-// View  creation log by Operating System
-router.get("/viewByOs", creationController.readCreationByOs);
+// // View  creation log by Operating System
+// router.get("/viewByOs", creationController.readCreationByOs);
 
 export default router;
 

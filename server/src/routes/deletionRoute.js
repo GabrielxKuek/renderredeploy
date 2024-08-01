@@ -12,10 +12,10 @@ router.get("/viewAll", deletionController.readDeletionByAll);
 // View deletion logs by date
 router.get("/viewByDate", deletionController.readDeletionByDate);
 
-// View deletion logs by ip address
-router.get("/viewByIp", deletionController.readDeletionByIp);
+// // View deletion logs by ip address
+// router.get("/viewByIp", deletionController.readDeletionByIp);
 
-// View deletion logs by operating system
-router.get("/viewByOs", deletionController.readDeletionByOs);
+// // View deletion logs by operating system
+// router.get("/viewByOs", deletionController.readDeletionByOs);
 
 export default router;
