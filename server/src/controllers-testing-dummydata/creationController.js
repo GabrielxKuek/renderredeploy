@@ -91,7 +91,7 @@ export async function readCreationByAll(req, res) {
 
 export async function readCreationByDate (req, res) {
   try {
-    const { site_id } = req.params;
+    const { site_id } = req.body;
     const { date } = req.body;
 
     const result = fakedb.um_creation_log.filter((element) => {
@@ -118,7 +118,7 @@ export async function readCreationByIp (req, res) {
 
 export async function readCreationByOs (req, res) {
   try {
-    const { site_id } = req.params;
+    const { site_id } = req.body;
     const { os } = req.body;
 
     const result = fakedb.um_creation_log.filter((element) => {

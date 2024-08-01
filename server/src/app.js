@@ -54,7 +54,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Use main routes for API endpoints
-app.use('/api/s/:site_id', mainRoutes);
+app.use('/api', mainRoutes);
 
 const morganFormat = ":method :url :status :remote-addr :response-time ms";
 

@@ -40,7 +40,7 @@ export async function readDeletionByAll(req, res) {
 
 export async function readDeletionByDate(req, res) {
   try {
-    const { site_id } = req.params;
+    const { site_id } = req.body;
     const { date } = req.body;
 
     const result = fakedb.um_deletion_log.filter((element) => {
@@ -58,7 +58,7 @@ export async function readDeletionByDate(req, res) {
 
 export async function readDeletionByIp(req, res) {
   try {
-    const { ip } = req.params;
+    const { ip } = req.body;
     const result = await deletionModel.selectDeletionByIp(ip);
     res.json(result);
   } catch (error) {
@@ -69,7 +69,7 @@ export async function readDeletionByIp(req, res) {
 
 export async function readDeletionByOs(req, res) {
   try {
-    const { os } = req.params;
+    const { os } = req.body;
     const result = await deletionModel.selectDeletionByOs(os);
     res.json(result);
   } catch (error) {

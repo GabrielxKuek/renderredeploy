@@ -19,5 +19,3 @@ router.get("/viewByDate", creationController.readCreationByDate);
 // router.get("/viewByOs", creationController.readCreationByOs);
 
 export default router;
-
-console.log( creationController.createCreation)

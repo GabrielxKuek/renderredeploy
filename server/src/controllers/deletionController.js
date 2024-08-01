@@ -27,7 +27,7 @@ export async function createDeletion(req, res) {
 
 export async function readDeletionByAll(req, res) {
   try {
-    const { site_id } = req.params;
+    const { site_id } = req.body;
     const result = await deletionModel.selectDeletionByAll(site_id);
     res.json(result);
   } catch (error) {
@@ -38,7 +38,7 @@ export async function readDeletionByAll(req, res) {
 
 export async function readDeletionByDate(req, res) {
   try {
-    const { site_id, date } = req.params;
+    const { site_id, date } = req.body;
     const result = await deletionModel.selectDeletionByDate(site_id, date);
     res.json(result);
   } catch (error) {
@@ -49,7 +49,7 @@ export async function readDeletionByDate(req, res) {
 
 export async function readDeletionByIp(req, res) {
   try {
-    const { ip } = req.params;
+    const { ip } = req.body;
     const result = await deletionModel.selectDeletionByIp(ip);
     res.json(result);
   } catch (error) {
@@ -60,7 +60,7 @@ export async function readDeletionByIp(req, res) {
 
 export async function readDeletionByOs(req, res) {
   try {
-    const { os } = req.params;
+    const { os } = req.body;
     const result = await deletionModel.selectDeletionByOs(os);
     res.json(result);
   } catch (error) {

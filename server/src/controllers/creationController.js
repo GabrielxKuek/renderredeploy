@@ -27,7 +27,7 @@ export async function createCreation(req, res) {
 
 export async function readCreationByAll (req, res) {
   try {
-    const { site_id } = req.params;
+    const { site_id } = req.body;
     const result = await creationModel.selectCreationByAll(site_id);
     res.json(result);
   } catch (error) {
@@ -38,7 +38,7 @@ export async function readCreationByAll (req, res) {
 
 export async function readCreationByDate (req, res) {
   try {
-    const { site_id, date } = req.params;
+    const { site_id, date } = req.body;
     const result = await creationModel.selectCreationByDate(site_id, date);
     res.json(result);
   } catch (error) {
@@ -49,7 +49,7 @@ export async function readCreationByDate (req, res) {
 
 export async function readCreationByIp (req, res) {
   try {
-    const { ip } = req.params;
+    const { ip } = req.body;
     const result = await creationModel.selectCreationByIp(ip);
     res.json(result);
   } catch (error) {
@@ -60,7 +60,7 @@ export async function readCreationByIp (req, res) {
 
 export async function readCreationByOs (req, res) {
   try {
-    const { os } = req.params;
+    const { os } = req.body;
     const result = await creationModel.selectCreationByOs(os);
     res.json(result);
   } catch (error) {

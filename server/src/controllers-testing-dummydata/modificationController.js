@@ -28,7 +28,7 @@ export async function createModification(req, res) {
 
 export async function readModificationByAll(req, res) {
   try {
-    const { site_id } = req.params;
+    const { site_id } = req.body;
     
     const result = fakedb.um_modification_log.filter((element) => {
       return element.site_id == site_id;
@@ -43,7 +43,7 @@ export async function readModificationByAll(req, res) {
 
 export async function readModificationByDate(req, res) {
   try {
-    const { site_id } = req.params;
+    const { site_id } = req.body;
     const { date } = req.body;
 
     const result = fakedb.um_modification_log.filter((element) => {
@@ -61,7 +61,7 @@ export async function readModificationByDate(req, res) {
 
 export async function readModificationByIp(req, res) {
   try {
-    // const { ip } = req.params;
+    // const { ip } = req.body;
     // const result = await modificationModel.selectModificationByIp(ip);
     // res.json(result);
     res.send("broken please stay on hold. beep beep boop.");
@@ -73,7 +73,7 @@ export async function readModificationByIp(req, res) {
 
 export async function readModificationByOs(req, res) {
   try {
-    // const { os } = req.params;
+    // const { os } = req.body;
     // const result = await modificationModel.selectModificationByOs(os);
     // res.json(result);
     res.send("broken please stay on hold. beep beep boop.");

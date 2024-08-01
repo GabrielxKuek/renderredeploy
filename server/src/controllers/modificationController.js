@@ -22,7 +22,7 @@ export async function createModification(req, res) {
 
 export async function readModificationByAll(req, res) {
   try {
-    const { site_id } = req.params;
+    const { site_id } = req.body;
     const result = await modificationModel.selectModificationByAll(site_id);
     res.json(result);
   } catch (error) {
@@ -33,7 +33,7 @@ export async function readModificationByAll(req, res) {
 
 export async function readModificationByDate(req, res) {
   try {
-    const { site_id, date } = req.params;
+    const { site_id, date } = req.body;
     const result = await modificationModel.selectModificationByDate(site_id, date);
     res.json(result);
   } catch (error) {
@@ -44,7 +44,7 @@ export async function readModificationByDate(req, res) {
 
 export async function readModificationByIp(req, res) {
   try {
-    const { ip } = req.params;
+    const { ip } = req.body;
     const result = await modificationModel.selectModificationByIp(ip);
     res.json(result);
   } catch (error) {
@@ -55,7 +55,7 @@ export async function readModificationByIp(req, res) {
 
 export async function readModificationByOs(req, res) {
   try {
-    const { os } = req.params;
+    const { os } = req.body;
     const result = await modificationModel.selectModificationByOs(os);
     res.json(result);
   } catch (error) {
