@@ -1,3 +1,6 @@
+
+////////////////////////////////////// 1st Version //////////////////////////////////
+
 // const express = require('express');
 // const createHttpError = require('http-errors');
 
@@ -39,56 +42,85 @@
 
 // module.exports = app;
 
-import express from 'express'
-import logger from "./logger.js";
-import morgan from "morgan";
-import cors from 'cors';
+////////////////////////////////////// 2nd Version //////////////////////////////////
 
-import mainRoutes from './routes/mainRoutes.js';
+// import express from 'express'
+// import logger from "./logger.js";
+// import morgan from "morgan";
+// import cors from 'cors';
 
-const app = express();
-app.use(cors());
+// import mainRoutes from './routes/mainRoutes.js';
 
-// Middleware to parse JSON and urlencoded data
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// const app = express();
+// app.use(cors());
 
-// Use main routes for API endpoints
-app.use('/api', mainRoutes);
+// // Middleware to parse JSON and urlencoded data
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
 
-const morganFormat = ":method :url :status :remote-addr :response-time ms";
+// // Use main routes for API endpoints
+// app.use('/api', mainRoutes);
+
+// const morganFormat = ":method :url :status :remote-addr :response-time ms";
 
 
-app.use(
-  morgan(morganFormat, {
+// app.use(
+//   morgan(morganFormat, {
+//     stream: {
+//       write: (message) => {
+//         const logObject = {
+//           method: message.split(" ")[0],
+//           url: message.split(" ")[1],
+//           status: message.split(" ")[2],
+//           responseTime: message.split(" ")[4],
+//           ip: message.split(" ")[3]
+//         };
+//         logger.info(JSON.stringify(logObject));
+//       },
+//     },
+//   })
+// );
+
+// const morganMiddleware = morgan((tokens, req, res) => {
+//   const logObject = {
+//     method: tokens.method(req, res),
+//     url: tokens.url(req, res),
+//     status: tokens.status(req, res),
+//     responseTime: tokens['response-time'](req, res),
+//   };
+
+//   req.logData = logObject;
+
+//   return null; // Prevent morgan from outputting to console directly
+// });
+
+// app.use(morganMiddleware);
+
+////////////////////////////////////// 3rd Version //////////////////////////////////
+
+const morgan = require('morgan');
+
+morgan.token('user_id', (req) => req.user_id || 'anonymous');
+morgan.token('site_id', (req) => req.site_id || 'unknown');
+morgan.token('user_os', (req) => req.headers['user-agent'] || 'unknown');
+
+const morganFormat = ':user_id :site_id :method :url :remote-addr :user_os';
+
+const morganMiddleware = morgan(morganFormat, {
     stream: {
-      write: (message) => {
-        const logObject = {
-          method: message.split(" ")[0],
-          url: message.split(" ")[1],
-          status: message.split(" ")[2],
-          responseTime: message.split(" ")[4],
-          ip: message.split(" ")[3]
-        };
-        logger.info(JSON.stringify(logObject));
-      },
-    },
-  })
-);
-
-const morganMiddleware = morgan((tokens, req, res) => {
-  const logObject = {
-    method: tokens.method(req, res),
-    url: tokens.url(req, res),
-    status: tokens.status(req, res),
-    responseTime: tokens['response-time'](req, res),
-  };
-
-  req.logData = logObject;
-
-  return null; // Prevent morgan from outputting to console directly
+        write: (message) => {
+            const [user_id, site_id, method, url, ip, os] = message.trim().split(' ');
+            logger.info({
+                user_id,
+                site_id,
+                request_method: method,
+                api_requested: url,
+                user_ip: ip,
+                user_os: os,
+                error_message: null
+            });
+        }
+    }
 });
-
-app.use(morganMiddleware);
 
 export default app;
