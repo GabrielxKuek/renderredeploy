@@ -30,7 +30,7 @@ export async function createRequest(req, res, next) {
     res.status(200).json({ message: 'Request logged successfully', result });
 
     // Proceed to the next middleware or route handler
-    next();
+    // next();
   } catch (error) {
     console.error('Error logging request:', error);
     // Log the error message to Winston

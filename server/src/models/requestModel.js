@@ -5,15 +5,15 @@ const prisma = new PrismaClient();
 // insert request
 // ========================
 
-export const insertRequest = async (user_id, site_id, request_method, api_requested, user_ip, user_os, error_message) => {
-  try {
-    const result = await prisma.$queryRaw`CALL log_request(${user_id}, ${site_id}, ${request_method}, ${api_requested}, ${user_ip}, ${user_os}, ${error_message});`;
-    return result;
-  } catch (error) {
-    console.error('Error executing logRequest:', error);
-    throw error;
-  }
-};
+// export const insertRequest = async (user_id, site_id, request_method, api_requested, user_ip, user_os, error_message) => {
+//   try {
+//     const result = await prisma.$executeRaw`CALL log_request(${user_id}, ${site_id}, ${request_method}, ${api_requested}, ${user_ip}, ${user_os}, ${error_message});`;
+//     return result;
+//   } catch (error) {
+//     console.error('Error executing logRequest:', error);
+//     throw error;
+//   }
+// };
 
 // export const insertRequest = async (user_id, site_id, request_method, api_requested, user_ip, user_os) => {
 //     try {
@@ -33,6 +33,18 @@ export const insertRequest = async (user_id, site_id, request_method, api_reques
 //       throw error;
 //     }
 //   };
+
+export const insertRequest = async (user_id, site_id, request_method, api_requested, user_ip, user_os) => {
+    try {
+      const result = await prisma.$queryRaw`
+        CALL log_request(${user_id}, ${site_id}, ${request_method}, ${api_requested}, ${user_ip}, ${user_os}, ${null})
+      `;
+      return result;
+    } catch (error) {
+      console.error('Error inserting request:', error);
+      throw error;
+    }
+  };
 
 // ========================
 // select all request

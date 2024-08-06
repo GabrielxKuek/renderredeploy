@@ -126,6 +126,27 @@ morgan.token('os', (req) => req.headers['user-agent']);
 // Custom format string including the custom tokens
 const morganFormat = ':user_id :site_id :method :url :remote-addr :os';
 
+async function testInsert() {
+  try {
+    await prisma.um_request_log.create({
+      data: {
+        user_id: 1,
+        site_id: 3,
+        request_method: 'POST',
+        api_requested: '/api/creation/input',
+        user_ip: '::1',
+        user_os: 'TestOS',
+        error_message: null
+      }
+    });
+    console.log('Test insert successful');
+  } catch (error) {
+    console.error('Test insert failed:', error);
+  }
+}
+
+testInsert()
+
 // Morgan middleware with custom stream to log requests
 const morganMiddleware = morgan(morganFormat, {
   stream: {
@@ -145,7 +166,7 @@ const morganMiddleware = morgan(morganFormat, {
 
       try {
         // Insert request into the database
-        await prisma.umrequest_log.create({
+        await prisma.um_request_log.create({
           data: {
             user_id: parseInt(user_id, 10) || null, // Convert to integer or null if undefined
             site_id: parseInt(site_id, 10) || null,
