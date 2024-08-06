@@ -49,8 +49,6 @@
 // import morgan from "morgan";
 // import cors from 'cors';
 
-// import mainRoutes from './routes/mainRoutes.js';
-
 // const app = express();
 // app.use(cors());
 
@@ -59,7 +57,6 @@
 // app.use(express.urlencoded({ extended: false }));
 
 // // Use main routes for API endpoints
-// app.use('/api', mainRoutes);
 
 // const morganFormat = ":method :url :status :remote-addr :response-time ms";
 
@@ -98,29 +95,77 @@
 
 ////////////////////////////////////// 3rd Version //////////////////////////////////
 
-const morgan = require('morgan');
+import express from 'express';
+import { createLogger, transports, format } from 'winston';
+import { PrismaClient } from '@prisma/client';
+import morgan from 'morgan';
+import mainRoutes from './routes/mainRoutes.js';
 
-morgan.token('user_id', (req) => req.user_id || 'anonymous');
-morgan.token('site_id', (req) => req.site_id || 'unknown');
-morgan.token('user_os', (req) => req.headers['user-agent'] || 'unknown');
+const app = express();
+const prisma = new PrismaClient();
 
-const morganFormat = ':user_id :site_id :method :url :remote-addr :user_os';
-
-const morganMiddleware = morgan(morganFormat, {
-    stream: {
-        write: (message) => {
-            const [user_id, site_id, method, url, ip, os] = message.trim().split(' ');
-            logger.info({
-                user_id,
-                site_id,
-                request_method: method,
-                api_requested: url,
-                user_ip: ip,
-                user_os: os,
-                error_message: null
-            });
-        }
-    }
+// Logger configuration
+const logger = createLogger({
+  level: 'info',
+  format: format.json(),
+  transports: [
+    new transports.Console(),
+    new transports.File({ filename: 'combined.log' })
+  ]
 });
+
+// Middleware to parse JSON and URL-encoded data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Custom Morgan tokens
+morgan.token('user_id', (req) => req.body.user_id || req.headers['user_id']);
+morgan.token('site_id', (req) => req.body.site_id || req.headers['site_id']);
+morgan.token('os', (req) => req.headers['user-agent']);
+
+// Custom format string including the custom tokens
+const morganFormat = ':user_id :site_id :method :url :remote-addr :os';
+
+// Morgan middleware with custom stream to log requests
+const morganMiddleware = morgan(morganFormat, {
+  stream: {
+    write: async (message) => {
+      const [user_id, site_id, method, url, remote_addr, user_agent] = message.trim().split(' ');
+
+      // Log to Winston
+      logger.info('Request logged', {
+        user_id,
+        site_id,
+        request_method: method,
+        api_requested: url,
+        user_ip: remote_addr,
+        user_os: user_agent, // Assuming user_agent contains OS info
+        error_message: null
+      });
+
+      try {
+        // Insert request into the database
+        await prisma.umrequest_log.create({
+          data: {
+            user_id: parseInt(user_id, 10) || null, // Convert to integer or null if undefined
+            site_id: parseInt(site_id, 10) || null,
+            request_method: method,
+            api_requested: url,
+            user_ip: remote_addr,
+            user_os: user_agent,
+            error_message: null // Assuming no error message is captured here
+          }
+        });
+      } catch (error) {
+        logger.error('Failed to log request to database', { error });
+      }
+    }
+  }
+});
+
+app.use(morganMiddleware);
+
+// Main routes
+app.use('/api', mainRoutes);
 
 export default app;

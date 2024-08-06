@@ -1,13 +1,8 @@
-import { createLogger, format, transports } from "winston";
+// import { createLogger, format, transports } from "winston";
 // const { combine, timestamp, json, colorize } = format;
 
 // Custom format for console logging with colors
-const consoleLogFormat = format.combine(
-  format.colorize(),
-  format.printf(({ level, message, timestamp }) => {
-    return `${level}: ${message}`;
-  })
-);
+
 
 // // Create a Winston logger
 // const logger = createLogger({
@@ -82,40 +77,68 @@ const consoleLogFormat = format.combine(
 //     ]
 // });
 
-const { createLogger, format, transports } = require('winston');
+// const { createLogger, format, transports } = require('winston');
+
+
+import { createLogger, transports, format } from 'winston';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 class PrismaTransport extends transports.Stream {
-    log(info, callback) {
-        setImmediate(() => this.emit('logged', info));
+  constructor(options) {
+    super(options);
+    this.stream = options.stream;
+  }
 
-        prisma.request_log.create({
-            data: {
-                user_id: info.user_id,
-                site_id: info.site_id,
-                request_method: info.request_method,
-                api_requested: info.api_requested,
-                user_ip: info.user_ip,
-                user_os: info.user_os,
-                error_message: info.error_message,
-                created_at: new Date()
-            }
-        }).catch(err => {
-            console.error('Error saving log to PostgreSQL with Prisma', err);
-        }).finally(() => {
-            callback();
-        });
-    }
+  log(info, callback) {
+    setImmediate(() => this.emit('logged', info));
+
+    prisma.request.create({
+      data: {
+        level: info.level,
+        message: info.message,
+        timestamp: new Date(),
+      }
+    }).catch((error) => {
+      console.error('Failed to log request to database:', error);
+    });
+
+    callback();
+  }
 }
 
 const logger = createLogger({
-    level: 'info',
-    format: format.combine(
-        format.timestamp(),
-        format.json()
-    ),
-    transports: [
-        new PrismaTransport()
-    ]
+  level: 'info',
+  format: format.json(),
+  transports: [
+    new PrismaTransport({
+      stream: process.stdout,
+    }),
+    new transports.Console(),
+    new transports.File({ filename: 'combined.log' }),
+  ],
 });
 
-module.exports = logger;
+// const logger = createLogger({
+//   level: 'info',
+//   format: format.json(),
+//   transports: [
+//     new transports.Console(),
+//     new transports.File({ filename: 'combined.log' })
+//   ]
+// });
+
+const logRequest = async (method, url, status) => {
+  try {
+    await prisma.request.create({
+      data: { method, url, status },
+    });
+  } catch (error) {
+    logger.error('Failed to log request to database:', error);
+  }
+};
+
+
+export { logger, logRequest };
+export default logger;

@@ -1,4 +1,5 @@
 import * as creationModel from '../models/creationModel.js';
+import 'dotenv/config';
 
 // create
 

@@ -4,16 +4,31 @@ const prisma = new PrismaClient();
 
 // insert
 
-export const insertCreation = async (user_id, site_id, table_name, record_id) => {
-  const sql = `
-  CALL log_creation($1, $2, $3, $4, $5, $6);
-  `;
+// export const insertCreation = async (user_id, site_id, table_name, record_id) => {
+//   const sql = `
+//   CALL log_creation($1, $2, $3, $4);
+//   `;
 
+//   try {
+//     const result = await prisma.$executeRaw`
+//       CALL log_creation(${user_id}, ${site_id}, ${table_name}, ${record_id});
+//     `;
+//     return result;
+//   } catch (error) {
+//     console.error('Error executing logRemove:', error);
+//     throw error;
+//   }
+// };
+
+export const insertCreation = async (user_id, site_id, table_name, record_id) => {
   try {
-    const result = await prisma.$queryRaw`CALL log_creation(${user_id}, ${site_id}, ${table_name}, ${record_id});`
+    const result = await prisma.$executeRaw`
+      INSERT INTO um_creation_log (user_id, site_id, table_name, record_id)
+      VALUES (${user_id}, ${site_id}, ${table_name}, ${record_id});
+    `;
     return result;
   } catch (error) {
-    console.error('Error executing logRemove:', error);
+    console.error('Error inserting creation log:', error);
     throw error;
   }
 };

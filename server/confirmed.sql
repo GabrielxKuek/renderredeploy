@@ -6,7 +6,7 @@ CREATE TABLE um_request_log (
     api_requested JSONB,
     user_ip VARCHAR(16),
     user_os VARCHAR(10),
-    request_success BOOLEAN,
+    error_message VARCHAR(200),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

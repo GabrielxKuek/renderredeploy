@@ -3,9 +3,10 @@ import logger from '../logger.js'
 
 export async function createRequest(req, res, next) {
   try {
-    const { method: request_method, url: api_requested, status, responseTime, remoteAddr: user_ip } = req.logData;
-    const user_id = req.user.id; // Assuming req.user is set after JWT authentication
-    const site_id = req.body.site_id;a
+    // Ensure req.logData and req.user are correctly set up before this middleware
+    const { method: request_method, url: api_requested, status, responseTime, remoteAddr: user_ip, error_message } = req.logData || {};
+    const user_id = req.user ? req.user.id : null; // Ensure req.user is set after authentication
+    const site_id = req.body.site_id;
     const user_os = res.locals.user_os;
 
     if (!user_id || !site_id || !request_method || !api_requested || !user_ip || !user_os) {
@@ -20,15 +21,29 @@ export async function createRequest(req, res, next) {
       api_requested,
       user_ip,
       user_os,
+      error_message: error_message || null, // Include error_message if available
       timestamp: new Date().toISOString(),
     });
 
     // Insert request into the database
-    const result = await requestModel.insertRequest(user_id, site_id, request_method, api_requested, user_ip, user_os);
+    const result = await requestModel.insertRequest(user_id, site_id, request_method, api_requested, user_ip, user_os, error_message);
     res.status(200).json({ message: 'Request logged successfully', result });
- // Proceed to the next middleware or route handler
+
+    // Proceed to the next middleware or route handler
+    next();
   } catch (error) {
     console.error('Error logging request:', error);
+    // Log the error message to Winston
+    logger.error('Error logging request', {
+      user_id: req.user ? req.user.id : null,
+      site_id: req.body.site_id,
+      request_method: req.logData?.method || null,
+      api_requested: req.logData?.url || null,
+      user_ip: req.logData?.remoteAddr || null,
+      user_os: res.locals.user_os || null,
+      error_message: error.message,
+      timestamp: new Date().toISOString(),
+    });
     res.status(500).json({ error: 'Internal server error' });
   }
 }
