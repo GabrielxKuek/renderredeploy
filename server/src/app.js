@@ -237,10 +237,12 @@ import { PrismaClient } from '@prisma/client';
 import morgan from 'morgan';
 import jwt from 'jsonwebtoken';
 import mainRoutes from './routes/mainRoutes.js';
+import cors from 'cors';
 
 const secret = 'your_jwt_secret'; // Replace with your JWT secret
 
 const app = express();
+app.use(cors());
 const prisma = new PrismaClient();
 
 // Middleware to attach log data and extract JWT information
