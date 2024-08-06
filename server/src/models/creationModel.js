@@ -19,6 +19,8 @@ const prisma = new PrismaClient();
 //     throw error;
 //   }
 // };
+import {logRequest} from '../app.js'
+
 
 export const insertCreation = async (user_id, site_id, table_name, record_id) => {
   try {

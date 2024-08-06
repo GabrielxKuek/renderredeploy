@@ -1,5 +1,5 @@
 import * as requestModel from '../models/requestModel.js';
-import logger from '../logger.js'
+// import { logger } from '../logger.js';
 
 export async function createRequest(req, res, next) {
   try {

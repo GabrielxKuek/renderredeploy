@@ -1,20 +1,40 @@
+// import { logRequest } from '../logger.js';
 import * as creationModel from '../models/creationModel.js';
 import 'dotenv/config';
 
+import {logRequest} from '../app.js'
+import logger from '../logger.js'
+
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
 // create
 
-export async function createCreation(req, res) {
+export async function createCreation(req, res, next) {
+  const { user_id, site_id, table_name, record_id } = req.body;
     try {
-        const { user_id, site_id, table_name, record_id } = req.body;
-
         if (!user_id || !site_id || !table_name || !record_id) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
         const result = await creationModel.insertCreation(user_id, site_id, table_name, record_id);
         res.status(200).json({ message: 'Creation logged successfully', result });
-    } catch (error) {
-        console.error('Error logging creation:', error);
+        next();
+      } catch (error) {
+
+        logger.info('Request logged', {
+          request_method: req.method,
+          api_requested: req.originalUrl,
+          user_ip: req.ip,
+          user_os: req.headers['user-agent'],
+          error_message: error, // or the error message if an error occurred
+          site_id: req.site_id,
+          user_id: req.user_id
+        });
+        
+        // await logRequest(user_id, site_id, error);
+        // Log error using Winston
         res.status(500).json({ error: 'Internal server error' });
     }
 }

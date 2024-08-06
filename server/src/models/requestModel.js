@@ -41,6 +41,7 @@ export const insertRequest = async (user_id, site_id, request_method, api_reques
       `;
       return result;
     } catch (error) {
+    logRequest(user_id, site_id, error);
       console.error('Error inserting request:', error);
       throw error;
     }
