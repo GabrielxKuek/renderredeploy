@@ -5,10 +5,12 @@ import morgan from 'morgan';
 import jwt from 'jsonwebtoken';
 import mainRoutes from './routes/mainRoutes.js';
 import { logRequestMiddleware } from './middleware/logRequestMiddleware.js';
+import cors from 'cors';
 
 const secret = 'your_jwt_secret'; // Replace with your JWT secret
 
 const app = express();
+app.use(cors());
 const prisma = new PrismaClient();
 
 // Middleware to attach log data and extract JWT information
@@ -16,7 +18,7 @@ app.use((req, res, next) => {
   req.logData = {
     request_method: req.method,
     api_requested: req.originalUrl,
-    user_ip: req.ip,
+    user_ip: req.headers['x-forwarded-for'],
     user_os: req.get('User-Agent')
   };
 
@@ -49,6 +51,15 @@ const logger = createLogger({
 morgan.token('user_id', (req) => req.user_id || 'UNKNOWN_USER_ID');
 morgan.token('site_id', (req) => req.site_id || 'UNKNOWN_SITE_ID');
 morgan.token('os', (req) => req.get('User-Agent') || 'UNKNOWN_OS');
+
+morgan.token('remote-addr', (req) => {
+  const forwardedFor = req.headers['x-forwarded-for'];
+  let ip = forwardedFor ? forwardedFor.split(',')[0].trim() : req.ip;
+  if (ip === '::1') {
+    ip = 'UNKNOWN_IP';
+  }
+  return ip;
+});
 
 // Custom format string including the custom tokens
 const morganFormat = ':user_id :site_id :method :url :remote-addr :os';

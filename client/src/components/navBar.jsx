@@ -20,6 +20,10 @@ const NavBar = () => {
           <Link to="/logsBoard" className="text-gray-300 hover:text-white">
             Board
           </Link>
+
+          <Link to="/logsStatistics" className="text-gray-300 hover:text-white">
+            Statistics
+          </Link>
         </div>
       </div>
     </nav>
