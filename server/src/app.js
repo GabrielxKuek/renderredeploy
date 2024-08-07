@@ -61,8 +61,14 @@ morgan.token('remote-addr', (req) => {
   return ip;
 });
 
+morgan.token('fullurl', (req) => {
+  const domain = req.headers.host;
+  const url = req.originalUrl || req.url;
+  return domain ? `${domain}${url}` : url;
+});
+
 // Custom format string including the custom tokens
-const morganFormat = ':user_id :site_id :method :url :remote-addr :os';
+const morganFormat = ':user_id :site_id :method :fullurl :remote-addr :user-agent';
 
 // Morgan middleware with custom stream to log requests
 const morganMiddleware = morgan(morganFormat, {
@@ -76,14 +82,14 @@ const morganMiddleware = morgan(morganFormat, {
         return;
       }
 
-      const [user_id, site_id, method, url, remote_addr, user_agent] = parts;
+      const [user_id, site_id, method, fullurl, remote_addr, user_agent] = parts;
 
       // Log to Winston
       logger.info('Request logged', {
         user_id,
         site_id,
         request_method: method,
-        api_requested: url,
+        api_requested: fullurl,
         user_ip: remote_addr,
         user_os: user_agent
       });
@@ -107,13 +113,10 @@ app.use(logRequestMiddleware);
 export async function logRequest(req, res, next, error) {
   try {
     const { request_method, api_requested, user_ip, user_os } = req.logData;
-    const domain = req.headers.host;
-    const fullApiRequested = domain ? `${domain}${api_requested}` : api_requested;
-
     await prisma.um_request_log.create({
       data: {
         request_method: request_method || 'UNKNOWN_METHOD',
-        api_requested: fullApiRequested || 'UNKNOWN_API',
+        api_requested: api_requested || 'UNKNOWN_API',
         user_ip: user_ip || 'UNKNOWN_IP',
         user_os: user_os || 'UNKNOWN_OS',
         created_at: new Date(),
