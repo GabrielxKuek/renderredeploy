@@ -10,7 +10,7 @@ const LogsBoard = () => {
 
     const fetchLogs = async () => {
         try {
-            const response = await axios.get('https://sad-readers-cry.loca.lt/api/creation/viewAll');
+            const response = await axios.get('http://localhost:8081/api/creation/viewAll');
             setLogs(response.data);
             setError(null); // Clear any previous errors
         } catch (error) {
