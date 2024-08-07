@@ -37,54 +37,61 @@ const LogsBoard = () => {
                     hi guys im working on pagination. i deleted rafael code cause i like to start from scratch. please refer to previous commits to look at previous code.
                 </p>
 
-                <div className="flex justify-between items-center w-11/12 max-w-4xl mb-4">
+                <div className="flex justify-between items-center w-11/12 max-w-4xl mb-4 mt-4">
                     {error && (
                         <div className="text-red-500">
-                            {error}
-                            <button
-                                onClick={fetchLogs}
-                                className="ml-4 px-4 py-2 bg-indigo-500 text-white rounded"
-                            >
-                                Retry
-                            </button>
+                        {error}
+                        <button
+                            onClick={fetchLogs}
+                            className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
+                        >
+                            Retry
+                        </button>
                         </div>
                     )}
                     {!error && (
                         <button
-                            onClick={fetchLogs}
-                            className="ml-4 px-4 py-2 bg-indigo-500 text-white rounded"
+                        onClick={fetchLogs}
+                        className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
                         >
-                            Refresh
+                        Refresh
                         </button>
                     )}
+
+                    <div className="flex space-x-2">
+                        <button className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 active:bg-red-800">Previous</button>
+                        <button className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 active:bg-indigo-700">Next</button>
+                    </div>
                 </div>
 
                 <div className="w-11/12 max-w-4xl" style={{ height: '70vh', overflowY: 'auto' }}>
                     {logs.length > 0 ? (
-                        <table className="min-w-full bg-gray-700 text-white rounded" style={{ tableLayout: 'fixed' }}>
-                            <thead>
-                                <tr>
-                                    <th className="py-2 px-4 border-b">Log ID</th>
-                                    <th className="py-2 px-4 border-b">User ID</th>
-                                    <th className="py-2 px-4 border-b">Site ID</th>
-                                    <th className="py-2 px-4 border-b">Table Name</th>
-                                    <th className="py-2 px-4 border-b">Record ID</th>
-                                    <th className="py-2 px-4 border-b">Created At</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {logs.slice(0, 20).map((log) => (
-                                    <tr key={log.log_id}>
-                                        <td className="py-2 px-4 border-b">{log.log_id}</td>
-                                        <td className="py-2 px-4 border-b">{log.user_id}</td>
-                                        <td className="py-2 px-4 border-b">{log.site_id}</td>
-                                        <td className="py-2 px-4 border-b">{log.table_name}</td>
-                                        <td className="py-2 px-4 border-b">{log.record_id}</td>
-                                        <td className="py-2 px-4 border-b">{log.created_at}</td>
+                        <div style={{ maxHeight: '100%', overflowY: 'auto' }}>
+                            <table className="min-w-full bg-gray-700 text-white rounded" style={{ tableLayout: 'fixed' }}>
+                                <thead className="sticky top-0 bg-gray-900 shadow-md">
+                                    <tr>
+                                        <th className="py-2 px-4 border-b border-gray-600">Log ID</th>
+                                        <th className="py-2 px-4 border-b border-gray-600">User ID</th>
+                                        <th className="py-2 px-4 border-b border-gray-600">Site ID</th>
+                                        <th className="py-2 px-4 border-b border-gray-600">Table Name</th>
+                                        <th className="py-2 px-4 border-b border-gray-600">Record ID</th>
+                                        <th className="py-2 px-4 border-b border-gray-600">Created At</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {logs.slice(0, 20).map((log) => (
+                                        <tr key={log.log_id}>
+                                            <td className="py-2 px-4 border-b border-gray-600">{log.log_id}</td>
+                                            <td className="py-2 px-4 border-b border-gray-600">{log.user_id}</td>
+                                            <td className="py-2 px-4 border-b border-gray-600">{log.site_id}</td>
+                                            <td className="py-2 px-4 border-b border-gray-600">{log.table_name}</td>
+                                            <td className="py-2 px-4 border-b border-gray-600">{log.record_id}</td>
+                                            <td className="py-2 px-4 border-b border-gray-600">{log.created_at}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     ) : (
                         !error && <p className="text-gray-400">No logs available</p>
                     )}
