@@ -76,24 +76,6 @@ const morganMiddleware = morgan(morganFormat, {
         user_ip: remote_addr,
         user_os: user_agent
       });
-
-      try {
-        // Insert request into the database
-        // await prisma.um_request_log.create({
-        //   data: {
-        //     user_id: parseInt(user_id, 10) || null,
-        //     site_id: parseInt(site_id, 10) || null,
-        //     request_method: method || 'UNKNOWN_METHOD',
-        //     api_requested: url || 'UNKNOWN_URL',
-        //     user_ip: remote_addr || 'UNKNOWN_IP',
-        //     user_os: user_agent || 'UNKNOWN_USER_AGENT',
-        //     error_message: null // No error message is captured here
-        //   }
-        // });
-      } catch (error) {
-        console.error('Failed to log request to database:', error.message);
-        logger.error('Failed to log request to database', { error });
-      }
     }
   }
 });
