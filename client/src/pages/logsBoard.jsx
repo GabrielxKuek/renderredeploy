@@ -7,7 +7,7 @@ import NavBarGroup1 from './Navbar.jsx';
 const LogsBoard = () => {
 
     // config
-    const logsPerPage = 20;
+    const logsPerPage = 2;
 
     // declaration
     const useQuery = () => {
@@ -19,9 +19,13 @@ const LogsBoard = () => {
     const page = parseInt(query.get('page')) || 1;
     const [logs, setLogs] = useState([]);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const [selectedFilter, setSelectedFilter] = useState('All');
     const totalPages = Math.ceil(logs.length / logsPerPage);
 
     const fetchLogs = async () => {
+        setLoading(true);
         try {
             const response = await axios.get('http://localhost:8081/api/creation/viewAll');
             setLogs(response.data);
@@ -29,12 +33,12 @@ const LogsBoard = () => {
         } catch (error) {
             setError('Error fetching logs. Please try again.');
             console.error('Error fetching logs:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
-
     const handleNextPage = () => {
-        console.log(totalPages);
         if (page < totalPages) {
             navigate(`/logsBoard?page=${page + 1}`);
         } else {
@@ -52,14 +56,24 @@ const LogsBoard = () => {
 
     const handleInputPage = (event) => {
         const value = parseInt(event.target.value);
-
-        if (value > 0 && value <= totalPages) {
+        if (value > 0 && value <= totalPages && value !== page) {
             navigate(`/logsBoard?page=${value}`);
         } else if (value > totalPages) {
             navigate(`/logsBoard?page=${totalPages}`);
         } else {
             console.log("invalid page number");
         }
+    }
+
+    const toggleDropdown = () => {
+        setIsDropdownVisible(!isDropdownVisible);
+    }
+
+    const handleFilterSelect = (filter) => {
+        setSelectedFilter(filter);
+        setIsDropdownVisible(false);
+        
+        console.log(`Selected filter: ${filter}`);
     }
 
     useEffect(() => {
@@ -77,41 +91,89 @@ const LogsBoard = () => {
                 </h1>
 
                 <p className="text-lg text-gray-300">
-                    hi guys im working on pagination. i deleted rafael code cause i like to start from scratch. please refer to previous commits to look at previous code.
+                    Not sure if we should keep it here, or display it with graphs side
                 </p>
 
                 {/* fetch data */}
                 <div className="flex justify-between items-center w-11/12 max-w-4xl mb-4 mt-4">
                     {error && (
-                        <div className="text-red-500">
-                        {error}
-                        <button
-                            onClick={fetchLogs}
-                            className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
-                        >
-                            Retry
-                        </button>
+                        <div className="flex justify-between items-center text-red-500">
+                            <button
+                                onClick={fetchLogs}
+                                className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700 flex items-center"
+                                disabled={loading}
+                            >
+                                {loading ? (
+                                    <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                    </svg>
+                                ) : null}
+                                Retry
+                            </button>
+                            <div className="ml-4">
+                                {error}
+                            </div>
                         </div>
                     )}
                     {!error && (
                         <button
-                        onClick={fetchLogs}
-                        className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
+                            onClick={fetchLogs}
+                            className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700 flex items-center"
+                            disabled={loading}
                         >
-                        Refresh
+                            {loading ? (
+                                <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                </svg>
+                            ) : null}
+                            Refresh
                         </button>
                     )}
 
-                    <button
-                        onClick={fetchLogs}
-                        className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
-                    >
-                        Filter
-                    </button>
+                    <div className="relative">
+                        <button
+                            onClick={toggleDropdown}
+                            className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
+                        >
+                            Filter
+                        </button>
+                        {isDropdownVisible && (
+                            <div className="absolute right-0 mt-2 w-48 bg-slate-700 rounded-md shadow-lg z-50">
+                                <ul className="py-1">
+                                    <li
+                                        onClick={() => handleFilterSelect('um_request_log')}
+                                        className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-b"
+                                    >
+                                        um_request_log
+                                    </li>
+                                    <li
+                                        onClick={() => handleFilterSelect('um_creation_log')}
+                                        className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-t border-b"
+                                    >
+                                        um_creation_log
+                                    </li>
+                                    <li
+                                        onClick={() => handleFilterSelect('um_modification_log')}
+                                        className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-t border-b"
+                                    >
+                                        um_modification_log
+                                    </li>
+                                    <li
+                                        onClick={() => handleFilterSelect('um_deletion_log')}
+                                        className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-t"
+                                    >
+                                        um_deletion_log
+                                    </li>
+                                </ul>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {/* table */}
-                <div className="w-11/12 max-w-4xl " style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+                <div className="w-11/12 max-w-4xl" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
                     {logs.length > 0 ? (
                         <div style={{ maxHeight: '100%', overflowY: 'auto' }}>
                             <table className="min-w-full bg-gray-700 text-white rounded" style={{ tableLayout: 'fixed' }}>
@@ -126,8 +188,8 @@ const LogsBoard = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {logs.slice(page * logsPerPage - logsPerPage, page * logsPerPage).map((log) => (
-                                        <tr key={log.log_id}>
+                                    {logs.slice(page * logsPerPage - logsPerPage, page * logsPerPage).map((log, index) => (
+                                        <tr key={log.log_id} className={index % 2 === 0 ? "bg-slate-600" : ""}>
                                             <td className="py-2 px-4 border-b border-gray-600">{log.log_id}</td>
                                             <td className="py-2 px-4 border-b border-gray-600">{log.user_id}</td>
                                             <td className="py-2 px-4 border-b border-gray-600">{log.site_id}</td>
@@ -143,7 +205,7 @@ const LogsBoard = () => {
                         !error && <p className="text-gray-400">No logs available</p>
                     )}
                 </div>
-                
+
                 {/* pagination */}
                 <div className="flex justify-center max-w-4xl mt-2 mb-12 w-full ">
                     <div className="flex items-center ml-auto space-x-2">
@@ -173,9 +235,7 @@ const LogsBoard = () => {
                             onChange={handleInputPage}
                         />
                     </div>
-                    </div>
-
-
+                </div>
             </div>
         </>
     );
