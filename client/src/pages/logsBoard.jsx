@@ -7,7 +7,7 @@ import NavBarGroup1 from './Navbar.jsx';
 const LogsBoard = () => {
 
     // config
-    const logsPerPage = 2;
+    const logsPerPage = 10;
 
     // declaration
     const useQuery = () => {
@@ -232,7 +232,7 @@ const LogsBoard = () => {
                         </div>
 
                         <button
-                            className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800 hover:border-white"
+                            className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800"
                             onClick={() => handleNextPage()}
                         >
                             {'>'}
