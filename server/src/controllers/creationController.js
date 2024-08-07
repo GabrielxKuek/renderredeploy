@@ -45,15 +45,9 @@ export async function createCreation(req, res, next) {
 
 export async function readCreationByAll (req, res) {
   try {
-    const limit = parseInt(req.query.limit) || 20;
-    const offset = parseInt(req.query.offset) || 0;
-    
-    // const limit = req.body.limit || 20;
-    // const offset = req.body.offset || 0;
-
-    // const result = await creationModel.selectCreationByAll(site_id);
-    const result = await creationModel.selectCreationByAll(limit, offset);
+    const result = await creationModel.selectCreationByAll();
     res.json(result);
+    
   } catch (error) {
     console.error('Error reading creation logs:', error);
     res.status(500).json({ error: 'Internal server error' });

@@ -7,7 +7,7 @@ import NavBarGroup1 from './Navbar.jsx';
 const LogsBoard = () => {
 
     // config
-    const logsPerPage = 10;
+    const logsPerPage = 2;
 
     // declaration
     const useQuery = () => {
@@ -23,14 +23,9 @@ const LogsBoard = () => {
 
     const fetchLogs = async () => {
         try {
-            const response = await axios.get('http://localhost:8081/api/creation/viewAll', {
-                params: {
-                    limit: page * logsPerPage,
-                    offset: page * logsPerPage - logsPerPage
-                }
-            });
+            const response = await axios.get('http://localhost:8081/api/creation/viewAll');
             setLogs(response.data);
-            setError(null); // Clear any previous errors
+            setError(null);
         } catch (error) {
             setError('Error fetching logs. Please try again.');
             console.error('Error fetching logs:', error);
@@ -55,6 +50,17 @@ const LogsBoard = () => {
         }
     }
 
+    const handleInputPage = (event) => {
+        const value = parseInt(event.target.value);
+
+        if (value > 0 && value <= totalPages) {
+            navigate(`/logsBoard?page=${value}`);
+        } else if (value > totalPages) {
+            navigate(`/logsBoard?page=${totalPages}`);
+        } else {
+            console.log("invalid page number");
+        }
+    }
 
     useEffect(() => {
         fetchLogs();
@@ -120,7 +126,7 @@ const LogsBoard = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {logs.map((log) => (
+                                    {logs.slice(page * logsPerPage - logsPerPage, page * logsPerPage).map((log) => (
                                         <tr key={log.log_id}>
                                             <td className="py-2 px-4 border-b border-gray-600">{log.log_id}</td>
                                             <td className="py-2 px-4 border-b border-gray-600">{log.user_id}</td>
@@ -153,7 +159,7 @@ const LogsBoard = () => {
                         </div>
 
                         <button
-                            className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800"
+                            className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800 hover:border-white"
                             onClick={() => handleNextPage()}
                         >
                             {'>'}
@@ -161,9 +167,10 @@ const LogsBoard = () => {
 
                         <input
                             type="number"
-                            className="ml-2 w-16 px-2 py-2 border rounded text-center bg-gray-500 text-white"
+                            className="ml-2 px-2 py-2 border rounded text-center bg-gray-500 text-white"
                             min={1}
                             max={totalPages}
+                            onChange={handleInputPage}
                         />
                     </div>
                     </div>

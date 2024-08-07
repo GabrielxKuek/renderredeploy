@@ -48,13 +48,10 @@ export const insertCreation = async (user_id, site_id, table_name, record_id) =>
 // };
 
 // wanna ask about the function
-export const selectCreationByAll = async (limit, offset) => {
+export const selectCreationByAll = async () => {
   try {
     const result = await prisma.$queryRaw`
       SELECT * FROM um_creation_log
-      ORDER BY created_at DESC
-      LIMIT ${limit}
-      OFFSET ${offset}
     `
 
     return result;
