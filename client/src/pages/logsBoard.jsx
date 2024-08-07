@@ -90,7 +90,7 @@ const LogsBoard = () => {
                     Log <span className="text-green-600">Board</span>
                 </h1>
 
-                <p className="text-lg text-gray-300">
+                <p className="text-lg text-gray-300 mx-3.5">
                     Not sure if we should keep it here, or display it with graphs side
                 </p>
 
@@ -133,9 +133,9 @@ const LogsBoard = () => {
                                 Refresh
                             </button>
 
-                            <div className="ml-4 text-white">
+                            {/* <div className="ml-4 text-white">
                                 Displaying results for <span className="text-orange-300">um_{selectedFilter}_log</span>
-                            </div>
+                            </div> */}
                         </div>
                     )}
 
@@ -215,6 +215,10 @@ const LogsBoard = () => {
 
                 {/* pagination */}
                 {!error ? (<div className="flex justify-center max-w-4xl mt-2 mb-12 w-full ">
+                    <div className="text-white borde">
+                        Displaying results for <span className="text-orange-300">um_{selectedFilter}_log</span>
+                    </div>
+                    
                     <div className="flex items-center ml-auto space-x-2">
                         <button
                             className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800"
@@ -223,7 +227,7 @@ const LogsBoard = () => {
                             {'<'}
                         </button>
 
-                        <div className="px-4 py-2 text-white rounded bg-gray-700">
+                        <div className="px-4 py-2 text-white rounded bg-gray-700 hidden sm:flex">
                             {page} of {totalPages}
                         </div>
 
@@ -236,7 +240,7 @@ const LogsBoard = () => {
 
                         <input
                             type="number"
-                            className="ml-2 px-2 py-2 border rounded text-center bg-gray-500 text-white"
+                            className="ml-2 px-2 py-2 border rounded text-center bg-gray-500 text-white" 
                             min={1}
                             max={totalPages}
                             onChange={handleInputPage}
