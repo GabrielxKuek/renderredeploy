@@ -7,7 +7,7 @@ import NavBarGroup1 from './Navbar.jsx';
 const LogsBoard = () => {
 
     // config
-    const logsPerPage = 2;
+    const logsPerPage = 20;
 
     // declaration
     const useQuery = () => {
