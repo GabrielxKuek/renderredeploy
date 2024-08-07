@@ -91,13 +91,13 @@ const LogsBoard = () => {
                 </h1>
 
                 <p className="text-lg text-gray-300">
-                    Not sure if we should keep it here, or display it with graphs side {selectedFilter}
+                    Not sure if we should keep it here, or display it with graphs side
                 </p>
 
                 {/* fetch data */}
                 <div className="flex justify-between items-center w-11/12 max-w-4xl mb-4 mt-4">
                     {error && (
-                        <div className="flex justify-between items-center text-red-500">
+                        <div className="flex justify-between items-center">
                             <button
                                 onClick={() => fetchLogs(selectedFilter)}
                                 className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700 flex items-center"
@@ -111,25 +111,32 @@ const LogsBoard = () => {
                                 ) : null}
                                 Retry
                             </button>
-                            <div className="ml-4">
+
+                            <div className="ml-4 text-red-500">
                                 {error}
                             </div>
                         </div>
                     )}
                     {!error && (
-                        <button
-                            onClick={() => fetchLogs(selectedFilter)}
-                            className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700 flex items-center"
-                            disabled={loading}
-                        >
-                            {loading ? (
-                                <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                                </svg>
-                            ) : null}
-                            Refresh
-                        </button>
+                        <div className="flex justify-between items-center">
+                            <button
+                                onClick={() => fetchLogs(selectedFilter)}
+                                className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700 flex items-center"
+                                disabled={loading}
+                            >
+                                {loading ? (
+                                    <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                    </svg>
+                                ) : null}
+                                Refresh
+                            </button>
+
+                            <div className="ml-4 text-white">
+                                Displaying results for <span className="text-orange-300">um_{selectedFilter}_log</span>
+                            </div>
+                        </div>
                     )}
 
                     <div className="relative">
@@ -207,7 +214,7 @@ const LogsBoard = () => {
                 </div>
 
                 {/* pagination */}
-                <div className="flex justify-center max-w-4xl mt-2 mb-12 w-full ">
+                {!error ? (<div className="flex justify-center max-w-4xl mt-2 mb-12 w-full ">
                     <div className="flex items-center ml-auto space-x-2">
                         <button
                             className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800"
@@ -235,7 +242,8 @@ const LogsBoard = () => {
                             onChange={handleInputPage}
                         />
                     </div>
-                </div>
+                </div>) : null}
+                
             </div>
         </>
     );
