@@ -2,7 +2,6 @@
 import * as creationModel from '../models/creationModel.js';
 import 'dotenv/config';
 
-import {logRequest} from '../app.js'
 import logger from '../logger.js'
 
 import { PrismaClient } from '@prisma/client';
@@ -33,8 +32,6 @@ export async function createCreation(req, res, next) {
           user_id: req.user_id
         });
         
-        // await logRequest(user_id, site_id, error);
-        // Log error using Winston
         res.status(500).json({ error: 'Internal server error' });
     }
 }

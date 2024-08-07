@@ -16,7 +16,7 @@ model um_request_log {
   user_ip        String?   @db.VarChar(50)
   user_os        String?   @db.VarChar(200)
   created_at     DateTime? @default(now()) @db.Timestamp(6)
-  error_message  Json?   
+  error_message  Json?
   um_site        um_site?  @relation(fields: [site_id], references: [site_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_request_site_id")
   um_user        um_user?  @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_request_user_id")
 }
@@ -186,7 +186,6 @@ model um_image {
   um_status                     um_status?                      @relation(fields: [status_id], references: [status_id], map: "fk_um_image_um_status")
   um_image_tags                 um_image_tags[]
   um_user_image_role_permission um_user_image_role_permission[]
-
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -196,7 +195,7 @@ model um_image_tags {
   um_image um_image @relation(fields: [image_id], references: [image_id], onDelete: Cascade, map: "fk_um_image_tags_um_image")
   um_tags  um_tags  @relation(fields: [tag_id], references: [tag_id], onDelete: SetNull, map: "fk_um_image_tags_um_tags")
 
-  @@id([image_id, tag_id]) // Composite primary key
+  @@id([image_id, tag_id])
 }
 
 model um_invited_user {
@@ -475,9 +474,9 @@ model um_tags {
 
 model um_task {
   task_id       Int             @id @default(autoincrement())
+  task_name     String          @db.VarChar(100)
   table_name    String?         @db.VarChar(100)
   pk_name       String?         @db.VarChar(80)
-  payload_msg   Json?
   priority      priority_status @default(Low)
   task_by_user  Int?
   created_at    DateTime        @default(now())
@@ -489,6 +488,7 @@ model um_task_queue {
   task_queue_id Int       @id @default(autoincrement())
   task_id       Int
   user_id       Int?
+  payload       Json
   record_id     Int?
   status_id     Int
   updated_at    DateTime  @default(now())
@@ -561,7 +561,7 @@ model um_user_image_role_permission {
 model um_user_profile {
   profile_id          Int                   @id @default(autoincrement())
   profile_name        String?               @unique @db.VarChar(64)
-  profile_pin         String?               @db.VarChar(6)
+  profile_pin         String                @db.VarChar(255)
   created_on          DateTime?             @default(now()) @db.Timestamp(6)
   updated_on          DateTime?             @default(now()) @db.Timestamp(6)
   user_id             Int?

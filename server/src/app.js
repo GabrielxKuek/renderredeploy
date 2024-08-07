@@ -1,248 +1,14 @@
-
-////////////////////////////////////// 1st Version //////////////////////////////////
-
-// const express = require('express');
-// const createHttpError = require('http-errors');
-
-// const authRoute = require('./routes/auth');z
-// const mainRoutes = require('./routes/mainRoutes');
-
-// //////////////////////////
-// // Task 2 Related Routers
-// //////////////////////////
-// const logRoute = require('./routes/logRoutes')
-
-// const app = express();
-// app.use(express.json()); // to process JSON in request body
-
-
-// app.use(express.static('public'));
-
-// app.use("/task6", mainRoutes);
-
-// app.use('/modules', modulesRoute);
-// app.use('/reports', reportsRoute);
-// app.use('/students', studentsRoute);
-// app.use('/staff', staffRoute);
-// app.use('/auth', authRoute);
-
-// /////////////////////////
-// // Task 2 Related Routes
-// /////////////////////////
-// app.use('/task6/logs/:siteid', logRoute)
-
-// app.use(function (req, res, next) {
-//     return next(createHttpError(404, `Unknown Resource ${req.method} ${req.originalUrl}`));
-// });
-
-// // eslint-disable-next-line no-unused-vars
-// app.use(function (err, req, res, next) {
-//     return res.status(err.status || 500).json({ error: err.message || 'Unknown Server Error!' });
-// });
-
-// module.exports = app;
-
-////////////////////////////////////// 2nd Version //////////////////////////////////
-
-// import express from 'express'
-// import logger from "./logger.js";
-// import morgan from "morgan";
-// import cors from 'cors';
-
-// const app = express();
-// app.use(cors());
-
-// // Middleware to parse JSON and urlencoded data
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
-
-// // Use main routes for API endpoints
-
-// const morganFormat = ":method :url :status :remote-addr :response-time ms";
-
-
-// app.use(
-//   morgan(morganFormat, {
-//     stream: {
-//       write: (message) => {
-//         const logObject = {
-//           method: message.split(" ")[0],
-//           url: message.split(" ")[1],
-//           status: message.split(" ")[2],
-//           responseTime: message.split(" ")[4],
-//           ip: message.split(" ")[3]
-//         };
-//         logger.info(JSON.stringify(logObject));
-//       },
-//     },
-//   })
-// );
-
-// const morganMiddleware = morgan((tokens, req, res) => {
-//   const logObject = {
-//     method: tokens.method(req, res),
-//     url: tokens.url(req, res),
-//     status: tokens.status(req, res),
-//     responseTime: tokens['response-time'](req, res),
-//   };
-
-//   req.logData = logObject;
-
-//   return null; // Prevent morgan from outputting to console directly
-// });
-
-// app.use(morganMiddleware);
-
-////////////////////////////////////// 3rd Version //////////////////////////////////
-// import express from 'express';
-// import { createLogger, transports, format } from 'winston';
-// import { PrismaClient } from '@prisma/client';
-// import morgan from 'morgan';
-// import useragent from 'useragent';
-// import mainRoutes from './routes/mainRoutes.js';
-// import { PrismaTransport, logger } from './logger.js'; // Import PrismaTransport as a named export
-
-
-
-// const app = express();
-// const prisma = new PrismaClient();
-
-// // Middleware to parse JSON and URL-encoded data
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-
-// // Custom Morgan tokens
-// morgan.token('user_id', (req) => req.body.user_id || req.headers['user_id']);
-// morgan.token('site_id', (req) => req.body.site_id || req.headers['site_id']);
-// morgan.token('user_os', (req) => req.logData?.user_os || 'unknown');
-// morgan.token('user_ip', (req) => req.ip);
-
-// // Middleware to extract OS information
-// const osExtractor = (req, res, next) => {
-//   const userAgentString = req.headers['user-agent'];
-//   const agent = useragent.parse(userAgentString);
-//   req.logData = {
-//     user_os: agent.os.toString(), // Extract OS information
-//   };
-//   next();
-// };
-
-// // Morgan format string including the custom tokens
-// const morganFormat = ':user_id :site_id :method :url :remote-addr :user_os :response-time ms';
-
-// // Morgan middleware with custom stream to log requests
-// const morganMiddleware = morgan(morganFormat, {
-//   stream: {
-//     write: async (message) => {
-//       const [user_id, site_id, method, url, remote_addr, user_os, response_time] = message.trim().split(' ');
-
-//       // Log to Winston
-//       logger.info('Request logged', {
-//         user_id,
-//         site_id,
-//         request_method: method,
-//         api_requested: url,
-//         user_ip: remote_addr,
-//         user_os,
-//         response_time: parseFloat(response_time),
-//         error_message: null
-//       });
-
-//       try {
-//         // Insert request into the database
-//         await prisma.um_request_log.create({
-//           data: {
-//             user_id: parseInt(user_id, 10) || null,
-//             site_id: parseInt(site_id, 10) || null,
-//             request_method: method,
-//             api_requested: url,
-//             user_ip: remote_addr,
-//             user_os,
-//             response_time: parseFloat(response_time) || null,
-//             error_message: null
-//           }
-//         });
-//       } catch (error) {
-//         // Log the error with Winston
-//         logger.error('Failed to log request to database', {
-//           error: {
-//             message: error.message,
-//             stack: error.stack,
-//             code: error.code,
-//             meta: error.meta
-//           }
-//         });
-
-//         // Attempt to log the error to the database
-//         try {
-//           await prisma.um_request_log.create({
-//             data: {
-//               user_id: parseInt(user_id, 10) || null,
-//               site_id: parseInt(site_id, 10) || null,
-//               request_method: method,
-//               api_requested: url,
-//               user_ip: remote_addr,
-//               user_os,
-//               error_message: error.message
-//             }
-//           });
-//         } catch (dbError) {
-//           // If the second insertion fails, log the error with Winston
-//           logger.error('Failed to log error to database', {
-//             error: {
-//               message: dbError.message,
-//               stack: dbError.stack,
-//               code: dbError.code,
-//               meta: dbError.meta
-//             }
-//           });
-//         }
-//       }
-//     }
-//   }
-// });
-
-
-
-// function logRequest(user_id, site_id, request_method, api_requested, user_ip, user_os, error) {
-//   // Prepare log info object
-//   const logInfo = {
-//     request_method,
-//     api_requested,
-//     user_ip,
-//     user_os,
-//     site_id,
-//     user_id,
-//     error_message: error ? error.message : null
-//   };
-
-//   // Log to Prisma using the Winston logger
-//   logger.info('Request logged', logInfo);
-// }
-
-// // Use middleware to extract OS information
-// app.use(osExtractor);
-
-// app.use(logRequest);
-
-// app.use(morganMiddleware);
-
-// // Main routes
-// app.use('/api', mainRoutes);
-
-// export default app;
 import express from 'express';
 import { createLogger, transports, format } from 'winston';
 import { PrismaClient } from '@prisma/client';
 import morgan from 'morgan';
 import jwt from 'jsonwebtoken';
 import mainRoutes from './routes/mainRoutes.js';
-import cors from 'cors';
+import { logRequestMiddleware } from './middleware/logRequestMiddleware.js';
 
 const secret = 'your_jwt_secret'; // Replace with your JWT secret
 
 const app = express();
-app.use(cors());
 const prisma = new PrismaClient();
 
 // Middleware to attach log data and extract JWT information
@@ -310,12 +76,42 @@ const morganMiddleware = morgan(morganFormat, {
         user_ip: remote_addr,
         user_os: user_agent
       });
+
+      try {
+        // Insert request into the database
+        // await prisma.um_request_log.create({
+        //   data: {
+        //     user_id: parseInt(user_id, 10) || null,
+        //     site_id: parseInt(site_id, 10) || null,
+        //     request_method: method || 'UNKNOWN_METHOD',
+        //     api_requested: url || 'UNKNOWN_URL',
+        //     user_ip: remote_addr || 'UNKNOWN_IP',
+        //     user_os: user_agent || 'UNKNOWN_USER_AGENT',
+        //     error_message: null // No error message is captured here
+        //   }
+        // });
+      } catch (error) {
+        console.error('Failed to log request to database:', error.message);
+        logger.error('Failed to log request to database', { error });
+      }
     }
   }
 });
 
+// Middleware to parse JSON and URL-encoded data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Use the Morgan middleware before your routes
+app.use(morganMiddleware);
+
+// Main routes
+app.use('/api', mainRoutes);
+
+app.use(logRequestMiddleware);
+
 // Function to log request details
-async function logRequest(req, user_id, site_id, error) {
+export async function logRequest(req, res, next, error) {
   try {
     const { request_method, api_requested, user_ip, user_os } = req.logData;
     await prisma.um_request_log.create({
@@ -326,8 +122,8 @@ async function logRequest(req, user_id, site_id, error) {
         user_os: user_os || 'UNKNOWN_OS',
         created_at: new Date(),
         error_message: error ? error.message : 'NO_ERROR',
-        site_id: site_id !== undefined ? parseInt(site_id, 10) : null,
-        user_id: user_id !== undefined ? parseInt(user_id, 10) : null
+        site_id: req.site_id !== undefined ? parseInt(req.site_id, 10) : null,
+        user_id: req.user_id !== undefined ? parseInt(req.user_id, 10) : null
       }
     });
     console.log('Request logged to the database successfully');
@@ -336,14 +132,4 @@ async function logRequest(req, user_id, site_id, error) {
   }
 }
 
-app.use(morganMiddleware);
-
-// Middleware to parse JSON and URL-encoded data
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Main routes
-app.use('/api', mainRoutes);
-
-export { logRequest };
 export default app;

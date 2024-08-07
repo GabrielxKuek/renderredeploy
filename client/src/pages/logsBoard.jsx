@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import NavBarReyes from '../components/navBar';
 import NavBarGroup1 from './Navbar.jsx';
-import PaginationControls from '@/components/PaginationControls'
+import PaginationControls from '@/components/PaginationControlsProps'
 
 const LogsBoard = ({
     searchParams,
