@@ -107,10 +107,13 @@ app.use(logRequestMiddleware);
 export async function logRequest(req, res, next, error) {
   try {
     const { request_method, api_requested, user_ip, user_os } = req.logData;
+    const domain = req.headers.host;
+    const fullApiRequested = domain ? `${domain}${api_requested}` : api_requested;
+
     await prisma.um_request_log.create({
       data: {
         request_method: request_method || 'UNKNOWN_METHOD',
-        api_requested: api_requested || 'UNKNOWN_API',
+        api_requested: fullApiRequested || 'UNKNOWN_API',
         user_ip: user_ip || 'UNKNOWN_IP',
         user_os: user_os || 'UNKNOWN_OS',
         created_at: new Date(),
