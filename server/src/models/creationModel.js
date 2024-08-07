@@ -52,6 +52,7 @@ export const selectCreationByAll = async () => {
   try {
     const result = await prisma.$queryRaw`
       SELECT * FROM um_creation_log
+      ORDER BY created_at DESC;
     `
 
     return result;

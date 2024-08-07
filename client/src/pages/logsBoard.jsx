@@ -21,17 +21,18 @@ const LogsBoard = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState('All');
+    const [selectedFilter, setSelectedFilter] = useState('creation');
     const totalPages = Math.ceil(logs.length / logsPerPage);
 
-    const fetchLogs = async () => {
+    const fetchLogs = async (filter) => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:8081/api/creation/viewAll');
+            const response = await axios.get(`http://localhost:8081/api/${filter}/viewAll`);
             setLogs(response.data);
             setError(null);
         } catch (error) {
             setError('Error fetching logs. Please try again.');
+            setLogs([]); // Clear logs in case of error
             console.error('Error fetching logs:', error);
         } finally {
             setLoading(false);
@@ -72,13 +73,12 @@ const LogsBoard = () => {
     const handleFilterSelect = (filter) => {
         setSelectedFilter(filter);
         setIsDropdownVisible(false);
-        
-        console.log(`Selected filter: ${filter}`);
+        navigate(`/logsBoard`);
     }
 
     useEffect(() => {
-        fetchLogs();
-    }, [page]);
+        fetchLogs(selectedFilter);
+    }, [selectedFilter, page]);
 
     return (
         <>
@@ -91,7 +91,7 @@ const LogsBoard = () => {
                 </h1>
 
                 <p className="text-lg text-gray-300">
-                    Not sure if we should keep it here, or display it with graphs side
+                    Not sure if we should keep it here, or display it with graphs side {selectedFilter}
                 </p>
 
                 {/* fetch data */}
@@ -99,7 +99,7 @@ const LogsBoard = () => {
                     {error && (
                         <div className="flex justify-between items-center text-red-500">
                             <button
-                                onClick={fetchLogs}
+                                onClick={() => fetchLogs(selectedFilter)}
                                 className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700 flex items-center"
                                 disabled={loading}
                             >
@@ -118,7 +118,7 @@ const LogsBoard = () => {
                     )}
                     {!error && (
                         <button
-                            onClick={fetchLogs}
+                            onClick={() => fetchLogs(selectedFilter)}
                             className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700 flex items-center"
                             disabled={loading}
                         >
@@ -143,25 +143,25 @@ const LogsBoard = () => {
                             <div className="absolute right-0 mt-2 w-48 bg-slate-700 rounded-md shadow-lg z-50">
                                 <ul className="py-1">
                                     <li
-                                        onClick={() => handleFilterSelect('um_request_log')}
+                                        onClick={() => handleFilterSelect('request')}
                                         className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-b"
                                     >
                                         um_request_log
                                     </li>
                                     <li
-                                        onClick={() => handleFilterSelect('um_creation_log')}
+                                        onClick={() => handleFilterSelect('creation')}
                                         className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-t border-b"
                                     >
                                         um_creation_log
                                     </li>
                                     <li
-                                        onClick={() => handleFilterSelect('um_modification_log')}
+                                        onClick={() => handleFilterSelect('modification')}
                                         className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-t border-b"
                                     >
                                         um_modification_log
                                     </li>
                                     <li
-                                        onClick={() => handleFilterSelect('um_deletion_log')}
+                                        onClick={() => handleFilterSelect('deletion')}
                                         className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-t"
                                     >
                                         um_deletion_log
@@ -174,7 +174,7 @@ const LogsBoard = () => {
 
                 {/* table */}
                 <div className="w-11/12 max-w-4xl" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
-                    {logs.length > 0 ? (
+                    {logs.length > 0 && !error ? (
                         <div style={{ maxHeight: '100%', overflowY: 'auto' }}>
                             <table className="min-w-full bg-gray-700 text-white rounded" style={{ tableLayout: 'fixed' }}>
                                 <thead className="sticky top-0 bg-gray-700 shadow-md">
@@ -202,7 +202,7 @@ const LogsBoard = () => {
                             </table>
                         </div>
                     ) : (
-                        !error && <p className="text-gray-400">No logs available</p>
+                        !loading && <p className="text-gray-400">No logs available</p>
                     )}
                 </div>
 

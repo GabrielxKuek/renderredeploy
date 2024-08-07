@@ -16,9 +16,22 @@ export const insertModification = async (user_id, site_id, table_name, record_id
 
 // select
 
-export const selectModification = async (site_id) => {
+// export const selectModification = async (site_id) => {
+//   try {
+//     const result = await prisma.$queryRaw`SELECT * FROM viewModification(${site_id});`
+//     return result;
+//   } catch (error) {
+//     console.error('Error reading modification logs:', error);
+//     throw error;
+//   }
+// };
+
+export const selectModificationByAll = async (site_id) => {
   try {
-    const result = await prisma.$queryRaw`SELECT * FROM viewModification(${site_id});`
+    const result = await prisma.$queryRaw`
+      SELECT * FROM um_modification_log
+      ORDER BY created_at DESC;
+    `
     return result;
   } catch (error) {
     console.error('Error reading modification logs:', error);
