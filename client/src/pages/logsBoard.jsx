@@ -7,7 +7,6 @@ import NavBarGroup1 from './Navbar.jsx';
 const LogsBoard = () => {
 
     // config
-    const paginationButtons = 8;
     const logsPerPage = 10;
 
     // declaration
@@ -24,7 +23,12 @@ const LogsBoard = () => {
 
     const fetchLogs = async () => {
         try {
-            const response = await axios.get('http://localhost:8081/api/creation/viewAll');
+            const response = await axios.get('http://localhost:8081/api/creation/viewAll', {
+                params: {
+                    limit: page * logsPerPage,
+                    offset: page * logsPerPage - logsPerPage
+                }
+            });
             setLogs(response.data);
             setError(null); // Clear any previous errors
         } catch (error) {
@@ -116,7 +120,7 @@ const LogsBoard = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {logs.slice(page * logsPerPage - logsPerPage, page * logsPerPage).map((log) => (
+                                    {logs.map((log) => (
                                         <tr key={log.log_id}>
                                             <td className="py-2 px-4 border-b border-gray-600">{log.log_id}</td>
                                             <td className="py-2 px-4 border-b border-gray-600">{log.user_id}</td>

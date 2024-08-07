@@ -2,24 +2,33 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// import {logRequest} from '../app.js'
+// insert
+
+// export const insertCreation = async (user_id, site_id, table_name, record_id) => {
+//   const sql = `
+//   CALL log_creation($1, $2, $3, $4);
+//   `;
+
+//   try {
+//     const result = await prisma.$executeRaw`
+//       CALL log_creation(${user_id}, ${site_id}, ${table_name}, ${record_id});
+//     `;
+//     return result;
+//   } catch (error) {
+//     console.error('Error executing logRemove:', error);
+//     throw error;
+//   }
+// };
+import {logRequest} from '../app.js'
 
 
 export const insertCreation = async (user_id, site_id, table_name, record_id) => {
   try {
-    // const result = await prisma.$executeRaw`
-    //   INSERT INTO um_creation_log (user_id, site_id, table_name, record_id)
-    //   VALUES (${user_id}, ${site_id}, ${table_name}, ${record_id});
-    // `;
-    prisma.um_creation_log.create({
-      data: {
-        user_id,
-        site_id,
-        table_name,
-        record_id,
-        created_at: new Date()
-      }
-    })
+    const result = await prisma.$executeRaw`
+      INSERT INTO um_creation_log (user_id, site_id, table_name, record_id)
+      VALUES (${user_id}, ${site_id}, ${table_name}, ${record_id});
+    `;
+    return result;
   } catch (error) {
     console.error('Error inserting creation log:', error);
     throw error;
@@ -28,9 +37,26 @@ export const insertCreation = async (user_id, site_id, table_name, record_id) =>
 
 // select
 
-export const selectCreationByAll = async (site_id) => {
+// export const selectCreationByAll = async (site_id) => {
+//   try {
+//     const result = await prisma.$queryRaw`SELECT * FROM viewCreation(${site_id});`
+//     return result;
+//   } catch (error) {
+//     console.error('Error selecting creation logs:', error);
+//     throw error;
+//   }
+// };
+
+// wanna ask about the function
+export const selectCreationByAll = async (limit, offset) => {
   try {
-    const result = await prisma.$queryRaw`SELECT * FROM viewCreation(${site_id});`
+    const result = await prisma.$queryRaw`
+      SELECT * FROM um_creation_log
+      ORDER BY created_at DESC
+      LIMIT ${limit}
+      OFFSET ${offset}
+    `
+
     return result;
   } catch (error) {
     console.error('Error selecting creation logs:', error);
