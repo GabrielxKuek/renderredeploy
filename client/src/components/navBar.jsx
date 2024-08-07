@@ -21,6 +21,9 @@ const NavBar = () => {
             Board
           </Link>
 
+          <Link to="/logsStatistics" className="text-gray-300 hover:text-white">
+            Statistics
+          </Link>
         </div>
       </div>
     </nav>

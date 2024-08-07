@@ -13,6 +13,7 @@ import Setting from "./pages/Setting.jsx";
 import LogsHome from "./pages/logsHome.jsx";
 import LogsSomething from "./pages/logsSomething.jsx";
 import LogsBoard from "./pages/logsBoard.jsx";
+import LogStatistics from "./pages/logsStatistics";
 
 function App() {
   const [headerWidth, setHeaderWidth] = useState("0");
@@ -40,6 +41,7 @@ function App() {
         <Route path="/logsSomething" element={<LogsSomething />} />
         <Route path="/logsBoard" element={<LogsBoard />} />
         <Route path="/logsBoard-pagination" element={<LogsBoard-pagination />} />
+        <Route path="/logsStatistics" element={<LogStatistics />} />
 
         <Route path="/profile" element={<Profile />} />
         <Route path="/Role" element={<Role />} />
