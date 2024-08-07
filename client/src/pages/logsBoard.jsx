@@ -215,8 +215,8 @@ const LogsBoard = () => {
 
                 {/* pagination */}
                 {!error ? (<div className="flex justify-center max-w-4xl mt-2 mb-12 w-full ">
-                    <div className="text-white borde">
-                        Displaying results for <span className="text-orange-300">um_{selectedFilter}_log</span>
+                    <div className="flex items-end text-white">
+                        Displaying results for&nbsp;<span className="text-orange-300">um_{selectedFilter}_log</span>
                     </div>
                     
                     <div className="flex items-center ml-auto space-x-2">
