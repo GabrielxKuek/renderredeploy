@@ -33,9 +33,14 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/site" element={<Site />} />
         <Route path="/user" element={<User />} />
+
+        {/* these are the ones we work on: */}
+
         <Route path="/logsHome" element={<LogsHome />} />
         <Route path="/logsSomething" element={<LogsSomething />} />
         <Route path="/logsBoard" element={<LogsBoard />} />
+        <Route path="/logsBoard-pagination" element={<LogsBoard-pagination />} />
+
         <Route path="/profile" element={<Profile />} />
         <Route path="/Role" element={<Role />} />
         <Route path="/Group" element={<Group />} />

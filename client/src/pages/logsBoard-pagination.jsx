@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import NavBarReyes from '../components/navBar';
 import NavBarGroup1 from './Navbar.jsx';
-// import PaginationControls from '@/components/PaginationControlsProps'
+import PaginationControls from '@/components/PaginationControls'
 
 const LogsBoard = ({
-    // searchParams,
+    searchParams,
   }) => {
-    // const page = searchParams['page'] ?? '1';
-    // const perPage = searchParams['per_page'] ?? '5';
-    // // mocked, skipped and limited in the real app
-    // const start = (Number(page) - 1) * Number(perPage); // 0, 5, 10 ...
-    // const end = start + Number(perPage); // 5, 10, 15
+    const page = searchParams['page'] ?? '1';
+    const perPage = searchParams['per_page'] ?? '5';
+    // mocked, skipped and limited in the real app
+    const start = (Number(page) - 1) * Number(perPage); // 0, 5, 10 ...
+    const end = start + Number(perPage); // 5, 10, 15
 
     const [logs, setLogs] = useState([]);
     const [error, setError] = useState(null);
@@ -71,7 +71,7 @@ const LogsBoard = ({
                         )}
                     </div>
 
-                    {/* <div className='flex flex-col gap-2 items-center'>
+                    <div className='flex flex-col gap-2 items-center'>
                         {entries.map((entry) => (
                             <p key={entry}>{entry}</p>
                         ))}
@@ -80,7 +80,7 @@ const LogsBoard = ({
                             hasNextPage={end < data.length}
                             hasPrevPage={start > 0}
                         />
-                    </div> */}
+                    </div>
                     
                     {logs.length > 0 ? (
                         <table className="min-w-full bg-gray-700 text-white rounded">
