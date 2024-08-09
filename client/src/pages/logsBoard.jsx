@@ -25,6 +25,7 @@ const LogsBoard = () => {
     const [selectedFilter, setSelectedFilter] = useState('creation');
     const totalPages = Math.ceil(logs.length / logsPerPage);
     const [expandedRow, setExpandedRow] = useState(null);
+    const [searchValue, setsearchValue] = useState(""); 
 
     const fetchLogs = async (filter) => {
         setLoading(true);
@@ -36,6 +37,26 @@ const LogsBoard = () => {
             setError('Error fetching logs. Please try again.');
             setLogs([]); // Clear logs in case of error
             console.error('Error fetching logs:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSearchChange = (searchValue) => {
+        setsearchValue(searchValue.target.value);
+    };
+
+    const handleSearchSubmit = async (event) => {
+        setLoading(true);
+        event.preventDefault();
+        try {
+            const response = await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedFilter}`, {
+                params: { searchValue }
+            });
+            setLogs(response.data);
+        } catch (error) {
+            console.error('Error searching logs:', error);
+            setLogs([]);
         } finally {
             setLoading(false);
         }
@@ -107,6 +128,24 @@ const LogsBoard = () => {
                     Not sure if we should keep it here, or display it with graphs side
                 </p>
 
+                {/* Search Bar */}
+                <div className="w-11/12 max-w-4xl mb-4 mt-4">
+                    <form onSubmit={handleSearchSubmit} className="flex items-center">
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            value={searchValue}
+                            onChange={handleSearchChange}
+                            className="flex-grow px-4 py-2 border border-gray-300 rounded-l-md text-black"
+                        />
+                        <button
+                            type="submit"
+                            className="px-4 py-2 bg-indigo-500 text-white rounded-r-md hover:bg-indigo-600 active:bg-indigo-700"
+                        >
+                            Search
+                        </button>
+                    </form>
+                </div>
                 {/* fetch data */}
                 <div className="flex justify-between items-center w-11/12 max-w-4xl mb-4 mt-4">
                     {error && (
@@ -204,7 +243,7 @@ const LogsBoard = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {logs.slice(page * logsPerPage - logsPerPage, page * logsPerPage).map((log, index) => (
+                                    {logs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(page * logsPerPage - logsPerPage, page * logsPerPage).map((log, index) => (
                                         <React.Fragment key={log.log_id}>
                                             <tr className={index % 2 === 0 ? "bg-slate-600" : ""} onClick={() => handleRowClick(log)} style={{cursor: 'pointer', position: 'relative'}}>
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.log_id}</td>
