@@ -21,12 +21,23 @@ const prisma = new PrismaClient();
 // };
 import {logRequest} from '../app.js'
 
+// export const insertCreation = async (user_id, site_id, table_name, record_id) => {
+//   try {
+//     const result = await prisma.$executeRaw`
+//       INSERT INTO um_creation_log (user_id, site_id, table_name, record_id)
+//       VALUES (${user_id}, ${site_id}, ${table_name}, ${record_id});
+//     `;
+//     return result;
+//   } catch (error) {
+//     console.error('Error inserting creation log:', error);
+//     throw error;
+//   }
+// };
 
 export const insertCreation = async (user_id, site_id, table_name, record_id) => {
   try {
     const result = await prisma.$executeRaw`
-      INSERT INTO um_creation_log (user_id, site_id, table_name, record_id)
-      VALUES (${user_id}, ${site_id}, ${table_name}, ${record_id});
+      CALL log_creation(${user_id}, ${site_id}, ${table_name}, ${record_id}); 
     `;
     return result;
   } catch (error) {
@@ -37,24 +48,9 @@ export const insertCreation = async (user_id, site_id, table_name, record_id) =>
 
 // select
 
-// export const selectCreationByAll = async (site_id) => {
-//   try {
-//     const result = await prisma.$queryRaw`SELECT * FROM viewCreation(${site_id});`
-//     return result;
-//   } catch (error) {
-//     console.error('Error selecting creation logs:', error);
-//     throw error;
-//   }
-// };
-
-// wanna ask about the function
-export const selectCreationByAll = async () => {
+export const selectCreationByAll = async (site_id) => {
   try {
-    const result = await prisma.$queryRaw`
-      SELECT * FROM um_creation_log
-      ORDER BY created_at DESC;
-    `
-
+    const result = await prisma.$queryRaw`SELECT * FROM viewCreation(${site_id});`
     return result;
   } catch (error) {
     console.error('Error selecting creation logs:', error);
@@ -62,9 +58,24 @@ export const selectCreationByAll = async () => {
   }
 };
 
+// // wanna ask about the function
+// export const selectCreationByAll = async () => {
+//   try {
+//     const result = await prisma.$queryRaw`
+//       SELECT * FROM um_creation_log
+//       ORDER BY created_at DESC;
+//     `
+
+//     return result;
+//   } catch (error) {
+//     console.error('Error selecting creation logs:', error);
+//     throw error;
+//   }
+// };
+
 export const selectCreationByDate = async (site_id, date) => {
   try {
-    const result = await prisma.$queryRaw`SELECT * FROM viewCreationByDate(${site_id, date});`
+    const result = await prisma.$queryRaw`SELECT * FROM viewCreationByDate(${site_id}, ${date});`
     return result;
   } catch (error) {
     console.error('Error selecting creation logs by date:', error);

@@ -33,28 +33,28 @@ export const insertDeletion = async (user_id, site_id, table_name, record_id, fi
 //   }
 // };
 
-// export const selectDeletionByAll = async (site_id) => {
-//   try {
-//     const result = await prisma.$queryRaw`SELECT * FROM viewDeletion(${site_id});`
-//     return result;
-//   } catch (error) {
-//     console.error('Error selecting deletion logs:', error);
-//     throw error;
-//   }
-// }
-
 export const selectDeletionByAll = async (site_id) => {
   try {
-    const result = await prisma.$queryRaw`
-      SELECT * FROM um_deletion_log
-      ORDER BY created_at DESC;
-    `
+    const result = await prisma.$queryRaw`SELECT * FROM viewDeletion(${site_id});`
     return result;
   } catch (error) {
     console.error('Error selecting deletion logs:', error);
     throw error;
   }
 }
+
+// export const selectDeletionByAll = async (site_id) => {
+//   try {
+//     const result = await prisma.$queryRaw`
+//       SELECT * FROM um_deletion_log
+//       ORDER BY created_at DESC;
+//     `
+//     return result;
+//   } catch (error) {
+//     console.error('Error selecting deletion logs:', error);
+//     throw error;
+//   }
+// }
 
 export const selectDeletionByDate = async (site_id, date) => {
   try {
