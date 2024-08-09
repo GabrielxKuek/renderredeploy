@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
-// import * as deletionController from "../controllers/deletionController.js";
-import * as deletionController from "../controllers-testing-dummydata/deletionController.js";
+import * as deletionController from "../controllers/deletionController.js";
+// import * as deletionController from "../controllers-testing-dummydata/deletionController.js";
 
 // Create deletion log
 router.post("/input", deletionController.createDeletion);

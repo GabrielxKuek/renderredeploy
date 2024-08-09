@@ -53,6 +53,7 @@ morgan.token('user_id', (req) => req.user_id || 'UNKNOWN_USER_ID');
 morgan.token('site_id', (req) => req.site_id || 'UNKNOWN_SITE_ID');
 morgan.token('os', (req) => req.get('User-Agent') || 'UNKNOWN_OS');
 
+// Gabriel Update
 morgan.token('remote-addr', (req) => {
   const forwardedFor = req.headers['x-forwarded-for'];
   let ip = forwardedFor ? forwardedFor.split(',')[0].trim() : req.ip;
@@ -62,8 +63,16 @@ morgan.token('remote-addr', (req) => {
   return ip;
 });
 
+// Gabriel Update
+morgan.token('fullurl', (req) => {
+  const domain = req.headers.host;
+  const url = req.originalUrl || req.url;
+  return domain ? `${domain}${url}` : url;
+});
+
+// Gabriel Update
 // Custom format string including the custom tokens
-const morganFormat = ':user_id :site_id :method :url :remote-addr :os';
+const morganFormat = ':user_id :site_id :method :fullurl :remote-addr :user-agent';
 
 // Morgan middleware with custom stream to log requests
 const morganMiddleware = morgan(morganFormat, {
@@ -76,15 +85,15 @@ const morganMiddleware = morgan(morganFormat, {
         console.error('Malformed log message:', message);
         return;
       }
-
-      const [user_id, site_id, method, url, remote_addr, user_agent] = parts;
+      // Gabriel Update
+      const [user_id, site_id, method, fullurl, remote_addr, user_agent] = parts;
 
       // Log to Winston
       logger.info('Request logged', {
         user_id: user_id,
         site_id: site_id,
         request_method: method,
-        api_requested: url,
+        api_requested: fullurl, // Gabriel Update
         user_ip: remote_addr,
         user_os: user_agent
       });

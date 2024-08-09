@@ -8,17 +8,17 @@ datasource db {
 }
 
 model um_request_log {
-  log_id          Int       @id @default(autoincrement())
-  user_id         Int?
-  site_id         Int?
-  request_method  String?   @db.VarChar(10)
-  api_requested   Json?
-  user_ip         String?   @db.VarChar(16)
-  user_os         String?   @db.VarChar(10)
-  request_success Boolean?
-  created_at      DateTime? @default(now()) @db.Timestamp(6)
-  um_site         um_site?  @relation(fields: [site_id], references: [site_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_request_site_id")
-  um_user         um_user?  @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_request_user_id")
+  log_id         Int       @id @default(autoincrement())
+  user_id        Int?
+  site_id        Int?
+  request_method String?   @db.VarChar(100)
+  api_requested  String?   @db.VarChar(200)
+  user_ip        String?   @db.VarChar(50)
+  user_os        String?   @db.VarChar(200)
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  error_message  Json?
+  um_site        um_site?  @relation(fields: [site_id], references: [site_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_request_site_id")
+  um_user        um_user?  @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_request_user_id")
 }
 
 model um_creation_log {
@@ -33,15 +33,15 @@ model um_creation_log {
 }
 
 model um_modification_log {
-  log_id     Int                         @id @default(autoincrement())
-  user_id    Int?
-  site_id    Int?
-  table_name String?                     @db.VarChar(50)
-  record_id  String?                     @db.VarChar(50)
-  created_at DateTime?                   @default(now()) @db.Timestamp(6)
-  um_site    um_site?                    @relation(fields: [site_id], references: [site_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_modification_site_id")
-  um_user    um_user?                    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_modification_user_id")
-  details    um_modification_log_detail? @relation("ModificationLogDetails")
+  log_id                     Int                         @id @default(autoincrement())
+  user_id                    Int?
+  site_id                    Int?
+  table_name                 String?                     @db.VarChar(50)
+  record_id                  String?                     @db.VarChar(50)
+  created_at                 DateTime?                   @default(now()) @db.Timestamp(6)
+  um_site                    um_site?                    @relation(fields: [site_id], references: [site_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_modification_site_id")
+  um_user                    um_user?                    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_modification_user_id")
+  um_modification_log_detail um_modification_log_detail?
 }
 
 model um_modification_log_detail {
@@ -49,19 +49,19 @@ model um_modification_log_detail {
   log_id                Int?                 @unique
   field_name            String?              @db.VarChar(50)
   old_value             Json?
-  um_modification_log   um_modification_log? @relation("ModificationLogDetails", fields: [log_id], references: [log_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_modification_log_detail_log_id")
+  um_modification_log   um_modification_log? @relation(fields: [log_id], references: [log_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_modification_log_detail_log_id")
 }
 
 model um_deletion_log {
-  log_id     Int                     @id @default(autoincrement())
-  user_id    Int?
-  site_id    Int?
-  table_name String?                 @db.VarChar(50)
-  record_id  String?                 @db.VarChar(50)
-  created_at DateTime?               @default(now()) @db.Timestamp(6)
-  um_site    um_site?                @relation(fields: [site_id], references: [site_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_deletion_site_id")
-  um_user    um_user?                @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_deletion_user_id")
-  details    um_deletion_log_detail? @relation("DeletionLogDetails")
+  log_id                 Int                     @id @default(autoincrement())
+  user_id                Int?
+  site_id                Int?
+  table_name             String?                 @db.VarChar(50)
+  record_id              String?                 @db.VarChar(50)
+  created_at             DateTime?               @default(now()) @db.Timestamp(6)
+  um_site                um_site?                @relation(fields: [site_id], references: [site_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_deletion_site_id")
+  um_user                um_user?                @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_deletion_user_id")
+  um_deletion_log_detail um_deletion_log_detail?
 }
 
 model um_deletion_log_detail {
@@ -69,7 +69,7 @@ model um_deletion_log_detail {
   log_id                Int?             @unique
   field_name            String?          @db.VarChar(50)
   old_value             Json?
-  um_deletion_log       um_deletion_log? @relation("DeletionLogDetails", fields: [log_id], references: [log_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_deletion_log_detail_log_id")
+  um_deletion_log       um_deletion_log? @relation(fields: [log_id], references: [log_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_deletion_log_detail_log_id")
 }
 
 model um_album {
@@ -100,6 +100,8 @@ model um_authentication {
   um_oauth_provider um_oauth_provider? @relation(fields: [provider_id], references: [provider_id], onDelete: Cascade, map: "fk_provider_id")
   um_site           um_site            @relation(fields: [site_id], references: [site_id], onDelete: Cascade, map: "fk_site_id")
   um_user           um_user            @relation(fields: [user_id], references: [user_id], onDelete: Cascade, map: "fk_user_id")
+
+  @@unique([user_id, site_id], map: "unique_user_site")
 }
 
 model um_feature {
@@ -187,15 +189,13 @@ model um_image {
   um_user_profile               um_user_profile[]
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model um_image_tags {
-  image_tag_id Int
-  image_id     Int
-  tag_id       Int
-  um_image     um_image @relation(fields: [image_id], references: [image_id], onDelete: Cascade, map: "fk_um_image_tags_um_image")
-  um_tags      um_tags  @relation(fields: [tag_id], references: [tag_id], onDelete: SetNull, map: "fk_um_image_tags_um_tags")
+  image_id Int
+  tag_id   Int
+  um_image um_image @relation(fields: [image_id], references: [image_id], onDelete: Cascade, map: "fk_um_image_tags_um_image")
+  um_tags  um_tags  @relation(fields: [tag_id], references: [tag_id], onDelete: SetNull, map: "fk_um_image_tags_um_tags")
 
-  @@id([image_tag_id, image_id, tag_id])
+  @@id([image_id, tag_id])
 }
 
 model um_invited_user {
@@ -289,7 +289,7 @@ model um_provider_site {
 
 model um_report {
   report_id          Int              @id @default(autoincrement())
-  report_type        String?          @db.VarChar(20)
+  report_type        String?          @db.VarChar(50)
   report_title       String?          @db.VarChar(100)
   report_description String?
   report_query       String?
@@ -477,10 +477,10 @@ model um_task {
   task_id       Int             @id @default(autoincrement())
   table_name    String?         @db.VarChar(100)
   pk_name       String?         @db.VarChar(80)
-  payload_msg   Json?
   priority      priority_status @default(Low)
   task_by_user  Int?
   created_at    DateTime        @default(now())
+  task_name     String          @db.VarChar(100)
   um_user       um_user?        @relation(fields: [task_by_user], references: [user_id])
   um_task_queue um_task_queue[]
 }
@@ -492,6 +492,7 @@ model um_task_queue {
   record_id     Int?
   status_id     Int
   updated_at    DateTime  @default(now())
+  payload       Json
   um_status     um_status @relation(fields: [status_id], references: [status_id])
   um_task       um_task   @relation(fields: [task_id], references: [task_id], onDelete: Cascade)
   um_user       um_user?  @relation(fields: [user_id], references: [user_id])
@@ -501,9 +502,9 @@ model um_task_queue {
 
 model um_user {
   user_id                         Int                               @id @default(autoincrement())
-  email                           String                            @unique @db.VarChar(255)
+  email                           String?                           @unique @db.VarChar(255)
   created_on                      DateTime?                         @default(now()) @db.Timestamp(6)
-  status_id                       Int
+  status_id                       Int?
   updated_on                      DateTime?                         @default(now()) @db.Timestamp(6)
   um_authentication               um_authentication[]
   um_creation_log                 um_creation_log[]
@@ -514,7 +515,7 @@ model um_user {
   um_session                      um_session[]
   um_task                         um_task[]
   um_task_queue                   um_task_queue[]
-  um_status                       um_status                         @relation(fields: [status_id], references: [status_id], map: "fk_user_status_id")
+  um_status                       um_status?                        @relation(fields: [status_id], references: [status_id], onDelete: Restrict, map: "fk_user_status_id")
   um_user_album_role_permission   um_user_album_role_permission[]
   um_user_gallery_role_permission um_user_gallery_role_permission[]
   um_user_image_role_permission   um_user_image_role_permission[]
@@ -560,17 +561,17 @@ model um_user_image_role_permission {
 
 model um_user_profile {
   profile_id          Int                   @id @default(autoincrement())
-  profile_name        String                @unique @db.VarChar(64)
+  profile_name        String?               @unique @db.VarChar(64)
   profile_pin         String                @db.VarChar(255)
-  created_on          DateTime              @default(now()) @db.Timestamp(6)
-  updated_on          DateTime              @default(now()) @db.Timestamp(6)
-  user_id             Int
+  created_on          DateTime?             @default(now()) @db.Timestamp(6)
+  updated_on          DateTime?             @default(now()) @db.Timestamp(6)
+  user_id             Int?
   image_id            Int?
-  status_id           Int
+  status_id           Int?
   um_submission_value um_submission_value[]
-  um_image            um_image?             @relation(fields: [image_id], references: [image_id], map: "fk_image_id")
-  um_status           um_status             @relation(fields: [status_id], references: [status_id], map: "fk_status_id")
-  um_user             um_user               @relation(fields: [user_id], references: [user_id], map: "fk_user_profile_user_id")
+  um_image            um_image?             @relation(fields: [image_id], references: [image_id], onUpdate: NoAction, map: "fk_image_id")
+  um_status           um_status?            @relation(fields: [status_id], references: [status_id], onUpdate: NoAction, map: "fk_status_id")
+  um_user             um_user?              @relation(fields: [user_id], references: [user_id], onUpdate: NoAction, map: "fk_user_id")
 }
 
 model um_user_site_role_permission {

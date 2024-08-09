@@ -45,9 +45,9 @@ export async function createCreation(req, res, next) {
 
 export async function readCreationByAll (req, res) {
   try {
-    const { site_id } = req.body;
-    const result = await creationModel.selectCreationByAll(site_id);
+    const result = await creationModel.selectCreationByAll();
     res.json(result);
+    
   } catch (error) {
     console.error('Error reading creation logs:', error);
     res.status(500).json({ error: 'Internal server error' });

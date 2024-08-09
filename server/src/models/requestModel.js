@@ -51,9 +51,22 @@ export const insertRequest = async (user_id, site_id, request_method, api_reques
 // select all request
 // ========================
 
+// export const selectAllRequestBySite = async (site_id) => {
+//     try {
+//         const result = await prisma.$queryRaw`SELECT * FROM viewRequest(${site_id});`
+//         return result;
+//     } catch (error) {
+//         console.error('Error selecting all logs:', error);
+//         throw error;
+//     }
+// };
+
 export const selectAllRequestBySite = async (site_id) => {
     try {
-        const result = await prisma.$queryRaw`SELECT * FROM viewRequest(${site_id});`
+        const result = await prisma.$queryRaw`
+            SELECT * FROM viewRequest(${site_id})
+            ORDER BY created_at DESC;
+        `
         return result;
     } catch (error) {
         console.error('Error selecting all logs:', error);

@@ -3,3 +3,4 @@ node_modules/
 example.js
 .env
 server/.env
+client/.env
