@@ -37,30 +37,30 @@ export const insertCreation = async (user_id, site_id, table_name, record_id) =>
 
 // select
 
-// export const selectCreationByAll = async (site_id) => {
-//   try {
-//     const result = await prisma.$queryRaw`SELECT * FROM viewCreation(${site_id});`
-//     return result;
-//   } catch (error) {
-//     console.error('Error selecting creation logs:', error);
-//     throw error;
-//   }
-// };
-
-// wanna ask about the function
-export const selectCreationByAll = async () => {
+export const selectCreationByAll = async (site_id) => {
   try {
-    const result = await prisma.$queryRaw`
-      SELECT * FROM um_creation_log
-      ORDER BY created_at DESC;
-    `
-
+    const result = await prisma.$queryRaw`SELECT * FROM viewCreation(${site_id});`
     return result;
   } catch (error) {
     console.error('Error selecting creation logs:', error);
     throw error;
   }
 };
+
+// // wanna ask about the function
+// export const selectCreationByAll = async () => {
+//   try {
+//     const result = await prisma.$queryRaw`
+//       SELECT * FROM um_creation_log
+//       ORDER BY created_at DESC;
+//     `
+
+//     return result;
+//   } catch (error) {
+//     console.error('Error selecting creation logs:', error);
+//     throw error;
+//   }
+// };
 
 export const selectCreationByDate = async (site_id, date) => {
   try {
