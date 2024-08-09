@@ -1,4 +1,3 @@
-// import { logRequest } from '../logger.js';
 import * as creationModel from '../models/creationModel.js';
 import 'dotenv/config';
 
