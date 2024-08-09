@@ -4,6 +4,9 @@ import axios from 'axios';
 import Chart from 'chart.js/auto';
 import NavBarReyes from '../components/navBar';
 import NavBarGroup1 from './Navbar.jsx';
+import PieChart from '@/components/pieChart';
+import LineChart from '@/components/lineChart';
+import BarChart from '@/components/barChart';
 
 const LogStatistics = () => {
 
@@ -43,92 +46,39 @@ const LogStatistics = () => {
         setIsDropdownVisible(false);
         navigate(`/logsStatistics`);
     }
-
-    const pieRef = useRef(null);
-    const lineRef = useRef(null);
-
-    const pieInstance = useRef(null);
-    const lineInstance = useRef(null);
-
-    // Pie chart
-    useEffect(() => {
-        if (pieInstance.current) {
-            pieInstance.current.destroy()
+    
+    /*
+    // Stacked bar chart
+    useEffect(() => {        
+        if (stackedBarInstance.current) {
+            stackedBarInstance.current.destroy();
         }
-        const myPieRef = pieRef.current.getContext('2d');
+        const myStackedBarRef = stackedBarRef.current.getContext('2d');
 
-        console.log(logs.length)
-        pieInstance.current=new Chart(myPieRef, {
-            type: "pie",
+        stackedBarInstance.current=new Chart(myStackedBarRef, {
+            type: 'bar',
             data: {
-                labels: ["GET", "POST", "PUT", "DELETE"],
-                datasets: [
+                labels: ["Chocolate", "Vanilla", "Strawberry"],
+                datasets:[
                     {
-                        data: [300, 50, 100, 20],
-                        backgroundColor: [
-                            'rgb(255, 99, 132)',
-                            'rgb(54, 162, 235)',
-                            'rgb(255, 205, 86)',
-                            'rgb(0, 255, 0)'
-                        ],
+                        label: "Blue",
+                        backgroundColor: "blue",
+                        data: [3,7,4]
+                    },
+                    {
+                        label: "Red",
+                        backgroundColor: "red",
+                        data: [4,3,5]
+                    },
+                    {
+                        label: "Green",
+                        backgroundColor: "green",
+                        data: [7,2,6]
                     }
                 ]
-            }
-        });
-
-        return () => {
-            if (pieInstance.current) {
-                pieInstance.current.destroy(); 
-            }
-        }
-    }, []);
-
-    // Line chart
-    useEffect(() => {
-        if (lineInstance.current) {
-            lineInstance.current.destroy();
-        }
-        const myLineRef = lineRef.current.getContext('2d');
-
-        lineInstance.current=new Chart(myLineRef, {
-            type: "line",
-            data: {
-                labels: ["2024-03-04", "2024-03-05", "2024-03-06", "2024-03-07"],
-                datasets: [
-                    {   
-                        label: 'GET',
-                        data: [300, 50, 100, 20],
-                        borderColor: 'rgb(255, 99, 132)',
-                        backgroundColor: 'rgb(255, 99, 132)'
-                    },
-                    {   
-                        label: 'POST',
-                        data: [200, 70, 80, 10],
-                        borderColor: 'rgb(54, 162, 235)',
-                        backgroundColor: 'rgb(54, 162, 235)'
-                    },
-                    {   
-                        label: 'PUT',
-                        data: [240, 100, 80, 15],
-                        borderColor: 'rgb(255, 205, 86)',
-                        backgroundColor: 'rgb(255, 205, 86)'
-                    },
-                    {   
-                        label: 'DELETE',
-                        data: [160, 60, 50, 20],
-                        borderColor: 'rgb(0, 255, 0)',
-                        backgroundColor: 'rgb(0, 255, 0)'
-                    },
-                ]
-            }
-        });
-    
-        return () => {
-            if (lineInstance.current) {
-                lineInstance.current.destroy(); 
-            }
-        }
-    }, [])
+            }  
+        })
+    }) */
 
     return (
         <>
@@ -223,13 +173,17 @@ const LogStatistics = () => {
                         )}
                     </div>
                 </div>
-                <div className="div container row">
-                    <div className="pie-container col-5">
-                        <canvas ref={pieRef} style={{width:"300px", height:"200px"}}/>
+                <div className="chart container row">
+                    <div className="pie-container col-3">
+                        <PieChart />
                     </div>
 
-                    <div className="line-container col-5">
-                        <canvas ref={lineRef} style={{width:"400px", height:"200px"}}/>
+                    <div className="line-container col-4">
+                        <LineChart />
+                    </div>
+
+                    <div className="stackedBar-container col-5">
+                        <BarChart />
                     </div>
                 </div>
             </div>
