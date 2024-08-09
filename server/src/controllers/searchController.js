@@ -1,10 +1,11 @@
 import * as searchModel from '../models/searchModel.js';
 import 'dotenv/config';
 
+import validator from 'validator';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
-const validator = require('validator')
+
 
 // Search logs for creation
 export async function searchLogsCreate(req, res) {

@@ -50,7 +50,11 @@ const LogsBoard = () => {
         setLoading(true);
         event.preventDefault();
         try {
-            const response = await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedFilter}`, {
+            const response = useRender
+            ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedFilter}`, {
+                params: { searchValue }
+            })
+            : await axios.get(`http://localhost:8081/api/search/${selectedFilter}`, {
                 params: { searchValue }
             });
             setLogs(response.data);
