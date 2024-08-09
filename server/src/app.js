@@ -111,8 +111,6 @@ app.use(morganMiddleware);
 // Main routes
 app.use('/api', mainRoutes);
 
-app.use(logRequestMiddleware);
-
 // Function to log request details
 export async function logRequest(req, res, next, error) {
   try {

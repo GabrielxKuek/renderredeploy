@@ -1,12 +1,11 @@
 import express from "express";
 const router = express.Router();
-// import { logRequestMiddleware } from "../middleware/logRequestMiddleware.js";
+import { logRequestMiddleware } from "../middleware/logRequestMiddleware.js";
 // import * as creationController from "../controllers/creationController.js";
 import * as creationController from "../controllers/creationController.js";
 
 // Create creation log
-router.post("/input", creationController.createCreation);
-    // , logRequestMiddleware);
+router.post("/input", creationController.createCreation, logRequestMiddleware);
 
 // View all creation logs
 router.get("/viewAll", creationController.readCreationByAll);
