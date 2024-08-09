@@ -21,12 +21,23 @@ const prisma = new PrismaClient();
 // };
 import {logRequest} from '../app.js'
 
+// export const insertCreation = async (user_id, site_id, table_name, record_id) => {
+//   try {
+//     const result = await prisma.$executeRaw`
+//       INSERT INTO um_creation_log (user_id, site_id, table_name, record_id)
+//       VALUES (${user_id}, ${site_id}, ${table_name}, ${record_id});
+//     `;
+//     return result;
+//   } catch (error) {
+//     console.error('Error inserting creation log:', error);
+//     throw error;
+//   }
+// };
 
 export const insertCreation = async (user_id, site_id, table_name, record_id) => {
   try {
     const result = await prisma.$executeRaw`
-      INSERT INTO um_creation_log (user_id, site_id, table_name, record_id)
-      VALUES (${user_id}, ${site_id}, ${table_name}, ${record_id});
+      CALL log_creation(${user_id}, ${site_id}, ${table_name}, ${record_id}); 
     `;
     return result;
   } catch (error) {
