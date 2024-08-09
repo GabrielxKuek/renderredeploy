@@ -15,7 +15,7 @@ export async function searchLogsCreate(req, res) {
       const result = await searchModel.searchCreationLogs(sanitizedValue);
       res.json(result);
     } catch (error) {
-      console.error('Error searching creation logs:', error);
+      console.log('Error searching creation logs:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
 }
@@ -28,7 +28,7 @@ export async function searchLogsModification(req, res) {
         const result = await searchModel.searchModificationLogs(sanitizedValue);
         res.json(result);
     } catch (error) {
-        console.error('Error searching modification logs:', error);
+        console.log('Error searching modification logs:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 }
@@ -41,7 +41,7 @@ export async function searchLogsDelete(req, res) {
         const result = await searchModel.searchDeletionLogs(sanitizedValue);
         res.json(result);
     } catch (error) {
-        console.error('Error searching deletion logs:', error);
+        console.log('Error searching deletion logs:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 }
