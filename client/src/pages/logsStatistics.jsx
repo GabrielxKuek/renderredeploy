@@ -46,9 +46,11 @@ const LogStatistics = () => {
 
     const pieRef = useRef(null);
     const lineRef = useRef(null);
+    const stackedBarRef = useRef(null);
 
     const pieInstance = useRef(null);
     const lineInstance = useRef(null);
+    const stackedBarInstance = useRef(null);
 
     // Pie chart
     useEffect(() => {
@@ -97,7 +99,7 @@ const LogStatistics = () => {
                 datasets: [
                     {   
                         label: 'GET',
-                        data: [300, 50, 100, 20],
+                        data: [300, 50, 100, 120],
                         borderColor: 'rgb(255, 99, 132)',
                         backgroundColor: 'rgb(255, 99, 132)'
                     },
@@ -115,7 +117,7 @@ const LogStatistics = () => {
                     },
                     {   
                         label: 'DELETE',
-                        data: [160, 60, 50, 20],
+                        data: [160, 60, 50, 60],
                         borderColor: 'rgb(0, 255, 0)',
                         backgroundColor: 'rgb(0, 255, 0)'
                     },
@@ -129,6 +131,38 @@ const LogStatistics = () => {
             }
         }
     }, [])
+    
+    // Stacked bar chart
+    useEffect(() => {        
+        if (stackedBarInstance.current) {
+            stackedBarInstance.current.destroy();
+        }
+        const myStackedBarRef = stackedBarRef.current.getContext('2d');
+
+        stackedBarInstance.current=new Chart(myStackedBarRef, {
+            type: 'bar',
+            data: {
+                labels: ["Chocolate", "Vanilla", "Strawberry"],
+                datasets:[
+                    {
+                        label: "Blue",
+                        backgroundColor: "blue",
+                        data: [3,7,4]
+                    },
+                    {
+                        label: "Red",
+                        backgroundColor: "red",
+                        data: [4,3,5]
+                    },
+                    {
+                        label: "Green",
+                        backgroundColor: "green",
+                        data: [7,2,6]
+                    }
+                ]
+            }  
+        })
+    })
 
     return (
         <>
@@ -223,13 +257,17 @@ const LogStatistics = () => {
                         )}
                     </div>
                 </div>
-                <div className="div container row">
-                    <div className="pie-container col-5">
+                <div className="chart container row">
+                    <div className="pie-container col-3">
                         <canvas ref={pieRef} style={{width:"300px", height:"200px"}}/>
                     </div>
 
-                    <div className="line-container col-5">
+                    <div className="line-container col-4">
                         <canvas ref={lineRef} style={{width:"400px", height:"200px"}}/>
+                    </div>
+
+                    <div className="stackedBar-container col-5">
+                        <canvas ref={stackedBarRef} style={{width:"400px", height:"200px"}}/>
                     </div>
                 </div>
             </div>
