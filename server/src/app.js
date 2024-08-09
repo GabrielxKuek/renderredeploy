@@ -6,12 +6,14 @@ import jwt from 'jsonwebtoken';
 import mainRoutes from './routes/mainRoutes.js';
 import { logRequestMiddleware } from './middleware/logRequestMiddleware.js';
 import cors from 'cors';
+import helmet from 'helmet';
 
 const secret = 'your_jwt_secret'; // Replace with your JWT secret
+const prisma = new PrismaClient();
 
 const app = express();
 app.use(cors());
-const prisma = new PrismaClient();
+app.use(helmet());
 
 //Gabriel change
 // Middleware to attach log data and extract JWT information
