@@ -173,17 +173,37 @@ const LogStatistics = () => {
                         )}
                     </div>
                 </div>
-                <div className="chart container row">
-                    <div className="pie-container col-3">
+                <div className="chart container">
+                    <div className="row">
+                    <div className="pie-container col-2">
                         <PieChart />
                     </div>
 
-                    <div className="line-container col-4">
+                    <div className="line-container col-3">
                         <LineChart />
                     </div>
 
-                    <div className="stackedBar-container col-5">
-                        <BarChart />
+                    <div className="stackedBar-container col-7">
+                        <BarChart 
+                            argument={logs}
+                        />
+                    </div>
+                    </div>
+
+                    <div className="row">
+                    <div className="stackedBar-container col-9">
+                        <BarChart 
+                            argument={logs}
+                        />
+                    </div>
+                    </div>
+
+                    <div className="row">
+                    <div className="stackedBar-container col-9">
+                        <BarChart 
+                            argument={logs}
+                        />
+                    </div>
                     </div>
                 </div>
             </div>

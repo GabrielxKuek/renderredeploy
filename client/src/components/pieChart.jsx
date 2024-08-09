@@ -43,7 +43,7 @@ const PieChart = () => {
 
     return (
         <>
-            <canvas ref={pieRef} style={{width:"300px", height:"200px"}}/>
+            <canvas ref={pieRef} style={{width:"300px", height:"50px"}}/>
         </>
     )
 }

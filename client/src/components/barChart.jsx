@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const BarChart = () => {
+const BarChart = ({ argument }) => {
 
     const stackedBarRef = useRef(null);
     const stackedBarInstance = useRef(null);
 
     // Stacked bar chart
-    useEffect(() => {        
+    useEffect(() => {      
+        console.log(argument[0])  
         if (stackedBarInstance.current) {
             stackedBarInstance.current.destroy();
         }
@@ -43,7 +44,7 @@ const BarChart = () => {
 
     return (
         <>
-            <canvas ref={stackedBarRef} style={{width:"400px", height:"200px"}}/>
+            <canvas ref={stackedBarRef} style={{width:"220px", height:"50px"}}/>
         </>
     )
 }
