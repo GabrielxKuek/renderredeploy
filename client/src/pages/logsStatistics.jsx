@@ -10,13 +10,7 @@ const LogStatistics = () => {
     // config
     const useRender = true;
 
-    // declaration
-    const useQuery = () => {
-        return new URLSearchParams(useLocation().search);
-    }
-
     const navigate = useNavigate();
-    const query = useQuery();
     const [logs, setLogs] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -38,7 +32,7 @@ const LogStatistics = () => {
             console.error('Error fetching logs:', error);
         } finally {
             setLoading(false);
-        }
+        } 
     };
 
     const data = [300, 50, 100, 20];
