@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Chart from 'chart.js/auto';
 import NavBarReyes from '../components/navBar';
@@ -7,29 +7,18 @@ import NavBarGroup1 from './Navbar.jsx';
 
 const LogStatistics = () => {
 
-    // config
     const useRender = true;
-
-    // declaration
-    const useQuery = () => {
-        return new URLSearchParams(useLocation().search);
-    }
-
     const navigate = useNavigate();
-    const query = useQuery();
     const [logs, setLogs] = useState([]);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState('creation');
 
-    const chartRef = useRef(null);
-    const chartInstance = useRef(null);
-
     const fetchLogs = async (filter) => {
         setLoading(true);
         try {
-            const response = useRender ? await axios.get(`https://authinc-inc2024-group6.onrender.com/api/${filter}/viewAll`) : await axios.get(`http://localhost:8081/api/${filter}/viewAll`);
+            const response = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/${filter}/viewAll`) : await axios.get(`http://localhost:8081/api/${filter}/viewAll`);
             setLogs(response.data);
             setError(null);
         } catch (error) {
@@ -41,23 +30,41 @@ const LogStatistics = () => {
         }
     };
 
-    const data = [300, 50, 100, 20];
+    useEffect(() => {
+        fetchLogs(selectedFilter);
+    }, []);
+
+    const toggleDropdown = () => {
+        setIsDropdownVisible(!isDropdownVisible);
+    }
+
+    const handleFilterSelect = (filter) => {
+        setSelectedFilter(filter);
+        setIsDropdownVisible(false);
+        navigate(`/logsStatistics`);
+    }
+
+    const pieRef = useRef(null);
+    const lineRef = useRef(null);
+
+    const pieInstance = useRef(null);
+    const lineInstance = useRef(null);
 
     // Pie chart
     useEffect(() => {
-        if (logs.length > 0 && chartRef.current) {
-        if (chartInstance.current) {
-            chartInstance.current.destroy()
+        if (pieInstance.current) {
+            pieInstance.current.destroy()
         }
-        const myChartRef = chartRef.current.getContext('2d');
+        const myPieRef = pieRef.current.getContext('2d');
 
-        chartInstance.current=new Chart(myChartRef, {
+        console.log(logs.length)
+        pieInstance.current=new Chart(myPieRef, {
             type: "pie",
             data: {
                 labels: ["GET", "POST", "PUT", "DELETE"],
                 datasets: [
                     {
-                        data: data,
+                        data: [300, 50, 100, 20],
                         backgroundColor: [
                             'rgb(255, 99, 132)',
                             'rgb(54, 162, 235)',
@@ -70,28 +77,59 @@ const LogStatistics = () => {
         });
 
         return () => {
-            if (chartInstance.current) {
-                chartInstance.current.destroy();
+            if (pieInstance.current) {
+                pieInstance.current.destroy(); 
             }
         }
-    }
-    }, []); 
+    }, []);
 
-    const toggleDropdown = () => {
-        setIsDropdownVisible(!isDropdownVisible);
-    }
-
-    const handleFilterSelect = (filter) => {
-        setSelectedFilter(filter);
-        setIsDropdownVisible(false);
-        fetchLogs(selectedFilter);
-        navigate(`/logsStatistics`);
-    }
-
+    // Line chart
     useEffect(() => {
-        fetchLogs(selectedFilter);
-    }, [selectedFilter]);
+        if (lineInstance.current) {
+            lineInstance.current.destroy();
+        }
+        const myLineRef = lineRef.current.getContext('2d');
+
+        lineInstance.current=new Chart(myLineRef, {
+            type: "line",
+            data: {
+                labels: ["2024-03-04", "2024-03-05", "2024-03-06", "2024-03-07"],
+                datasets: [
+                    {   
+                        label: 'GET',
+                        data: [300, 50, 100, 20],
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgb(255, 99, 132)'
+                    },
+                    {   
+                        label: 'POST',
+                        data: [200, 70, 80, 10],
+                        borderColor: 'rgb(54, 162, 235)',
+                        backgroundColor: 'rgb(54, 162, 235)'
+                    },
+                    {   
+                        label: 'PUT',
+                        data: [240, 100, 80, 15],
+                        borderColor: 'rgb(255, 205, 86)',
+                        backgroundColor: 'rgb(255, 205, 86)'
+                    },
+                    {   
+                        label: 'DELETE',
+                        data: [160, 60, 50, 20],
+                        borderColor: 'rgb(0, 255, 0)',
+                        backgroundColor: 'rgb(0, 255, 0)'
+                    },
+                ]
+            }
+        });
     
+        return () => {
+            if (lineInstance.current) {
+                lineInstance.current.destroy(); 
+            }
+        }
+    }, [])
+
     return (
         <>
             <NavBarGroup1 />
@@ -99,9 +137,8 @@ const LogStatistics = () => {
 
             <div className="flex flex-col justify-center items-center h-screen bg-gray-800">
                 <h1 className="text-6xl font-extrabold text-white mb-4">
-                    Log <span className="text-yellow-600">Statistics</span>
+                    log<span className="text-yellow-500">Stats</span>
                 </h1>
-
                 {/* fetch data */}
                 <div className="flex justify-between items-center w-11/12 max-w-4xl mb-4 mt-4">
                     {error && (
@@ -140,6 +177,10 @@ const LogStatistics = () => {
                                 ) : null}
                                 Refresh
                             </button>
+
+                            {/* <div className="ml-4 text-white">
+                                Displaying results for <span className="text-orange-300">um_{selectedFilter}_log</span>
+                            </div> */}
                         </div>
                     )}
 
@@ -182,95 +223,18 @@ const LogStatistics = () => {
                         )}
                     </div>
                 </div>
-                <div className='chart-container'>
-                    {console.log(logs.length)}
-                    {logs.length > 0 && (
-                        <div className="pie-chart">
-                            <canvas ref={chartRef} style={{ width: "300px", height: "200px" }} />
-                        </div>
-                    )}
-                </div>      
-            </div>
-        </>
+                <div className="div container row">
+                    <div className="pie-container col-5">
+                        <canvas ref={pieRef} style={{width:"300px", height:"200px"}}/>
+                    </div>
 
+                    <div className="line-container col-5">
+                        <canvas ref={lineRef} style={{width:"400px", height:"200px"}}/>
+                    </div>
+                </div>
+            </div>
+        </>   
     );
 };
 
 export default LogStatistics;
-
-/*
-
-    useEffect(() => {
-        fetchLogs();
-    }, []);
-
-    const chartRef = useRef(null);
-    const chartInstance = useRef(null);
-    const pieDetails = useRef(null);
-
-    const data = [300, 50, 100, 20];
-
-    // Create pie chart
-    useEffect(() => {
-        if (chartInstance.current) {
-            chartInstance.current.destroy()
-        }
-        const myChartRef = chartRef.current.getContext('2d');
-
-        chartInstance.current=new Chart(myChartRef, {
-            type: "pie",
-            data: {
-                labels: ["GET", "POST", "PUT", "DELETE"],
-                datasets: [
-                    {
-                        data: data,
-                        backgroundColor: [
-                            'rgb(255, 99, 132)',
-                            'rgb(54, 162, 235)',
-                            'rgb(255, 205, 86)',
-                            'rgb(0, 255, 0)'
-                        ],
-                    }
-                ]
-            }
-        });
-
-        return () => {
-            if (chartInstance.current) {
-                chartInstance.current.destroy();
-            }
-        }
-    }, []); 
-
-    // Create pie chart percentages to be shown
-    //const sum = data.reduce(currentValue, total => total + currentValue)
-    useEffect(() => {
-        if (pieDetails.current) {
-            pieDetails.current.destroy();
-        }
-    },[])
-
-
-        <>
-            <NavBarGroup1 />
-            <NavBarReyes />
-
-            <div className="flex flex-col justify-center items-center h-screen bg-gray-800">
-                <h1 className="text-6xl font-extrabold text-white mb-4">
-                    log<span className="text-yellow-500">Stats</span>
-                </h1>
-
-                <div class="chart-container">
-                    <canvas ref={chartRef} style={{width:"300px", height:"200px"}}/>
-                </div>
-
-                <div class="details text-white">
-                    <ul>
-                        <li>GET: <span class="percentage">40%</span></li>
-                        <li>POST: <span class="percentage">20%</span></li>
-                        <li>PUT: <span class="percentage">30%</span></li>
-                        <li>DELETE: <span class="percentage">10%</span></li>
-                    </ul>
-                </div>
-            </div>
-        </>   */
