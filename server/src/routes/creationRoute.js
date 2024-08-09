@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import { logRequestMiddleware } from "../middleware/logRequestMiddleware.js";
 // import * as creationController from "../controllers/creationController.js";
-import * as creationController from "../controllers-testing-dummydata/creationController.js";
+import * as creationController from "../controllers/creationController.js";
 
 // Create creation log
 router.post("/input", creationController.createCreation, logRequestMiddleware);

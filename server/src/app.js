@@ -13,6 +13,7 @@ const app = express();
 app.use(cors());
 const prisma = new PrismaClient();
 
+//Gabriel change
 // Middleware to attach log data and extract JWT information
 app.use((req, res, next) => {
   req.logData = {
@@ -80,8 +81,8 @@ const morganMiddleware = morgan(morganFormat, {
 
       // Log to Winston
       logger.info('Request logged', {
-        user_id,
-        site_id,
+        user_id: user_id,
+        site_id: site_id,
         request_method: method,
         api_requested: url,
         user_ip: remote_addr,

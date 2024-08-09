@@ -131,3 +131,55 @@ export async function readCreationByOs (req, res) {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
+
+import { PrismaClient } from '@prisma/client';
+import cron from 'node-cron';
+import { sendAlertEmail } from './mailer'; // Function to send email alerts
+
+const prisma = new PrismaClient();
+
+async function getLoginsFromLastHour() {
+  const oneHourAgo = new Date(new Date().getTime() - 60 * 60 * 1000);
+
+  return await prisma.um_session.findMany({
+    where: {
+      login_at: {
+        gte: oneHourAgo,
+      },
+    },
+  });
+}
+
+function analyzeLogins(logins) {
+  const suspiciousActivities = [];
+  const userLogins = {};
+
+  logins.forEach(login => {
+    const { user_id, site_id, login_at } = login;
+
+    const timestamp = new Date(login_at);
+    
+    const userKey = `${user_id}-${site_id}`;
+
+    if (!userLogins[userKey]) {
+      userLogins[userKey] = [];
+    }
+
+    userLogins[userKey].push(timestamp);
+
+    // Check for multiple login attempts within 1 minute
+    const userLoginTimestamps = userLogins[userKey];
+
+    if (userLoginTimestamps.length > 3 && 
+        (userLoginTimestamps[userLoginTimestamps.length - 1] - userLoginTimestamps[0]) < 60000) {
+      suspiciousActivities.push({
+        user_id,
+        site_id,
+        type: 'multiple-login-attempts',
+        details: userLoginTimestamps,
+      });
+    }
+  });
+
+  return suspiciousActivities;
+}
