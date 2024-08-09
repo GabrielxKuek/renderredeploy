@@ -209,13 +209,13 @@ model um_invited_user {
 
 model um_notification_category {
   category_id               Int                         @id @default(autoincrement())
-  category_name             String?                     @db.VarChar(50)
+  category_name             String                      @unique @db.VarChar(50)
   um_notification_user_site um_notification_user_site[]
 }
 
 model um_notification_type {
   type_id                   Int                         @id @default(autoincrement())
-  type_name                 String?                     @db.VarChar(50)
+  type_name                 String                      @unique @db.VarChar(50)
   um_notification_user_site um_notification_user_site[]
 }
 

@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export const insertDeletion = async (user_id, site_id, table_name, record_id, field_names, values) => { 
     try {
-      const result = await prisma.$queryRaw`CALL log_deletion(${user_id}, ${site_id}, ${table_name}, ${record_id}, ${field_names}, ${values});`
+      const result = await prisma.$queryRaw`CALL log_deletion(${user_id}::INT, ${site_id}::INT, ${table_name}::VARCHAR(50), ${record_id}::VARCHAR(50), ${field_names}::VARCHAR(50), ${values}::text::jsonb);`
       return result;
     } catch (error) {
       console.error('Error executing logRemove:', error);
@@ -35,7 +35,7 @@ export const insertDeletion = async (user_id, site_id, table_name, record_id, fi
 
 export const selectDeletionByAll = async (site_id) => {
   try {
-    const result = await prisma.$queryRaw`SELECT * FROM viewDeletion(${site_id});`
+    const result = await prisma.$queryRaw`SELECT * FROM viewDeletion(${site_id}::INT);`
     return result;
   } catch (error) {
     console.error('Error selecting deletion logs:', error);
@@ -58,7 +58,7 @@ export const selectDeletionByAll = async (site_id) => {
 
 export const selectDeletionByDate = async (site_id, date) => {
   try {
-    const result = await prisma.$queryRaw`SELECT * FROM viewDeletionByDate(${site_id}, ${date});`
+    const result = await prisma.$queryRaw`SELECT * FROM viewDeletionByDate(${site_id}::INT, ${date}::TIMESTAMP);`
     return result;
   } catch (error) {
     console.error('Error selecting deletion logs by date:', error);
@@ -66,22 +66,22 @@ export const selectDeletionByDate = async (site_id, date) => {
   }
 };
 
-export const selectDeletionByIp = async (ip) => {
-  try {
-    const result = await prisma.$queryRaw`SELECT * FROM viewDeletionByIp(${ip});`
-    return result;
-  } catch (error) {
-    console.error('Error selecting deletion logs by IP:', error);
-    throw error;
-  }
-};
+// export const selectDeletionByIp = async (ip) => {
+//   try {
+//     const result = await prisma.$queryRaw`SELECT * FROM viewDeletionByIp(${ip});`
+//     return result;
+//   } catch (error) {
+//     console.error('Error selecting deletion logs by IP:', error);
+//     throw error;
+//   }
+// };
 
-export const selectDeletionByOs = async (os) => {
-  try {
-    const result = await prisma.$queryRaw`SELECT * FROM viewDeletionByOs(${os});`
-    return result;
-  } catch (error) {
-    console.error('Error selecting deletion logs by OS:', error);
-    throw error;
-  }
-};
+// export const selectDeletionByOs = async (os) => {
+//   try {
+//     const result = await prisma.$queryRaw`SELECT * FROM viewDeletionByOs(${os});`
+//     return result;
+//   } catch (error) {
+//     console.error('Error selecting deletion logs by OS:', error);
+//     throw error;
+//   }
+// };
