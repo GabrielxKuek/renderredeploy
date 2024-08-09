@@ -145,10 +145,6 @@ const LogsBoard = () => {
                                 ) : null}
                                 Refresh
                             </button>
-
-                            {/* <div className="ml-4 text-white">
-                                Displaying results for <span className="text-orange-300">um_{selectedFilter}_log</span>
-                            </div> */}
                         </div>
                     )}
 
@@ -217,7 +213,6 @@ const LogsBoard = () => {
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.table_name}</td>
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.record_id}</td>
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.created_at}</td>
-                                                {/* Add a button to toggle details */}
                                                 <td>
                                                     {selectedFilter === 'modification' || selectedFilter === 'deletion' ? (
                                                         <button 
@@ -233,12 +228,13 @@ const LogsBoard = () => {
                                                 </td>
                                             </tr>
                                             {expandedRow === log.log_id && (
-                                                <tr style={{position: 'relative'}}>
-                                                    <td colSpan="7" style={{backgroundColor: 'white', color: 'black', position: 'absolute', top: '100%', left: 0, width: '100%', zIndex: 10}}>
+                                                <tr style={{ position: 'relative' }}>
+                                                    <td colSpan="7" style={{ backgroundColor: 'white', color: 'black', position: 'absolute', top: '100%', left: 0, width: '100%', zIndex: 10 }}>
                                                         <div className="p-4">
                                                             <p><strong>Modification ID:</strong> {log.field_modification_id}</p>
                                                             <p><strong>Field Name:</strong> {log.field_name}</p>
-                                                            <p><strong>Old Value:</strong> {log.old_value}</p>
+                                                            <p><strong>Old Value:</strong></p>
+                                                            <pre>{JSON.stringify(log.old_value, null, 4)}</pre>
                                                         </div>
                                                     </td>
                                                 </tr>
