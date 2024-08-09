@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { logRequestMiddleware } from "../middleware/logRequestMiddleware.js";
+// import { logRequestMiddleware } from "../middleware/logRequestMiddleware.js";
 // import * as creationController from "../controllers/creationController.js";
 import * as creationController from "../controllers/creationController.js";
 
