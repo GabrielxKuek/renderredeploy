@@ -37,7 +37,7 @@ import {logRequest} from '../app.js'
 export const insertCreation = async (user_id, site_id, table_name, record_id) => {
   try {
     const result = await prisma.$executeRaw`
-      CALL log_creation(${user_id}, ${site_id}, ${table_name}, ${record_id}); 
+      CALL log_creation(${user_id}::INT, ${site_id}::INT, ${table_name}::VARCHAR(50), ${record_id})::VARCHAR(50); 
     `;
     return result;
   } catch (error) {
@@ -50,7 +50,7 @@ export const insertCreation = async (user_id, site_id, table_name, record_id) =>
 
 export const selectCreationByAll = async (site_id) => {
   try {
-    const result = await prisma.$queryRaw`SELECT * FROM viewCreation(${site_id});`
+    const result = await prisma.$queryRaw`SELECT * FROM viewCreation(${site_id}::INT);`
     return result;
   } catch (error) {
     console.error('Error selecting creation logs:', error);
@@ -75,7 +75,7 @@ export const selectCreationByAll = async (site_id) => {
 
 export const selectCreationByDate = async (site_id, date) => {
   try {
-    const result = await prisma.$queryRaw`SELECT * FROM viewCreationByDate(${site_id}, ${date});`
+    const result = await prisma.$queryRaw`SELECT * FROM viewCreationByDate(${site_id}::INT, ${date}::TIMESTAMP);`
     return result;
   } catch (error) {
     console.error('Error selecting creation logs by date:', error);
@@ -83,22 +83,22 @@ export const selectCreationByDate = async (site_id, date) => {
   }
 };
 
-export const selectCreationByIp = async (site_id, ip) => {
-  try {
-    const result = await prisma.$queryRaw`SELECT * FROM viewCreationByIp(${site_id, ip});`
-    return result;
-  } catch (error) {
-    console.error('Error selecting creation logs by IP:', error);
-    throw error;
-  }
-};
+// export const selectCreationByIp = async (site_id, ip) => {
+//   try {
+//     const result = await prisma.$queryRaw`SELECT * FROM viewCreationByIp(${site_id, ip});`
+//     return result;
+//   } catch (error) {
+//     console.error('Error selecting creation logs by IP:', error);
+//     throw error;
+//   }
+// };
 
-export const selectCreationByOs = async (site_id, os) => {
-  try {
-    const result = await prisma.$queryRaw`SELECT * FROM viewCreationByOs(${site_id}, ${os});`
-    return result;
-  } catch (error) {
-    console.error('Error selecting creation logs by OS:', error);
-    throw error;
-  }
-};
+// export const selectCreationByOs = async (site_id, os) => {
+//   try {
+//     const result = await prisma.$queryRaw`SELECT * FROM viewCreationByOs(${site_id}, ${os});`
+//     return result;
+//   } catch (error) {
+//     console.error('Error selecting creation logs by OS:', error);
+//     throw error;
+//   }
+// };
