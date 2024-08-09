@@ -75,7 +75,7 @@ export const selectCreationByAll = async (site_id) => {
 
 export const selectCreationByDate = async (site_id, date) => {
   try {
-    const result = await prisma.$queryRaw`SELECT * FROM viewCreationByDate(${site_id, date});`
+    const result = await prisma.$queryRaw`SELECT * FROM viewCreationByDate(${site_id}, ${date});`
     return result;
   } catch (error) {
     console.error('Error selecting creation logs by date:', error);
