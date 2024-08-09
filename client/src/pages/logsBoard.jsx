@@ -24,6 +24,7 @@ const LogsBoard = () => {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState('creation');
     const totalPages = Math.ceil(logs.length / logsPerPage);
+    const [expandedRow, setExpandedRow] = useState(null);
 
     const fetchLogs = async (filter) => {
         setLoading(true);
@@ -67,6 +68,13 @@ const LogsBoard = () => {
         }
     }
 
+    const handleRowClick = (log) => {
+        console.log("Row clicked:", log);
+        if (selectedFilter == 'modification' || selectedFilter == 'deletion'){
+            setExpandedRow(expandedRow === log.log_id ? null : log.log_id);
+        }
+    }
+
     const toggleDropdown = () => {
         setIsDropdownVisible(!isDropdownVisible);
     }
@@ -81,6 +89,10 @@ const LogsBoard = () => {
         fetchLogs(selectedFilter);
     }, [selectedFilter, page]);
 
+    useEffect(() => {
+        console.log("Expanded Row:", expandedRow);
+    }, [expandedRow]);
+    
     return (
         <>
             <NavBarGroup1 />
@@ -197,14 +209,41 @@ const LogsBoard = () => {
                                 </thead>
                                 <tbody>
                                     {logs.slice(page * logsPerPage - logsPerPage, page * logsPerPage).map((log, index) => (
-                                        <tr key={log.log_id} className={index % 2 === 0 ? "bg-slate-600" : ""}>
-                                            <td className="py-2 px-4 border-b border-gray-600">{log.log_id}</td>
-                                            <td className="py-2 px-4 border-b border-gray-600">{log.user_id}</td>
-                                            <td className="py-2 px-4 border-b border-gray-600">{log.site_id}</td>
-                                            <td className="py-2 px-4 border-b border-gray-600">{log.table_name}</td>
-                                            <td className="py-2 px-4 border-b border-gray-600">{log.record_id}</td>
-                                            <td className="py-2 px-4 border-b border-gray-600">{log.created_at}</td>
-                                        </tr>
+                                        <React.Fragment key={log.log_id}>
+                                            <tr className={index % 2 === 0 ? "bg-slate-600" : ""} onClick={() => handleRowClick(log)} style={{cursor: 'pointer', position: 'relative'}}>
+                                                <td className="py-2 px-4 border-b border-gray-600">{log.log_id}</td>
+                                                <td className="py-2 px-4 border-b border-gray-600">{log.user_id}</td>
+                                                <td className="py-2 px-4 border-b border-gray-600">{log.site_id}</td>
+                                                <td className="py-2 px-4 border-b border-gray-600">{log.table_name}</td>
+                                                <td className="py-2 px-4 border-b border-gray-600">{log.record_id}</td>
+                                                <td className="py-2 px-4 border-b border-gray-600">{log.created_at}</td>
+                                                {/* Add a button to toggle details */}
+                                                <td>
+                                                    {selectedFilter === 'modification' || selectedFilter === 'deletion' ? (
+                                                        <button 
+                                                            onClick={(e) => {
+                                                                e.stopPropagation(); // Prevent triggering row click
+                                                                handleRowClick(log); 
+                                                            }} 
+                                                            className="px-1 py-0.5 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
+                                                        >
+                                                            {expandedRow === log.log_id ? 'Hide Details' : 'Show Details'}
+                                                        </button>
+                                                    ) : null}
+                                                </td>
+                                            </tr>
+                                            {expandedRow === log.log_id && (
+                                                <tr style={{position: 'relative'}}>
+                                                    <td colSpan="7" style={{backgroundColor: 'white', color: 'black', position: 'absolute', top: '100%', left: 0, width: '100%', zIndex: 10}}>
+                                                        <div className="p-4">
+                                                            <p><strong>Modification ID:</strong> {log.field_modification_id}</p>
+                                                            <p><strong>Field Name:</strong> {log.field_name}</p>
+                                                            <p><strong>Old Value:</strong> {log.old_value}</p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </React.Fragment>
                                     ))}
                                 </tbody>
                             </table>
