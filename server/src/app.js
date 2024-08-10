@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import jwt from 'jsonwebtoken';
 import mainRoutes from './routes/mainRoutes.js';
+import { logRequestMiddleware } from './middleware/logRequestMiddleware.js';
 
 const secret = 'your_jwt_secret'; // Replace with your JWT secret
 
