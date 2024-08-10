@@ -10,7 +10,8 @@ const prisma = new PrismaClient();
 // Search logs for creation
 export async function searchLogsCreate(req, res) {
     const { searchValue } = req.query; // Use req.query for GET request
-    const sanitizedValue = validator.escape(searchValue)
+    const sanitizedValue = validator.escape(searchValue);
+    console.log(sanitizedValue);
     try {
       const result = await searchModel.searchCreationLogs(sanitizedValue);
       res.json(result);
@@ -24,6 +25,7 @@ export async function searchLogsCreate(req, res) {
 export async function searchLogsModification(req, res) {
     const { searchValue } = req.query; // Use req.query for GET request
     const sanitizedValue = validator.escape(searchValue)
+    console.log(sanitizedValue);
     try {
         const result = await searchModel.searchModificationLogs(sanitizedValue);
         res.json(result);
@@ -37,6 +39,7 @@ export async function searchLogsModification(req, res) {
 export async function searchLogsDelete(req, res) {
     const { searchValue } = req.query; // Use req.query for GET request
     const sanitizedValue = validator.escape(searchValue)
+    console.log(sanitizedValue);
     try {
         const result = await searchModel.searchDeletionLogs(sanitizedValue);
         res.json(result);
