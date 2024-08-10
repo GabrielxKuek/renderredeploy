@@ -125,7 +125,7 @@ module.exports.verifyToken = (req, res, next) => {
       } else {
         console.log("Decoded:", decoded);
         res.locals.user_id = decoded.user_id;
-        res.locals.user_id = decoded.site_id;
+        res.locals.site_id_id = decoded.site_id;
         console.log(res.locals.user_id);
         console.log(res.locals.site_id);
         next();
