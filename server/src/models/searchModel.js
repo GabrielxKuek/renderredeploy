@@ -55,3 +55,14 @@ export async function searchDeletionLogs(searchValue) {
     }
   });
 }
+
+export async function searchRequestLogs(searchValue) {
+  const isNumeric = !isNaN(parseInt(searchValue));
+  
+  return await prisma.$queryRaw`
+    SELECT * FROM um_request_log
+    WHERE 
+      (log_id = ${parseInt(searchValue)} OR user_id = ${parseInt(searchValue)} OR site_id = ${parseInt(searchValue)})
+      OR (error_message::text LIKE '%' || ${searchValue} || '%')
+  `;
+}

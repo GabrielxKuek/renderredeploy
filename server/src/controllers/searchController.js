@@ -48,3 +48,17 @@ export async function searchLogsDelete(req, res) {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+// Search request logs
+export async function searchLogsRequest(req, res) {
+    const { searchValue } = req.query; // Use req.query for GET request
+    const sanitizedValue = validator.escape(searchValue)
+    console.log(sanitizedValue);
+    try {
+        const result = await searchModel.searchRequestLogs(sanitizedValue);
+        res.json(result);
+    } catch (error) {
+        console.log('Error searching deletion logs:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}

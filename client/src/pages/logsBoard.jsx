@@ -29,8 +29,6 @@ const LogsBoard = () => {
     const totalPages = Math.ceil(logs.length / logsPerPage);
     const [expandedRow, setExpandedRow] = useState(null);
     const [searchValue, setsearchValue] = useState(""); 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedLog, setSelectedLog] = useState(null);
 
     const fetchLogs = async (filter) => {
         setLoading(true);
