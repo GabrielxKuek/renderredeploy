@@ -12,8 +12,8 @@ export async function searchCreationLogs(searchValue) {
         { log_id: parseInt(searchValue) },
         { user_id: parseInt(searchValue) },
         { site_id: parseInt(searchValue) },
-        { record_id: parseInt(searchValue) },
       ] : [
+        { record_id: { contains: searchValue } },
         { table_name: { contains: searchValue } },
       ]
     }
@@ -30,8 +30,8 @@ export async function searchModificationLogs(searchValue) {
         { log_id: parseInt(searchValue) },
         { user_id: parseInt(searchValue) },
         { site_id: parseInt(searchValue) },
-        { record_id: parseInt(searchValue) },
       ] : [
+        { record_id: { contains: searchValue } },
         { table_name: { contains: searchValue } },
       ]
     }
@@ -48,8 +48,8 @@ export async function searchDeletionLogs(searchValue) {
         { log_id: parseInt(searchValue) },
         { user_id: parseInt(searchValue) },
         { site_id: parseInt(searchValue) },
-        { record_id: parseInt(searchValue) },
       ] : [
+        { record_id: { contains: searchValue } },
         { table_name: { contains: searchValue } },
       ]
     }
