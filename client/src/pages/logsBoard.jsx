@@ -7,8 +7,6 @@ import Modal from 'react-modal';
 import Cookies from 'js-cookie';
 import { format } from 'date-fns';
 
-console.log(readableDate); // August 9th, 2024, 11:23:47 AM
-
 
 Modal.setAppElement('#root');
 
