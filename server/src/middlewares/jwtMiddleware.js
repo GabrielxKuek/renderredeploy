@@ -27,7 +27,7 @@ const emailVerificationTokenDuration =
 const tokenAlgorithm = process.env.JWT_ALGORITHM;
 
 // STORE IN COOKIE
-module.exports.generateLoginAccessToken = (req, res, next) => {
+export const generateLoginAccessToken = (req, res, next) => {
   console.log("Access Token Middleware");
   const payload = {
     user_id: res.locals.user_id,
@@ -52,7 +52,7 @@ module.exports.generateLoginAccessToken = (req, res, next) => {
   jwt.sign(payload, accessSecretKey, options, callback);
 };
 
-module.exports.generateRefreshToken = (req, res, next) => {
+export const generateRefreshToken = (req, res, next) => {
   console.log("Refresh Token Middleware");
 
   const payload = {
@@ -95,7 +95,7 @@ module.exports.generateRefreshToken = (req, res, next) => {
 };
 
 // Verify token
-module.exports.verifyToken = (req, res, next) => {
+export const verifyToken = (req, res, next) => {
   console.log("Verify Token Middleware");
   let access_token;
 
@@ -138,7 +138,7 @@ module.exports.verifyToken = (req, res, next) => {
   }
 };
 
-module.exports.checkRefreshTokenValidTime = async (req, res, next) => {
+export const checkRefreshTokenValidTime = async (req, res, next) => {
   let token;
   console.log(req.cookies);
 
@@ -174,7 +174,7 @@ module.exports.checkRefreshTokenValidTime = async (req, res, next) => {
   }
 };
 
-module.exports.generateResetPasswordToken = (req, res, next) => {
+export const generateResetPasswordToken = (req, res, next) => {
   console.log("Reset Password Token Middleware");
   const { user_id } = res.locals;
   res.locals.service_id = 1;
@@ -204,7 +204,7 @@ module.exports.generateResetPasswordToken = (req, res, next) => {
 };
 
 // Check if the token has not expired
-module.exports.verifyResetPasswordToken = (req, res, next) => {
+export const verifyResetPasswordToken = (req, res, next) => {
   console.log("Verify Reset Password Token Middleware");
 
   const { token } = req.body;
@@ -220,7 +220,7 @@ module.exports.verifyResetPasswordToken = (req, res, next) => {
   }
 };
 
-module.exports.generateEmailVerificationToken = (req, res, next) => {
+export const generateEmailVerificationToken = (req, res, next) => {
   console.log("Email Verification Token Middleware");
   const { user_id } = res.locals;
 
@@ -249,7 +249,7 @@ module.exports.generateEmailVerificationToken = (req, res, next) => {
 };
 
 // Check if the token has not expired
-module.exports.verifyEmailVerificationToken = (req, res, next) => {
+export const verifyEmailVerificationToken = (req, res, next) => {
   console.log("Verify Email Verification Token Middleware");
 
   const { token } = req.body;
