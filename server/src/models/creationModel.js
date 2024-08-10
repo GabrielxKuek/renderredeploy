@@ -49,7 +49,7 @@ export const insertCreation = async (user_id, site_id, table_name, record_id) =>
 
 export const selectCreationByAll = async (site_id) => {
   try {
-    const result = await prisma.$queryRaw`SELECT * FROM viewCreation(${site_id}::INT);`
+    const result = await prisma.$queryRaw`SET custom.user_id=1;`
     return result;
   } catch (error) {
     console.error('Error selecting creation logs:', error);
@@ -74,7 +74,7 @@ export const selectCreationByAll = async (site_id) => {
 
 export const selectCreationByDate = async (site_id, date) => {
   try {
-    const result = await prisma.$queryRaw`SET custom.user_id=1;`
+    const result = await prisma.$queryRaw`SELECT * FROM viewCreationByDate(${site_id}::INT, ${date}::TIMESTAMP);`
     return result;
   } catch (error) {
     console.error('Error selecting creation logs by date:', error);
