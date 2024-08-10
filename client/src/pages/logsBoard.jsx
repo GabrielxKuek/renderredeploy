@@ -5,6 +5,9 @@ import NavBarReyes from '../components/navBar';
 import NavBarGroup1 from './Navbar.jsx';
 import Modal from 'react-modal';
 import Cookies from 'js-cookie';
+import { format } from 'date-fns';
+
+console.log(readableDate); // August 9th, 2024, 11:23:47 AM
 
 
 Modal.setAppElement('#root');
@@ -47,6 +50,14 @@ const LogsBoard = () => {
                   Authorization: `Bearer ${jwt}`
                 }
               });
+
+            const readableLogs = response.data.map(log => ({
+                ...log,
+                userName: log.um_user ? log.um_user.user_name : 'Unknown',
+            }));
+    
+            setLogs(readableLogs);
+
             setLogs(response.data);
             setError(null);
         } catch (error) {
@@ -62,6 +73,60 @@ const LogsBoard = () => {
         setsearchValue(searchValue.target.value);
     };
 
+    // const handleSearchSubmit = async (event) => {
+    //     setLoading(true);
+    //     event.preventDefault();
+    //     try {
+    //         const response = useRender
+    //             ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedFilter}`, {
+    //                 headers: { Authorization: `Bearer ${jwt}` },
+    //                 params: { searchValue }
+    //             })
+    //             : await axios.get(`http://localhost:8081/api/search/${selectedFilter}`, {
+    //                 headers: { Authorization: `Bearer ${jwt}` },
+    //                 params: { searchValue }
+    //             });
+    //         setSearchResults(response.data);
+    //         setIsSearching(true);
+    //     } catch (error) {
+    //         console.error('Error searching logs:', error);
+    //         setSearchResults([]);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    // const handleSearchSubmit = async (event) => {
+    //     setLoading(true);
+    //     event.preventDefault();
+    //     try {
+    //         const response = useRender
+    //             ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedFilter}`, {
+    //                 headers: { Authorization: `Bearer ${jwt}` },
+    //                 params: { searchValue }
+    //             })
+    //             : await axios.get(`http://localhost:8081/api/search/${selectedFilter}`, {
+    //                 headers: { Authorization: `Bearer ${jwt}` },
+    //                 params: { searchValue }
+    //             });
+
+    //             const readableLogs = response.data.map(log => ({
+    //                 ...log,
+    //                 userName: log.um_user ? log.um_user.user_name : 'Unknown',
+    //             }));
+        
+    //         setLogs(readableLogs);
+
+    //         setSearchResults(response.data);
+    //         setIsSearching(true);
+    //     } catch (error) {
+    //         console.error('Error searching logs:', error);
+    //         setSearchResults([]);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
     const handleSearchSubmit = async (event) => {
         setLoading(true);
         event.preventDefault();
@@ -75,6 +140,7 @@ const LogsBoard = () => {
                     headers: { Authorization: `Bearer ${jwt}` },
                     params: { searchValue }
                 });
+    
             setSearchResults(response.data);
             setIsSearching(true);
         } catch (error) {
@@ -284,11 +350,11 @@ const LogsBoard = () => {
                                         <React.Fragment key={log.log_id}>
                                             <tr className={index % 2 === 0 ? "bg-slate-600" : ""} onClick={() => handleRowClick(log)} style={{cursor: 'pointer'}}>
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.log_id}</td>
-                                                <td className="py-2 px-4 border-b border-gray-600">{log.user_id}</td>
-                                                <td className="py-2 px-4 border-b border-gray-600">{log.site_id}</td>
+                                                <td className="py-2 px-4 border-b border-gray-600">{log.userName}</td>
+                                                {/* <td className="py-2 px-4 border-b border-gray-600">{log.site_id}</td> */}
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.table_name}</td>
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.record_id}</td>
-                                                <td className="py-2 px-4 border-b border-gray-600">{log.created_at}</td>
+                                                <td className="py-2 px-4 border-b border-gray-600">{format(new Date(log.created_at), 'MMMM do, yyyy, h:mm:ss a')}</td>
                                                 <td>
                                                     {selectedFilter === 'modification' || selectedFilter === 'deletion' ? (
                                                         <button 
@@ -359,11 +425,11 @@ const LogsBoard = () => {
                             <div>
                                 <h2 className="text-xl font-bold mb-4">Log Details</h2>
                                 <p><strong>Log ID:</strong> {logs.find(log => log.log_id === expandedRow).log_id}</p>
-                                <p><strong>User ID:</strong> {logs.find(log => log.log_id === expandedRow).user_id}</p>
-                                <p><strong>Site ID:</strong> {logs.find(log => log.log_id === expandedRow).site_id}</p>
+                                <p><strong>User ID:</strong> {logs.find(log => log.log_id === expandedRow).userName}</p>
+                                {/* <p><strong>Site ID:</strong> {logs.find(log => log.log_id === expandedRow).site_id}</p> */}
                                 <p><strong>Table Name:</strong> {logs.find(log => log.log_id === expandedRow).table_name}</p>
                                 <p><strong>Record ID:</strong> {logs.find(log => log.log_id === expandedRow).record_id}</p>
-                                <p><strong>Created At:</strong> {logs.find(log => log.log_id === expandedRow).created_at}</p>
+                                <p><strong>Created At:</strong> {logs.find(log => log.log_id === expandedRow).format(new Date(log.created_at), 'MMMM do, yyyy, h:mm:ss a')}</p>
                                 {selectedFilter === 'modification' || selectedFilter === 'deletion' ? (
                                     <>
                                         <p><strong>Modification ID:</strong> {logs.find(log => log.log_id === expandedRow).field_modification_id}</p>
