@@ -19,7 +19,6 @@ const prisma = new PrismaClient();
 //     throw error;
 //   }
 // };
-import {logRequest} from '../app.js'
 
 // export const insertCreation = async (user_id, site_id, table_name, record_id) => {
 //   try {
@@ -37,7 +36,7 @@ import {logRequest} from '../app.js'
 export const insertCreation = async (user_id, site_id, table_name, record_id) => {
   try {
     const result = await prisma.$executeRaw`
-      CALL log_creation(${user_id}::INT, ${site_id}::INT, ${table_name}::VARCHAR(50), ${record_id})::VARCHAR(50); 
+      CALL log_creation(${user_id}::INT, ${site_id}::INT, ${table_name}::VARCHAR(50), ${record_id}::VARCHAR(50)); 
     `;
     return result;
   } catch (error) {
