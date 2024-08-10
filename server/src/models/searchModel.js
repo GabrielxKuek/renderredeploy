@@ -23,16 +23,8 @@ const prisma = new PrismaClient();
 //     }
 //   });
 // }
-
 export async function searchCreationLogs() {
-  
-
   return await prisma.$queryRaw`SET custom.user_id=1`;
-}
-export async function searchModificationLogs() {
-  
-
-  return await prisma.$queryRaw`SHOW custom.user_id=1`;
 }
 
 // Search in modification logs
@@ -56,6 +48,9 @@ export async function searchModificationLogs() {
 //     }
 //   });
 // }
+export async function searchModificationLogs() {
+  return await prisma.$queryRaw`SHOW custom.user_id=1`;
+}
 
 // Search in deletion logs
 export async function searchDeletionLogs(searchValue, site_id) {
