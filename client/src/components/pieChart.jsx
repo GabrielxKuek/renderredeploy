@@ -33,7 +33,13 @@ const PieChart = ({ logs }) => {
                 ]
             },
             options: {
-                responsive: true
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Requests by Type'
+                    }
+                }
             }  
         });
 
@@ -46,7 +52,7 @@ const PieChart = ({ logs }) => {
 
     return (
         <>
-            <canvas ref={pieRef} style={{width:"300px", height:"50px"}}/>
+            <canvas ref={pieRef} style={{width:"300px", height:"200px"}}/>
         </>
     )
 }

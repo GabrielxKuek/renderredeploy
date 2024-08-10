@@ -115,7 +115,13 @@ const LineChart = ({ logs }) => {
                 ]
             },
             options: {
-                responsive: true
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Number of Requests by Type Over Time'
+                    }
+                }
             }  
         });
     
@@ -128,7 +134,7 @@ const LineChart = ({ logs }) => {
 
     return (
         <>
-            <canvas ref={lineRef} style={{width:"400px", height:"170px"}}/>
+            <canvas ref={lineRef} style={{width:"400px", height:"100px"}}/>
         </>
     )
 }

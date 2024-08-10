@@ -1,8 +1,7 @@
-// import React, { useEffect, useRef } from 'react';
-// import Chart from 'chart.js/auto';
+
 
 const DataCard = ({logsArgument, title, unit}) => {
-    console.log(logsArgument)
+    
     const logs = logsArgument;
     let logsPerMin = 0
 
