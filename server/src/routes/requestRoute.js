@@ -7,7 +7,8 @@ import * as requestController from '../controllers/requestController.js';
 router.post('/input', requestController.createRequest);
 
 // select all request
-router.get('/viewAll', requestController.readAllRequestBySite);
+
+router.get('/viewAllBySite', requestController.readAllRequestBySite);
 router.get('/viewAllByDate', requestController.readAllRequestByDate);
 router.get('/viewAllByIp', requestController.readAllRequestByIp);
 router.get('/viewAllByOs', requestController.readAllRequestByOs);
