@@ -82,7 +82,9 @@ const LogStatistics = () => {
                 <h1 className="text-6xl font-extrabold text-white mb-4">
                     log<span className="text-yellow-500">Stats</span>
                 </h1>
+                
                 {/* fetch data */}
+                {/*
                 <div className="flex justify-between items-center w-11/12 max-w-4xl mb-4 mt-4">
                     {error && (
                         <div className="flex justify-between items-center">
@@ -121,9 +123,7 @@ const LogStatistics = () => {
                                 Refresh
                             </button>
 
-                            {/* <div className="ml-4 text-white">
-                                Displaying results for <span className="text-orange-300">um_{selectedFilter}_log</span>
-                            </div> */}
+
                         </div>
                     )}
 
@@ -165,7 +165,7 @@ const LogStatistics = () => {
                             </div>
                         )}
                     </div>
-                </div>
+                </div> */}
                 <div className="chart container py-3">
                     <div className="row">
                     <div className="pie-container col-2">
