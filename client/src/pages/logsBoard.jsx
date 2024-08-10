@@ -3,9 +3,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import NavBarReyes from '../components/navBar';
 import NavBarGroup1 from './Navbar.jsx';
-/*import Modal from 'react-modal';
+import Modal from 'react-modal';
+import Cookies from 'js-cookie';
 
-Modal.setAppElement('#root'); */
+
+Modal.setAppElement('#root');
 
 const LogsBoard = () => {
 
@@ -18,6 +20,7 @@ const LogsBoard = () => {
         return new URLSearchParams(useLocation().search);
     }
 
+    const jwt = Cookies.get('jwt');
     const navigate = useNavigate();
     const query = useQuery();
     const page = parseInt(query.get('page')) || 1;
@@ -33,7 +36,15 @@ const LogsBoard = () => {
     const fetchLogs = async (filter) => {
         setLoading(true);
         try {
-            const response = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/${filter}/viewAll`) : await axios.get(`http://localhost:8081/api/${filter}/viewAll`);
+            const response = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/${filter}/viewAll`, {
+                headers: {
+                  Authorization: `Bearer ${jwt}`
+                }
+              }) : await axios.get(`http://localhost:8081/api/${filter}/viewAll`, {
+                headers: {
+                  Authorization: `Bearer ${jwt}`
+                }
+              });
             setLogs(response.data);
             setError(null);
         } catch (error) {

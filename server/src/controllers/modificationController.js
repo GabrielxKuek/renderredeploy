@@ -22,7 +22,7 @@ export async function createModification(req, res) {
 
 export async function readModificationByAll(req, res) {
   try {
-    const { site_id } = req.body;
+    const { site_id } = res.locals.site_id;
     const result = await modificationModel.selectModificationByAll(site_id);
     res.json(result);
   } catch (error) {
