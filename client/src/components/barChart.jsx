@@ -21,7 +21,6 @@ const BarChart = ({ logs, title }) => {
         barInstance.current=new Chart(myBarRef, {
             type: 'bar',
             data: {
-                labels: ["Request Type"],
                 datasets:[
                     {
                         label: "POST",
@@ -54,7 +53,7 @@ const BarChart = ({ logs, title }) => {
 
     return (
         <>
-            <canvas ref={barRef} style={{width:"100px", height:"110px"}}/>
+            <canvas ref={barRef} style={{width:"200px", height:"175px"}}/>
         </>
     )
 }

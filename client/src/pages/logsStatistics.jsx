@@ -8,12 +8,18 @@ import LineChart from '@/components/lineChart';
 import BarChart from '@/components/barChart';
 import DonutChart from '@/components/doughnutChart';
 import DataCard from '@/components/dataCard';
+import { MoveDownLeftIcon } from 'lucide-react';
 
 const LogStatistics = () => {
 
     const useRender = true;
     const navigate = useNavigate();
-    const [logs, setLogs] = useState([]);
+    const [logs, setLogs] = useState({
+        creationLogs: [],
+        modificationLogs: [],
+        deletionLogs: [],
+        requestLogs: []
+    });
     const [error, setError] = useState([]);
     const [creationLogs, setCreationLogs] = useState([]);
     const [modLogs, setModLogs] = useState([]);
@@ -26,8 +32,18 @@ const LogStatistics = () => {
     const fetchLogs = async (filter, setLogType) => {
         setLoading(true);
         try {
-            const response = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/${filter}/viewAll`) : await axios.get(`http://localhost:8081/api/${filter}/viewAll`);
-            setLogType(response.data);
+            //const response = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/${filter}/viewAll`) : await axios.get(`http://localhost:8081/api/${filter}/viewAll`);
+            const createLogs = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/creation/viewAll`) : await axios.get(`http://localhost:8081/api/creation/viewAll`);
+            const modifyLogs = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/modification/viewAll`) : await axios.get(`http://localhost:8081/api/modification/viewAll`);
+            const deleteLogs = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/deletion/viewAll`) : await axios.get(`http://localhost:8081/api/deletion/viewAll`);
+            const reqLogs = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/request/viewAll`) : await axios.get(`http://localhost:8081/api/request/viewAll`);
+            setLogs({
+                creationLogs: createLogs,
+                modificationLogs: modifyLogs,
+                deletionLogs: deleteLogs,
+                requestLogs: reqLogs
+            })
+            console.log(logs)
             setError(null);
         } catch (error) {
             setError('Error fetching logs. Please try again.');
@@ -37,14 +53,14 @@ const LogStatistics = () => {
             setLoading(false);
         }
     };
-    
+    /*
     useEffect(() => {
         fetchLogs(selectedFilter, setLogs);
         fetchLogs('creation', setCreationLogs);
         fetchLogs('modification', setModLogs);
         fetchLogs('deletion', setDeletionLogs);
         fetchLogs('request', setRequestLogs);
-    }, []);
+    }, []); */
 
     const toggleDropdown = () => {
         setIsDropdownVisible(!isDropdownVisible);
@@ -155,51 +171,90 @@ const LogStatistics = () => {
                     <div className="pie-container col-2">
                         <PieChart 
                             logs={{
-                                creationLogs: creationLogs,
-                                modificationLogs: modLogs,
-                                deletionLogs: deletionLogs
+                                // creationLogs: creationLogs,
+                                // modificationLogs: modLogs,
+                                // deletionLogs: deletionLogs
+                                creationLogs: logs.creationLogs,
+                                modificationLogs: logs.modificationLogs,
+                                deletionLogs: logs.deletionLogs
                             }}
                         />
                     </div>
 
-                    <div className="line-container col-4">
-                        <LineChart 
-                            logs={{
-                                creationLogs: creationLogs,
-                                modificationLogs: modLogs,
-                                deletionLogs: deletionLogs
-                            }}
-                        />
-                    </div>
-
-                    <div className="stackedBar-container col-6">
+                    <div className="bar-container col-4">
                         <BarChart 
                             logs={{
-                                creationLogs: creationLogs,
-                                modificationLogs: modLogs,
-                                deletionLogs: deletionLogs
+                                // creationLogs: creationLogs,
+                                // modificationLogs: modLogs,
+                                // deletionLogs: deletionLogs
+                                creationLogs: logs.creationLogs,
+                                modificationLogs: logs.modificationLogs,
+                                deletionLogs: logs.deletionLogs
                             }}
                             title="Number of Requests by Type"
-                        />
+                        />                        
                     </div>
+                    <div className='dataCard-container col-6'>
+                            <div className='row'>
+                                <div className="dataCard col-3">
+                                    <DataCard
+                                        logsArgument={logs.requestLogs}//{requestLogs}
+                                        title={"Total Requests per Minute"}
+                                        unit={"requests/min"}
+                                    />
+                                </div>
+
+                                <div className="dataCard col-3">
+                                    <DataCard
+                                        logsArgument={logs.creationLogs}//{creationLogs}
+                                        title={"POST per Minute"}
+                                        unit={"requests/min"}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className='row'>
+                                <div className="dataCard col-3">
+                                    <DataCard
+                                        logsArgument={logs.modificationLogs}//{modLogs}
+                                        title={"PUT per Minute"}
+                                        unit={"requests/min"}
+                                    />
+                                </div>
+
+                                <div className="dataCard col-3">
+                                    <DataCard
+                                        logsArgument={logs.deletionLogs}//{deletionLogs}
+                                        title={"DELETE per Minute"}
+                                        unit={"requests/min"}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div className="row">
-                    <div className="doughnut-container col-3">
-                        <DonutChart 
-                            logs={{
-                                requestLogs: requestLogs
-                            }}
-                        />
-                    </div>
-
-                    <div className="dataCard-container col-3">
-                            <DataCard
-                                logsArgument={requestLogs}
-                                title={"Requests per Minute"}
-                                unit={"requests/min"}
+                        <div className="doughnut-container col-3">
+                            <DonutChart 
+                                logs={{
+                                    requestLogs: logs.requestLogs//requestLogs
+                                }}
                             />
-                    </div>
+                        </div>
+                        <div className="line-container col-8">
+                            <LineChart 
+                                logs={{
+                                    // creationLogs: creationLogs,
+                                    // modificationLogs: modLogs,
+                                    // deletionLogs: deletionLogs
+                                    creationLogs: logs.creationLogs,
+                                    modificationLogs: logs.modificationLogs,
+                                    deletionLogs: logs.deletionLogs
+                                }}
+                            />
+                        </div>
+
                     </div>
                 </div>
             </div>
