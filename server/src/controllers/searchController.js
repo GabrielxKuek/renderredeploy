@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
 // Search logs for creation
 export async function searchLogsCreate(req, res) {
     const { searchValue } = req.query; // Use req.query for GET request
-    const {site_id} = req.body;
+    const { site_id } = res.locals.site_id;
     const sanitizedValue = validator.escape(searchValue);
     console.log(site_id);
     console.log(sanitizedValue);
@@ -26,7 +26,7 @@ export async function searchLogsCreate(req, res) {
 // Search logs for modification
 export async function searchLogsModification(req, res) {
     const { searchValue } = req.query; // Use req.query for GET request
-    const {site_id} = req.body;
+    const { site_id } = res.locals.site_id;
     const sanitizedValue = validator.escape(searchValue)
     console.log(sanitizedValue);
     try {
@@ -41,7 +41,7 @@ export async function searchLogsModification(req, res) {
 // Search logs for deletion
 export async function searchLogsDelete(req, res) {
     const { searchValue } = req.query; // Use req.query for GET request
-    const {site_id} = req.body;
+    const { site_id } = res.locals.site_id;
     const sanitizedValue = validator.escape(searchValue)
     console.log(site_id);
     console.log(sanitizedValue);
@@ -57,7 +57,7 @@ export async function searchLogsDelete(req, res) {
 // Search request logs
 export async function searchLogsRequest(req, res) {
     const { searchValue } = req.query; // Use req.query for GET request
-    const {site_id} = req.body;
+    const { site_id } = res.locals.site_id;
     const sanitizedValue = validator.escape(searchValue)
     console.log(site_id);
     console.log(sanitizedValue);
