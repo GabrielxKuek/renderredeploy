@@ -129,7 +129,7 @@ const LogsBoard = () => {
                 </h1>
 
                 <p className="text-lg text-gray-300 mx-3.5">
-                    Not sure if we should keep it here, or display it with graphs side
+                    Collection of logs for Auth INC
                 </p>
 
                 {/* Search Bar */}
@@ -196,7 +196,7 @@ const LogsBoard = () => {
                             onClick={toggleDropdown}
                             className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
                         >
-                            Filter
+                            Tables
                         </button>
                         {isDropdownVisible && (
                             <div className="absolute right-0 mt-2 w-48 bg-slate-700 rounded-md shadow-lg z-50">
