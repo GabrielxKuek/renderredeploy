@@ -154,6 +154,7 @@ model um_gallery {
   gallery_description             String
   created_at                      DateTime?                         @default(now()) @db.Timestamp(6)
   updated_at                      DateTime?                         @default(now()) @db.Timestamp(6)
+  status_id                       Int?
   um_album                        um_album[]
   um_site_gallery_role_permission um_site_gallery_role_permission[]
   um_user_gallery_role_permission um_user_gallery_role_permission[]

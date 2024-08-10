@@ -6,6 +6,7 @@ import NavBarGroup1 from './Navbar.jsx';
 import PieChart from '@/components/pieChart';
 import LineChart from '@/components/lineChart';
 import BarChart from '@/components/barChart';
+import DonutChart from '@/components/doughnutChart';
 
 const LogStatistics = () => {
 
@@ -16,6 +17,7 @@ const LogStatistics = () => {
     const [creationLogs, setCreationLogs] = useState([]);
     const [modLogs, setModLogs] = useState([]);
     const [deletionLogs, setDeletionLogs] = useState([]);
+    const [requestLogs, setRequestLogs] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState('creation');
@@ -40,6 +42,7 @@ const LogStatistics = () => {
         fetchLogs('creation', setCreationLogs);
         fetchLogs('modification', setModLogs);
         fetchLogs('deletion', setDeletionLogs);
+        fetchLogs('request', setRequestLogs);
     }, []);
 
     const toggleDropdown = () => {
@@ -146,7 +149,7 @@ const LogStatistics = () => {
                         )}
                     </div>
                 </div>
-                <div className="chart container">
+                <div className="chart container py-3">
                     <div className="row">
                     <div className="pie-container col-2">
                         <PieChart 
@@ -180,19 +183,17 @@ const LogStatistics = () => {
                     </div>
 
                     <div className="row">
-                    <div className="stackedBar-container col-9">
-                        <BarChart 
+                    <div className="stackedBar-container col-3">
+                        <DonutChart 
                             logs={{
-                                creationLogs: creationLogs,
-                                modificationLogs: modLogs,
-                                deletionLogs: deletionLogs
+                                requestLogs: requestLogs
                             }}
                         />
                     </div>
                     </div>
 
                     <div className="row">
-                    <div className="stackedBar-container col-9">
+                    <div className="stackedBar-container col-5">
                         <BarChart 
                             logs={{
                                 creationLogs: creationLogs,
