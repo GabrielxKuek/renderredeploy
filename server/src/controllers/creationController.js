@@ -20,12 +20,12 @@ export async function createCreation(req, res, next) {
               headers: req.headers,
               user_ip: req.headers['x-forwarded-for'] || req.ip,
               user_os: req.headers['user-agent'] || 'UNKNOWN_USER_OS', // Provide a fallback value if undefined
-              error_message: "Missing Parameters" || 'No error', // Ensure error_message is defined
+              error_message: "Missing Parameters", // Ensure error_message is defined
               site_id: req.site_id !== undefined ? parseInt(req.site_id, 10) : null,
               user_id: req.user_id !== undefined ? parseInt(req.user_id, 10) : null,
           });
             return res.status(400).json({ error: 'Missing required fields' });
-            
+
         }
 
         const result = await creationModel.insertCreation(user_id, site_id, table_name, record_id);
