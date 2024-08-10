@@ -3,7 +3,6 @@ import Chart from 'chart.js/auto';
 
 const PieChart = ({ logs }) => {
 
-    console.log(logs)
     const creationLogs = logs.creationLogs;
     const modificationLogs = logs.modificationLogs;
     const deletionLogs = logs.deletionLogs;
