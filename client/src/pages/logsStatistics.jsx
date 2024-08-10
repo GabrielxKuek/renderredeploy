@@ -7,6 +7,7 @@ import PieChart from '@/components/pieChart';
 import LineChart from '@/components/lineChart';
 import BarChart from '@/components/barChart';
 import DonutChart from '@/components/doughnutChart';
+import DataCard from '@/components/dataCard';
 
 const LogStatistics = () => {
 
@@ -183,24 +184,20 @@ const LogStatistics = () => {
                     </div>
 
                     <div className="row">
-                    <div className="stackedBar-container col-3">
+                    <div className="doughnut-container col-3">
                         <DonutChart 
                             logs={{
                                 requestLogs: requestLogs
                             }}
                         />
                     </div>
-                    </div>
 
-                    <div className="row">
-                    <div className="stackedBar-container col-5">
-                        <BarChart 
-                            logs={{
-                                creationLogs: creationLogs,
-                                modificationLogs: modLogs,
-                                deletionLogs: deletionLogs
-                            }}
-                        />
+                    <div className="dataCard-container col-3">
+                            <DataCard
+                                logs={{
+                                    requestLogs: requestLogs
+                                }}
+                            />
                     </div>
                     </div>
                 </div>
