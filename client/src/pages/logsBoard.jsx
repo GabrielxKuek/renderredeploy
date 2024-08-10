@@ -277,7 +277,10 @@ const LogsBoard = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {(isSearching ? searchResults : logs).sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(page * logsPerPage - logsPerPage, page * logsPerPage).map((log, index) => (
+                                    {(isSearching ? searchResults : logs)
+                                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                                    .slice(page * logsPerPage - logsPerPage, page * logsPerPage)
+                                    .map((log, index) => (
                                         <React.Fragment key={log.log_id}>
                                             <tr className={index % 2 === 0 ? "bg-slate-600" : ""} onClick={() => handleRowClick(log)} style={{cursor: 'pointer'}}>
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.log_id}</td>
