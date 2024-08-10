@@ -3,12 +3,12 @@ import Chart from 'chart.js/auto';
 
 const LineChart = ({ logs }) => {
 
-    const lineRef = useRef(null);
-    const lineInstance = useRef(null);
-    
     const creationLogs = logs.creationLogs;
     const modificationLogs = logs.modificationLogs;
     const deletionLogs = logs.deletionLogs;
+
+    const lineRef = useRef(null);
+    const lineInstance = useRef(null);
     
     creationLogs.map(e => {
         let date = new Date(e.created_at);
@@ -124,7 +124,7 @@ const LineChart = ({ logs }) => {
                 lineInstance.current.destroy(); 
             }
         }
-    }, [])
+    })
 
     return (
         <>

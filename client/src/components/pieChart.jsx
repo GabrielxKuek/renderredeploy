@@ -42,7 +42,7 @@ const PieChart = ({ logs }) => {
                 pieInstance.current.destroy(); 
             }
         }
-    }, []);
+    });
 
     return (
         <>

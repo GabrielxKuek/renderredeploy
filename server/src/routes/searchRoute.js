@@ -7,6 +7,7 @@ import * as searchController from "../controllers/searchController.js";
 router.get("/creation", searchController.searchLogsCreate);
 router.get("/modification", searchController.searchLogsModification);
 router.get("/deletion", searchController.searchLogsDelete);
+router.get("/request", searchController.searchLogsRequest)
 
 
 export default router;

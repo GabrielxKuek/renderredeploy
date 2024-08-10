@@ -16,7 +16,9 @@ model um_request_log {
   user_os        String?   @db.VarChar(200)
   created_at     DateTime? @default(now()) @db.Timestamp(6)
   error_message  Json?
-  api_requested  Json?
+  api_requested  String?   @db.VarChar(200)
+  body           Json?
+  headers        Json?
   um_site        um_site?  @relation(fields: [site_id], references: [site_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_request_site_id")
   um_user        um_user?  @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_request_user_id")
 }
