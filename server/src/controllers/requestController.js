@@ -120,7 +120,8 @@ export async function createRequest(req, res) { // note: logger i comment out ca
 
 export async function readAllRequestBySite(req, res) {
   try {
-    const { site_id } = req.body;
+    // const { site_id } = res.locals.site_id;
+    const site_id = 1;
 
     if (!site_id) {
       return res.status(400).json({ error: 'Missing site_id' });

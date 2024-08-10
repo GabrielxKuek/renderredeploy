@@ -57,8 +57,10 @@ export async function createCreation(req, res, next) {
 // read
 
 export async function readCreationByAll (req, res) {
-  const { site_id } = res.locals.site_id;
   try {
+    // const { site_id } = res.locals.site_id;
+    const site_id = 1;
+
     const result = await creationModel.selectCreationByAll(site_id);
     res.json(result);
     

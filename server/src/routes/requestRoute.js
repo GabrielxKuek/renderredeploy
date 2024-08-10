@@ -1,13 +1,15 @@
 import express from 'express';
 const router = express.Router();
 import * as requestController from '../controllers/requestController.js';
+import * as jwtController from "../middlewares/jwtMiddleware.js";
 
 // insert request
 
 router.post('/input', requestController.createRequest);
 
 // select all request
-router.get('/viewAllBySite', requestController.readAllRequestBySite);
+// router.get('/viewAll', jwtController.verifyToken, requestController.readAllRequestBySite);
+router.get('/viewAll', requestController.readAllRequestBySite);
 router.get('/viewAllByDate', requestController.readAllRequestByDate);
 router.get('/viewAllByIp', requestController.readAllRequestByIp);
 router.get('/viewAllByOs', requestController.readAllRequestByOs);
