@@ -1,5 +1,4 @@
 // Monitoring multiple failed password attempts within the last hour.
-
 async function getFailedLoginsFromLastHour() {
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
   
@@ -83,7 +82,6 @@ async function getFailedLoginsFromLastHour() {
   }
 
   // Monitoring different ip logins within the past 12 hours
-  
   function analyzeDifferentIPLogins(logins) {
     const suspiciousActivities = [];
     const userLogins = {};

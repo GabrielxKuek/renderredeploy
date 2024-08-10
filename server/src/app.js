@@ -1,21 +1,17 @@
 import express from 'express';
 import { createLogger, transports, format } from 'winston';
-import { PrismaClient } from '@prisma/client';
 import morgan from 'morgan';
 import jwt from 'jsonwebtoken';
 import mainRoutes from './routes/mainRoutes.js';
-import { logRequestMiddleware } from './middleware/logRequestMiddleware.js';
 import cors from 'cors';
 import helmet from 'helmet';
 
 const secret = 'your_jwt_secret'; // Replace with your JWT secret
-const prisma = new PrismaClient();
 
 const app = express();
 app.use(cors());
 app.use(helmet());
 
-//Gabriel change
 // Middleware to attach log data and extract JWT information
 app.use((req, res, next) => {
   req.logData = {
@@ -25,17 +21,17 @@ app.use((req, res, next) => {
     user_os: req.get('User-Agent')
   };
 
-  // Extract and decode JWT
-  const token = req.headers['authorization']?.split(' ')[1];
-  if (token) {
-    try {
-      const decoded = jwt.verify(token, secret);
-      req.user_id = decoded.user_id;
-      req.site_id = decoded.site_id;
-    } catch (error) {
-      console.error('Invalid token:', error);
-    }
-  }
+  // // Extract and decode JWT
+  // const token = req.headers['authorization']?.split(' ')[1];
+  // if (token) {
+  //   try {
+  //     const decoded = jwt.verify(token, secret);
+  //     req.user_id = decoded.user_id;
+  //     req.site_id = decoded.site_id;
+  //   } catch (error) {
+  //     console.error('Invalid token:', error);
+  //   }
+  // }
 
   next();
 });
@@ -54,8 +50,6 @@ const logger = createLogger({
 morgan.token('user_id', (req) => req.user_id || 'UNKNOWN_USER_ID');
 morgan.token('site_id', (req) => req.site_id || 'UNKNOWN_SITE_ID');
 morgan.token('os', (req) => req.get('User-Agent') || 'UNKNOWN_OS');
-
-// Gabriel Update
 morgan.token('remote-addr', (req) => {
   const forwardedFor = req.headers['x-forwarded-for'];
   let ip = forwardedFor ? forwardedFor.split(',')[0].trim() : req.ip;
@@ -64,15 +58,12 @@ morgan.token('remote-addr', (req) => {
   }
   return ip;
 });
-
-// Gabriel Update
 morgan.token('fullurl', (req) => {
   const domain = req.headers.host;
   const url = req.originalUrl || req.url;
   return domain ? `${domain}${url}` : url;
 });
 
-// Gabriel Update
 // Custom format string including the custom tokens
 const morganFormat = ':user_id :site_id :method :fullurl :remote-addr :user-agent';
 
@@ -87,7 +78,7 @@ const morganMiddleware = morgan(morganFormat, {
         console.error('Malformed log message:', message);
         return;
       }
-      // Gabriel Update
+
       const [user_id, site_id, method, fullurl, remote_addr, user_agent] = parts;
 
       // Log to Winston
@@ -112,27 +103,5 @@ app.use(morganMiddleware);
 
 // Main routes
 app.use('/api', mainRoutes);
-
-// Function to log request details
-export async function logRequest(req, res, next, error) {
-  try {
-    const { request_method, api_requested, user_ip, user_os } = req.logData;
-    await prisma.um_request_log.create({
-      data: {
-        request_method: request_method || 'UNKNOWN_METHOD',
-        api_requested: api_requested || 'UNKNOWN_API',
-        user_ip: user_ip || 'UNKNOWN_IP',
-        user_os: user_os || 'UNKNOWN_OS',
-        created_at: new Date(),
-        error_message: error ? error.message : 'NO_ERROR',
-        site_id: req.site_id !== undefined ? parseInt(req.site_id, 10) : null,
-        user_id: req.user_id !== undefined ? parseInt(req.user_id, 10) : null
-      }
-    });
-    console.log('Request logged to the database successfully');
-  } catch (dbError) {
-    console.error('Failed to log request to database:', dbError);
-  }
-}
 
 export default app;
