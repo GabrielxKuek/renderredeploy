@@ -1,14 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const BarChart = ({ argument }) => {
+const BarChart = ({ logs }) => {
+
+    const creationLogs = logs.creationLogs;
+    const modificationLogs = logs.modificationLogs;
+    const deletionLogs = logs.deletionLogs;
 
     const stackedBarRef = useRef(null);
     const stackedBarInstance = useRef(null);
 
     // Stacked bar chart
     useEffect(() => {      
-        console.log(argument[0])  
+         
         if (stackedBarInstance.current) {
             stackedBarInstance.current.destroy();
         }
@@ -17,22 +21,22 @@ const BarChart = ({ argument }) => {
         stackedBarInstance.current=new Chart(myStackedBarRef, {
             type: 'bar',
             data: {
-                labels: ["Chocolate", "Vanilla", "Strawberry"],
+                labels: ["Request Type"],
                 datasets:[
                     {
-                        label: "Blue",
-                        backgroundColor: "blue",
-                        data: [3,7,4]
+                        label: "POST",
+                        backgroundColor: "rgb(255, 99, 132)",
+                        data: [creationLogs.length]
                     },
                     {
-                        label: "Red",
-                        backgroundColor: "red",
-                        data: [4,3,5]
+                        label: "PUT",
+                        backgroundColor: "rgb(54, 162, 235)",
+                        data: [modificationLogs.length]
                     },
                     {
-                        label: "Green",
-                        backgroundColor: "green",
-                        data: [7,2,6]
+                        label: "DELETE",
+                        backgroundColor: "rgb(255, 205, 86)",
+                        data: [deletionLogs.length]
                     }
                 ]
             },
@@ -44,7 +48,7 @@ const BarChart = ({ argument }) => {
 
     return (
         <>
-            <canvas ref={stackedBarRef} style={{width:"220px", height:"50px"}}/>
+            <canvas ref={stackedBarRef} style={{width:"100px", height:"50px"}}/>
         </>
     )
 }

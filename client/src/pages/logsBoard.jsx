@@ -3,6 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import NavBarReyes from '../components/navBar';
 import NavBarGroup1 from './Navbar.jsx';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 const LogsBoard = () => {
 
@@ -110,6 +113,16 @@ const LogsBoard = () => {
         navigate(`/logsBoard`);
     }
 
+    const openModal = (log) => {
+        setSelectedLog(log);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedLog(null);
+    };
+
     useEffect(() => {
         fetchLogs(selectedFilter);
     }, [selectedFilter, page]);
@@ -129,7 +142,7 @@ const LogsBoard = () => {
                 </h1>
 
                 <p className="text-lg text-gray-300 mx-3.5">
-                    Not sure if we should keep it here, or display it with graphs side
+                    Collection of logs for Auth INC
                 </p>
 
                 {/* Search Bar */}
@@ -196,7 +209,7 @@ const LogsBoard = () => {
                             onClick={toggleDropdown}
                             className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
                         >
-                            Filter
+                            Tables
                         </button>
                         {isDropdownVisible && (
                             <div className="absolute right-0 mt-2 w-48 bg-slate-700 rounded-md shadow-lg z-50">
@@ -249,7 +262,7 @@ const LogsBoard = () => {
                                 <tbody>
                                     {logs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(page * logsPerPage - logsPerPage, page * logsPerPage).map((log, index) => (
                                         <React.Fragment key={log.log_id}>
-                                            <tr className={index % 2 === 0 ? "bg-slate-600" : ""} onClick={() => handleRowClick(log)} style={{cursor: 'pointer', position: 'relative'}}>
+                                            <tr className={index % 2 === 0 ? "bg-slate-600" : ""} onClick={() => handleRowClick(log)} style={{cursor: 'pointer'}}>
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.log_id}</td>
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.user_id}</td>
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.site_id}</td>
@@ -261,7 +274,7 @@ const LogsBoard = () => {
                                                         <button 
                                                             onClick={(e) => {
                                                                 e.stopPropagation(); // Prevent triggering row click
-                                                                handleRowClick(log); 
+                                                                setExpandedRow(expandedRow === log.log_id ? null : log.log_id); 
                                                             }} 
                                                             className="px-1 py-0.5 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
                                                         >
@@ -270,18 +283,6 @@ const LogsBoard = () => {
                                                     ) : null}
                                                 </td>
                                             </tr>
-                                            {expandedRow === log.log_id && (
-                                                <tr style={{ position: 'relative' }}>
-                                                    <td colSpan="7" style={{ backgroundColor: 'white', color: 'black', position: 'absolute', top: '100%', left: 0, width: '100%', zIndex: 10 }}>
-                                                        <div className="p-4">
-                                                            <p><strong>Modification ID:</strong> {log.field_modification_id}</p>
-                                                            <p><strong>Field Name:</strong> {log.field_name}</p>
-                                                            <p><strong>Old Value:</strong></p>
-                                                            <pre>{JSON.stringify(log.old_value, null, 4)}</pre>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            )}
                                         </React.Fragment>
                                     ))}
                                 </tbody>
@@ -326,6 +327,41 @@ const LogsBoard = () => {
                         />
                     </div>
                 </div>) : null}
+                {/* Modal for expanded row */}
+                <Modal
+                    isOpen={expandedRow !== null}
+                    onRequestClose={() => setExpandedRow(null)}
+                    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+                    overlayClassName="fixed inset-0"
+                >
+                    <div className="bg-white p-6 rounded-md shadow-lg max-w-3xl w-full">
+                        {logs.find(log => log.log_id === expandedRow) && (
+                            <div>
+                                <h2 className="text-xl font-bold mb-4">Log Details</h2>
+                                <p><strong>Log ID:</strong> {logs.find(log => log.log_id === expandedRow).log_id}</p>
+                                <p><strong>User ID:</strong> {logs.find(log => log.log_id === expandedRow).user_id}</p>
+                                <p><strong>Site ID:</strong> {logs.find(log => log.log_id === expandedRow).site_id}</p>
+                                <p><strong>Table Name:</strong> {logs.find(log => log.log_id === expandedRow).table_name}</p>
+                                <p><strong>Record ID:</strong> {logs.find(log => log.log_id === expandedRow).record_id}</p>
+                                <p><strong>Created At:</strong> {logs.find(log => log.log_id === expandedRow).created_at}</p>
+                                {selectedFilter === 'modification' || selectedFilter === 'deletion' ? (
+                                    <>
+                                        <p><strong>Modification ID:</strong> {logs.find(log => log.log_id === expandedRow).field_modification_id}</p>
+                                        <p><strong>Field Name:</strong> {logs.find(log => log.log_id === expandedRow).field_name}</p>
+                                        <p><strong>Old Value:</strong></p>
+                                        <pre>{JSON.stringify(logs.find(log => log.log_id === expandedRow).old_value, null, 4)}</pre>
+                                    </>
+                                ) : null}
+                                <button
+                                    onClick={() => setExpandedRow(null)}
+                                    className="mt-4 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </Modal>
                 
             </div>
         </>
