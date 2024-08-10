@@ -7,18 +7,18 @@ const BarChart = ({ logs }) => {
     const modificationLogs = logs.modificationLogs;
     const deletionLogs = logs.deletionLogs;
 
-    const stackedBarRef = useRef(null);
-    const stackedBarInstance = useRef(null);
+    const barRef = useRef(null);
+    const barInstance = useRef(null);
 
     // Stacked bar chart
     useEffect(() => {      
          
-        if (stackedBarInstance.current) {
-            stackedBarInstance.current.destroy();
+        if (barInstance.current) {
+            barInstance.current.destroy();
         }
-        const myStackedBarRef = stackedBarRef.current.getContext('2d');
+        const myBarRef = barRef.current.getContext('2d');
 
-        stackedBarInstance.current=new Chart(myStackedBarRef, {
+        barInstance.current=new Chart(myBarRef, {
             type: 'bar',
             data: {
                 labels: ["Request Type"],
@@ -48,7 +48,7 @@ const BarChart = ({ logs }) => {
 
     return (
         <>
-            <canvas ref={stackedBarRef} style={{width:"100px", height:"50px"}}/>
+            <canvas ref={barRef} style={{width:"100px", height:"50px"}}/>
         </>
     )
 }

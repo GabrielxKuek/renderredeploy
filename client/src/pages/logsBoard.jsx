@@ -3,9 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import NavBarReyes from '../components/navBar';
 import NavBarGroup1 from './Navbar.jsx';
-import Modal from 'react-modal';
+/*import Modal from 'react-modal';
 
-Modal.setAppElement('#root');
+Modal.setAppElement('#root'); */
 
 const LogsBoard = () => {
 
