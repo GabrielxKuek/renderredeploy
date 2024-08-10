@@ -68,14 +68,31 @@ export async function searchDeletionLogs(searchValue, site_id) {
   });
 }
 
-
+// Search in request logs
 export async function searchRequestLogs(searchValue, site_id) {
+  // Determine if the search value is numeric
   const isNumeric = !isNaN(parseInt(searchValue));
-  
+
+  // Convert the search value to a string for text-based searches
+  const searchString = searchValue.toString();
+
   return await prisma.$queryRaw`
     SELECT * FROM um_request_log
     WHERE 
-      (log_id = ${parseInt(searchValue)} OR user_id = ${parseInt(searchValue)} OR site_id = ${parseInt(searchValue)})
-      OR (error_message::text LIKE '%' || ${searchValue} || '%')
+      -- Check for numeric fields
+      (log_id = ${isNumeric ? parseInt(searchValue) : null}
+      OR user_id = ${isNumeric ? parseInt(searchValue) : null})
+
+      -- Check for text-based fields with case-sensitive search
+      OR request_method LIKE '%' || ${searchString} || '%'
+      OR user_ip LIKE '%' || ${searchString} || '%'
+      OR user_os LIKE '%' || ${searchString} || '%'
+      OR api_requested LIKE '%' || ${searchString} || '%'
+      
+      -- Check for error_message field (JSONB) with case-insensitive search
+      OR error_message::text ILIKE '%' || ${searchString} || '%'
+
+      -- Filter by site_id
+      AND site_id = ${site_id}
   `;
 }
