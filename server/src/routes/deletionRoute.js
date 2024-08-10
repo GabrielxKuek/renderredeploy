@@ -8,6 +8,7 @@ import * as jwtController from "../middlewares/jwtMiddleware.js";
 router.post("/input", deletionController.createDeletion);
 
 // View all deletion logs
+// router.get("/viewAll", deletionController.readDeletionByAll);
 router.get("/viewAll", jwtController.verifyToken, deletionController.readDeletionByAll);
 
 // View deletion logs by date

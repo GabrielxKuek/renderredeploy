@@ -7,7 +7,8 @@ import * as jwtController from "../middlewares/jwtMiddleware.js";
 router.post("/input", creationController.createCreation, logRequestMiddleware);
 
 // View all creation logs
-router.get("/viewAll", jwtController.verifyToken, creationController.readCreationByAll);
+// router.get("/viewAll", jwtController.verifyToken, creationController.readCreationByAll);
+router.get("/viewAll", creationController.readCreationByAll);
 
 // View creation log by date
 router.get("/viewByDate", creationController.readCreationByDate);

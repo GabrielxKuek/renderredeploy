@@ -27,7 +27,9 @@ export async function createDeletion(req, res) {
 
 export async function readDeletionByAll(req, res) {
   try {
-    const { site_id } = res.locals.site_id;
+    // const { site_id } = res.locals.site_id;
+    const site_id = 1;
+    
     const result = await deletionModel.selectDeletionByAll(site_id);
     res.json(result);
   } catch (error) {
