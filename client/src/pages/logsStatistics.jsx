@@ -179,6 +179,7 @@ const LogStatistics = () => {
                                 modificationLogs: modLogs,
                                 deletionLogs: deletionLogs
                             }}
+                            title="Number of Requests by Type"
                         />
                     </div>
                     </div>
@@ -194,9 +195,9 @@ const LogStatistics = () => {
 
                     <div className="dataCard-container col-3">
                             <DataCard
-                                logs={{
-                                    requestLogs: requestLogs
-                                }}
+                                logsArgument={requestLogs}
+                                title={"Requests per Minute"}
+                                unit={"requests/min"}
                             />
                     </div>
                     </div>

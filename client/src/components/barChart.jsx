@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const BarChart = ({ logs }) => {
+const BarChart = ({ logs, title }) => {
 
     const creationLogs = logs.creationLogs;
     const modificationLogs = logs.modificationLogs;
@@ -41,14 +41,20 @@ const BarChart = ({ logs }) => {
                 ]
             },
             options: {
-                responsive: true
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: title
+                    }
+                }
             }  
         }) 
     })
 
     return (
         <>
-            <canvas ref={barRef} style={{width:"100px", height:"50px"}}/>
+            <canvas ref={barRef} style={{width:"100px", height:"110px"}}/>
         </>
     )
 }
