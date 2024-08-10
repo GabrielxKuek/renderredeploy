@@ -5,7 +5,7 @@ import * as deletionController from "../controllers/deletionController.js";
 import * as jwtController from "../middlewares/jwtMiddleware.js";
 
 // Create deletion log
-router.post("/input", creationController.createCreation, deletionController.createDeletion);
+router.post("/input", deletionController.createDeletion);
 
 // View all deletion logs
 router.get("/viewAll", jwtController.verifyToken, deletionController.readDeletionByAll);
