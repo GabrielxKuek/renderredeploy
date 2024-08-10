@@ -9,7 +9,7 @@ export async function searchCreationLogs(searchValue, site_id) {
   return await prisma.um_creation_log.findMany({
     where: {
       AND: [
-        { site_id: site_id },
+        { site_id: parseInt(site_id) },
         {
           OR: isNumeric ? [
             { log_id: parseInt(searchValue) },
@@ -31,7 +31,7 @@ export async function searchModificationLogs(searchValue, site_id) {
   return await prisma.um_modification_log.findMany({
     where: {
       AND: [
-        { site_id: site_id },
+        { site_id: parseInt(site_id) },
         {
           OR: isNumeric ? [
             { log_id: parseInt(searchValue) },
@@ -53,7 +53,7 @@ export async function searchDeletionLogs(searchValue, site_id) {
   return await prisma.um_deletion_log.findMany({
     where: {
       AND: [
-        { site_id: site_id },
+        { site_id: parseInt(site_id) },
         {
           OR: isNumeric ? [
             { log_id: parseInt(searchValue) },
