@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const BarChart = ({ argument }) => {
-
+const BarChart = ({ logs }) => {
+    console.log(logs)
     const stackedBarRef = useRef(null);
     const stackedBarInstance = useRef(null);
 
     // Stacked bar chart
     useEffect(() => {      
-        console.log(argument[0])  
+         
         if (stackedBarInstance.current) {
             stackedBarInstance.current.destroy();
         }

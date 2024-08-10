@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Chart from 'chart.js/auto';
 import NavBarReyes from '../components/navBar';
 import NavBarGroup1 from './Navbar.jsx';
 import PieChart from '@/components/pieChart';
@@ -14,15 +13,18 @@ const LogStatistics = () => {
     const navigate = useNavigate();
     const [logs, setLogs] = useState([]);
     const [error, setError] = useState([]);
+    const [creationLogs, setCreationLogs] = useState([]);
+    const [modLogs, setModLogs] = useState([]);
+    const [deletionLogs, setDeletionLogs] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState('creation');
 
-    const fetchLogs = async (filter) => {
+    const fetchLogs = async (filter, setLogType) => {
         setLoading(true);
         try {
             const response = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/${filter}/viewAll`) : await axios.get(`http://localhost:8081/api/${filter}/viewAll`);
-            setLogs(response.data);
+            setLogType(response.data);
             setError(null);
         } catch (error) {
             setError('Error fetching logs. Please try again.');
@@ -32,9 +34,12 @@ const LogStatistics = () => {
             setLoading(false);
         }
     };
-
+    
     useEffect(() => {
-        fetchLogs(selectedFilter);
+        fetchLogs(selectedFilter, setLogs);
+        fetchLogs('creation', setCreationLogs);
+        fetchLogs('modification', setModLogs);
+        fetchLogs('deletion', setDeletionLogs);
     }, []);
 
     const toggleDropdown = () => {
@@ -47,38 +52,6 @@ const LogStatistics = () => {
         navigate(`/logsStatistics`);
     }
     
-    /*
-    // Stacked bar chart
-    useEffect(() => {        
-        if (stackedBarInstance.current) {
-            stackedBarInstance.current.destroy();
-        }
-        const myStackedBarRef = stackedBarRef.current.getContext('2d');
-
-        stackedBarInstance.current=new Chart(myStackedBarRef, {
-            type: 'bar',
-            data: {
-                labels: ["Chocolate", "Vanilla", "Strawberry"],
-                datasets:[
-                    {
-                        label: "Blue",
-                        backgroundColor: "blue",
-                        data: [3,7,4]
-                    },
-                    {
-                        label: "Red",
-                        backgroundColor: "red",
-                        data: [4,3,5]
-                    },
-                    {
-                        label: "Green",
-                        backgroundColor: "green",
-                        data: [7,2,6]
-                    }
-                ]
-            }  
-        })
-    }) */
 
     return (
         <>
@@ -176,16 +149,32 @@ const LogStatistics = () => {
                 <div className="chart container">
                     <div className="row">
                     <div className="pie-container col-2">
-                        <PieChart />
+                        <PieChart 
+                            logs={{
+                                creationLogs: creationLogs,
+                                modificationLogs: modLogs,
+                                deletionLogs: deletionLogs
+                            }}
+                        />
                     </div>
 
-                    <div className="line-container col-3">
-                        <LineChart />
+                    <div className="line-container col-4">
+                        <LineChart 
+                            logs={{
+                                creationLogs: creationLogs,
+                                modificationLogs: modLogs,
+                                deletionLogs: deletionLogs
+                            }}
+                        />
                     </div>
 
-                    <div className="stackedBar-container col-7">
+                    <div className="stackedBar-container col-6">
                         <BarChart 
-                            argument={logs}
+                            logs={{
+                                creationLogs: creationLogs,
+                                modificationLogs: modLogs,
+                                deletionLogs: deletionLogs
+                            }}
                         />
                     </div>
                     </div>
@@ -193,7 +182,11 @@ const LogStatistics = () => {
                     <div className="row">
                     <div className="stackedBar-container col-9">
                         <BarChart 
-                            argument={logs}
+                            logs={{
+                                creationLogs: creationLogs,
+                                modificationLogs: modLogs,
+                                deletionLogs: deletionLogs
+                            }}
                         />
                     </div>
                     </div>
@@ -201,7 +194,11 @@ const LogStatistics = () => {
                     <div className="row">
                     <div className="stackedBar-container col-9">
                         <BarChart 
-                            argument={logs}
+                            logs={{
+                                creationLogs: creationLogs,
+                                modificationLogs: modLogs,
+                                deletionLogs: deletionLogs
+                            }}
                         />
                     </div>
                     </div>

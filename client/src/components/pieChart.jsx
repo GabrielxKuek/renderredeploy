@@ -1,11 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const PieChart = () => {
+const PieChart = ({ logs }) => {
+
+    console.log(logs)
+    const creationLogs = logs.creationLogs;
+    const modificationLogs = logs.modificationLogs;
+    const deletionLogs = logs.deletionLogs;
 
     const pieRef = useRef(null);
     const pieInstance = useRef(null);
-
+ 
     // Pie chart
     useEffect(() => {
         if (pieInstance.current) {
@@ -16,15 +21,14 @@ const PieChart = () => {
         pieInstance.current=new Chart(myPieRef, {
             type: "pie",
             data: {
-                labels: ["GET", "POST", "PUT", "DELETE"],
+                labels: ["POST", "PUT", "DELETE"],
                 datasets: [
                     {
-                        data: [300, 50, 100, 20],
+                        data: [creationLogs.length, modificationLogs.length, deletionLogs.length],
                         backgroundColor: [
                             'rgb(255, 99, 132)',
                             'rgb(54, 162, 235)',
                             'rgb(255, 205, 86)',
-                            'rgb(0, 255, 0)'
                         ],
                     }
                 ]
