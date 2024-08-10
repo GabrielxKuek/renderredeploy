@@ -29,7 +29,9 @@ const LogsBoard = () => {
     const [loading, setLoading] = useState(false);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState('creation');
-    const totalPages = Math.ceil(logs.length / logsPerPage);
+    const [searchResults, setSearchResults] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
+    const totalPages = Math.ceil((isSearching ? searchResults : logs).length / logsPerPage);
     const [expandedRow, setExpandedRow] = useState(null);
     const [searchValue, setsearchValue] = useState(""); 
 
@@ -65,18 +67,19 @@ const LogsBoard = () => {
         event.preventDefault();
         try {
             const response = useRender
-            ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedFilter}`, {
-                headers: {Authorization: `Bearer ${jwt}`},
-                params: { searchValue }
-            })
-            : await axios.get(`http://localhost:8081/api/search/${selectedFilter}`, {
-                headers: {Authorization: `Bearer ${jwt}`},
-                params: { searchValue }
-            });
-            setLogs(response.data);
+                ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedFilter}`, {
+                    headers: { Authorization: `Bearer ${jwt}` },
+                    params: { searchValue }
+                })
+                : await axios.get(`http://localhost:8081/api/search/${selectedFilter}`, {
+                    headers: { Authorization: `Bearer ${jwt}` },
+                    params: { searchValue }
+                });
+            setSearchResults(response.data);
+            setIsSearching(true);
         } catch (error) {
             console.error('Error searching logs:', error);
-            setLogs([]);
+            setSearchResults([]);
         } finally {
             setLoading(false);
         }
@@ -122,6 +125,7 @@ const LogsBoard = () => {
 
     const handleFilterSelect = (filter) => {
         setSelectedFilter(filter);
+        setIsSearching(false);
         setIsDropdownVisible(false);
         navigate(`/logsBoard`);
     }
@@ -273,7 +277,7 @@ const LogsBoard = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {logs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(page * logsPerPage - logsPerPage, page * logsPerPage).map((log, index) => (
+                                    {(isSearching ? searchResults : logs).sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(page * logsPerPage - logsPerPage, page * logsPerPage).map((log, index) => (
                                         <React.Fragment key={log.log_id}>
                                             <tr className={index % 2 === 0 ? "bg-slate-600" : ""} onClick={() => handleRowClick(log)} style={{cursor: 'pointer'}}>
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.log_id}</td>
