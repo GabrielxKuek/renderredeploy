@@ -8,10 +8,15 @@ const DonutChart = ({ logs }) => {
     const donutRef = useRef(null);
     const donutInstance = useRef(null);
 
-    const data = [
+    let data = [
+        requestLogs.filter(e => e.error_message != "NO_ERROR").length,
         requestLogs.filter(e => e.error_message == "NO_ERROR").length,
-        requestLogs.filter(e => e.error_message != "NO_ERROR").length
     ]
+
+    // Uses dummy data as a placeholder if there are no requests available
+    if (data[0].length == undefined && data[1].length == undefined) {
+        data = [10, 95]
+    }
 
     // Stacked bar chart
     useEffect(() => {      
@@ -34,7 +39,13 @@ const DonutChart = ({ logs }) => {
                 ]
             },
             options: {
-                responsive: true
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Request Success Rate'
+                    }
+                }
             }  
         })
     })
