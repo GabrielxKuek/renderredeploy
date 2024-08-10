@@ -58,7 +58,7 @@ const LineChart = () => {
 
     return (
         <>
-            <canvas ref={lineRef} style={{width:"400px", height:"200px"}}/>
+            <canvas ref={lineRef} style={{width:"400px", height:"170px"}}/>
         </>
     )
 }
