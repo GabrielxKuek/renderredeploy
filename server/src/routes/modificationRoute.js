@@ -8,8 +8,8 @@ import * as jwtController from "../middlewares/jwtMiddleware.js";
 router.post("/input", modificationController.createModification);
 
 // View all modification logs
-// router.get("/viewAll", modificationController.readModificationByAll);
-router.get("/viewAll", jwtController.verifyToken, modificationController.readModificationByAll);
+router.get("/viewAll", modificationController.readModificationByAll);
+// router.get("/viewAll", jwtController.verifyToken, modificationController.readModificationByAll);
 
 // View modification logs by date
 router.get("/viewByDate", modificationController.readModificationByDate);
