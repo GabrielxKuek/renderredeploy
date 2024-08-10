@@ -1,11 +1,9 @@
 //////////////////////////////////////////////////////
-// REQUIRE DOTENV MODULE
+// IMPORT REQUIRED MODULES
 //////////////////////////////////////////////////////
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
-//////////////////////////////////////////////////////
-// SET JWT CONFIGURATION
-//////////////////////////////////////////////////////
+
 const accessSecretKey = process.env.JWT_ACCESS_SECRET_KEY;
 const refreshSecretKey = process.env.JWT_REFRESH_SECRET_KEY;
 const resetPasswordSecretKey = process.env.JWT_REFRESH_SECRET_KEY;
