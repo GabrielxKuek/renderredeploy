@@ -12,6 +12,7 @@ export async function searchLogsCreate(req, res) {
     const { searchValue } = req.query; // Use req.query for GET request
     const {site_id} = req.body;
     const sanitizedValue = validator.escape(searchValue);
+    console.log(site_id);
     console.log(sanitizedValue);
     try {
       const result = await searchModel.searchCreationLogs(sanitizedValue, site_id);
@@ -42,6 +43,7 @@ export async function searchLogsDelete(req, res) {
     const { searchValue } = req.query; // Use req.query for GET request
     const {site_id} = req.body;
     const sanitizedValue = validator.escape(searchValue)
+    console.log(site_id);
     console.log(sanitizedValue);
     try {
         const result = await searchModel.searchDeletionLogs(sanitizedValue, site_id);
@@ -57,6 +59,7 @@ export async function searchLogsRequest(req, res) {
     const { searchValue } = req.query; // Use req.query for GET request
     const {site_id} = req.body;
     const sanitizedValue = validator.escape(searchValue)
+    console.log(site_id);
     console.log(sanitizedValue);
     try {
         const result = await searchModel.searchRequestLogs(sanitizedValue, site_id);
