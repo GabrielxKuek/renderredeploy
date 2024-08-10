@@ -4,10 +4,10 @@ import * as searchController from "../controllers/searchController.js";
 import * as jwtController from "../middlewares/jwtMiddleware.js";
 
 // Search creation logs
-router.get("/creation", searchController.searchLogsCreate);
+router.get("/creation", jwtController.verifyToken, searchController.searchLogsCreate);
 
 // Search modificaton logs
-router.get("/modification", searchController.searchLogsModification);
+router.get("/modification", jwtController.verifyToken, searchController.searchLogsModification);
 
 // Search deletion logs
 router.get("/deletion", jwtController.verifyToken, searchController.searchLogsDelete);

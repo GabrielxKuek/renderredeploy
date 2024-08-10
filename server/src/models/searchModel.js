@@ -3,53 +3,47 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 // Search in creation logs
-// export async function searchCreationLogs(searchValue, site_id) {
-//   const isNumeric = !isNaN(parseInt(searchValue));
+export async function searchCreationLogs(searchValue, site_id) {
+  const isNumeric = !isNaN(parseInt(searchValue));
 
-//   return await prisma.um_creation_log.findMany({
-//     where: {
-//       AND: [
-//         { site_id: parseInt(site_id) },
-//         {
-//           OR: isNumeric ? [
-//             { log_id: parseInt(searchValue) },
-//             { user_id: parseInt(searchValue) }
-//           ] : [
-//             { record_id: { equals: searchValue } },
-//             { table_name: { equals: searchValue } } 
-//           ]
-//         }
-//       ]
-//     }
-//   });
-// }
-export async function searchCreationLogs() {
-  return await prisma.$queryRaw`SET custom.user_id=1`;
+  return await prisma.um_creation_log.findMany({
+    where: {
+      AND: [
+        { site_id: parseInt(site_id) },
+        {
+          OR: isNumeric ? [
+            { log_id: parseInt(searchValue) },
+            { user_id: parseInt(searchValue) }
+          ] : [
+            { record_id: { equals: searchValue } },
+            { table_name: { equals: searchValue } } 
+          ]
+        }
+      ]
+    }
+  });
 }
 
 // Search in modification logs
-// export async function searchModificationLogs(searchValue, site_id) {
-//   const isNumeric = !isNaN(parseInt(searchValue));
+export async function searchModificationLogs(searchValue, site_id) {
+  const isNumeric = !isNaN(parseInt(searchValue));
 
-//   return await prisma.um_modification_log.findMany({
-//     where: {
-//       AND: [
-//         { site_id: parseInt(site_id) },
-//         {
-//           OR: isNumeric ? [
-//             { log_id: parseInt(searchValue) },
-//             { user_id: parseInt(searchValue) }
-//           ] : [
-//             { record_id: { equals: searchValue } },
-//             { table_name: { equals: searchValue } } 
-//           ]
-//         }
-//       ]
-//     }
-//   });
-// }
-export async function searchModificationLogs() {
-  return await prisma.$queryRaw`SHOW custom.user_id=1`;
+  return await prisma.um_modification_log.findMany({
+    where: {
+      AND: [
+        { site_id: parseInt(site_id) },
+        {
+          OR: isNumeric ? [
+            { log_id: parseInt(searchValue) },
+            { user_id: parseInt(searchValue) }
+          ] : [
+            { record_id: { equals: searchValue } },
+            { table_name: { equals: searchValue } } 
+          ]
+        }
+      ]
+    }
+  });
 }
 
 // Search in deletion logs
