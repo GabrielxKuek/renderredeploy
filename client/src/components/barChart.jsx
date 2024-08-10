@@ -43,7 +43,7 @@ const BarChart = ({ logs }) => {
             options: {
                 responsive: true
             }  
-        })
+        }) 
     })
 
     return (
