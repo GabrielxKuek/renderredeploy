@@ -54,14 +54,14 @@ const LogStatistics = () => {
             setLoading(false);
         }
     };
-    /*
+    
     useEffect(() => {
         fetchLogs(selectedFilter, setLogs);
         fetchLogs('creation', setCreationLogs);
         fetchLogs('modification', setModLogs);
         fetchLogs('deletion', setDeletionLogs);
         fetchLogs('request', setRequestLogs);
-    }, []); */
+    }, []);
 
     const toggleDropdown = () => {
         setIsDropdownVisible(!isDropdownVisible);
