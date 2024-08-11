@@ -20,7 +20,7 @@ import * as jwtController from "../middlewares/jwtMiddleware.js";
 // authentication
 // ===================
 
-// router.post("/input", jwtController.verifyToken, creationController.createCreation, logRequestMiddleware);
+router.post("/input", jwtController.verifyToken, creationController.createCreation, logRequestMiddleware);
 
 // View all creation logs
 router.get("/viewAll", jwtController.verifyToken, creationController.readCreationByAll);

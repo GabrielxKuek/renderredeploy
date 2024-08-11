@@ -52,74 +52,74 @@ import * as requestModel from '../models/requestModel.js';
 //   }
 // }
 
-// export async function createRequest(req, res) { // note: logger i comment out cause theres no export
-//   try {
-//     const { 
-//       user_id, 
-//       site_id, 
-//       request_method, 
-//       api_requested, 
-//       ip, 
-//       os,
-//       error_message, 
-//       body, 
-//       headers 
-//     } = req.body;
+export async function createRequest(req, res) { // note: logger i comment out cause theres no export
+  try {
+    const { 
+      user_id, 
+      site_id, 
+      request_method, 
+      api_requested, 
+      ip, 
+      os,
+      error_message, 
+      body, 
+      headers 
+    } = req.body;
 
-//     if (!user_id || !site_id || !request_method || !api_requested || !ip || !os) {
-//       console.log({ error: 'Missing fields' });
-//     }
+    if (!user_id || !site_id || !request_method || !api_requested || !ip || !os) {
+      console.log({ error: 'Missing fields' });
+    }
     
-//     // logger.info('Request received', {
-//     //   user_id,
-//     //   site_id,
-//     //   request_method,
-//     //   api_requested,
-//     //   ip,
-//     //   os,
-//     //   error_message: error_message || null, 
-//     //   timestamp: new Date().toISOString(),
-//     // });
+    // logger.info('Request received', {
+    //   user_id,
+    //   site_id,
+    //   request_method,
+    //   api_requested,
+    //   ip,
+    //   os,
+    //   error_message: error_message || null, 
+    //   timestamp: new Date().toISOString(),
+    // });
 
-//     // Pass each field explicitly to the insertRequest function
-//     const result = await requestModel.insertRequest(
-//       user_id,
-//       site_id,
-//       request_method,
-//       ip,
-//       os,
-//       api_requested,
-//       error_message || null,
-//       body || {},
-//       headers || {}
-//     );
+    // Pass each field explicitly to the insertRequest function
+    const result = await requestModel.insertRequest(
+      user_id,
+      site_id,
+      request_method,
+      ip,
+      os,
+      api_requested,
+      error_message || null,
+      body || {},
+      headers || {}
+    );
 
         
-//     const sanitizedResult = result.map(log => {
-//         return {
-//             ...log,
-//             fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
-//         };
-//     }); 
-//     res.status(200).json(sanitizedResult);
-//   } catch (error) {
-//     console.error('Error logging request:', error);
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
+  } catch (error) {
+    console.error('Error logging request:', error);
 
-//     // // Log the error message to Winston
-//     // logger.error('Error logging request', {
-//     //   user_id: req.user ? req.user.id : null,
-//     //   site_id: req.body.site_id,
-//     //   request_method: req.logData?.method || null,
-//     //   api_requested: req.logData?.url || null,
-//     //   user_ip: req.logData?.remoteAddr || null,
-//     //   user_os: res.locals.user_os || null,
-//     //   error_message: error.message,
-//     //   timestamp: new Date().toISOString(),
-//     // });
+    // // Log the error message to Winston
+    // logger.error('Error logging request', {
+    //   user_id: req.user ? req.user.id : null,
+    //   site_id: req.body.site_id,
+    //   request_method: req.logData?.method || null,
+    //   api_requested: req.logData?.url || null,
+    //   user_ip: req.logData?.remoteAddr || null,
+    //   user_os: res.locals.user_os || null,
+    //   error_message: error.message,
+    //   timestamp: new Date().toISOString(),
+    // });
 
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// }
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 
 // ========================
 // select all request

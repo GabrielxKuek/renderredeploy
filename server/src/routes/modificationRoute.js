@@ -22,7 +22,7 @@ import * as jwtController from "../middlewares/jwtMiddleware.js";
 // ===================
 
 // Create modification log
-// router.post("/input", jwtController.verifyToken, modificationController.createModification);
+router.post("/input", jwtController.verifyToken, modificationController.createModification);
 
 // View all modification logs
 router.get("/viewAll", jwtController.verifyToken, modificationController.readModificationByAll);

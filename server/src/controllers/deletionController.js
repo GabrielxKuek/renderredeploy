@@ -1,27 +1,22 @@
 import * as deletionModel from '../models/deletionModel.js';
 
-// create - deprecated
+// create
 
-// export async function createDeletion(req, res) {
-//     try {
-//         const { user_id, site_id, table_name, record_id, field_name, values } = req.body;
+export async function createDeletion(req, res) {
+    try {
+        const { user_id, site_id, table_name, record_id, field_name, values } = req.body;
 
-//         if (!user_id || !site_id || !table_name || !record_id || !field_name || !values) {
-//             return res.status(400).json({ error: 'Missing required fields' });
-//         }
+        if (!user_id || !site_id || !table_name || !record_id || !field_name || !values) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
 
-//         const result = await deletionModel.insertDeletion(user_id, site_id, table_name, record_id, field_name, values);
-//         res.status(200).json({ message: 'Deletion logged successfully', result });
-//     } catch (error) {
-//         console.error('Error logging deletion:', error);
-//         res.status(500).json({ error: 'Internal server error' });
-//     }
-// }
-
-/*
-    gabriel note
-    im just assuming we get all our values from the body. will work on this later
-*/
+        const result = await deletionModel.insertDeletion(user_id, site_id, table_name, record_id, field_name, values);
+        res.status(200).json({ message: 'Deletion logged successfully', result });
+    } catch (error) {
+        console.error('Error logging deletion:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
 
 // read
 

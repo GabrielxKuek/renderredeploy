@@ -4,52 +4,47 @@ import 'dotenv/config';
 import logger from '../logger.js'
 import validator from 'validator';
 
-// create - deprecated
+// create 
 
-// export async function createCreation(req, res, next) {
-//   const { user_id, site_id, table_name, record_id } = req.body;
-//     try {
-//         if (!user_id || !site_id || !table_name || !record_id) {
-//             logger.info('Request logged', {
-//               request_method: req.method,
-//               api_requested: req.originalUrl,
-//               body: req.body,
-//               headers: req.headers,
-//               user_ip: req.headers['x-forwarded-for'] || req.ip,
-//               user_os: req.headers['user-agent'] || 'UNKNOWN_USER_OS', // Provide a fallback value if undefined
-//               error_message: "Missing Parameters", // Ensure error_message is defined
-//               site_id: req.site_id !== undefined ? parseInt(req.site_id, 10) : null,
-//               user_id: req.user_id !== undefined ? parseInt(req.user_id, 10) : null,
-//           });
-//             return res.status(400).json({ error: 'Missing required fields' });
+export async function createCreation(req, res, next) {
+  const { user_id, site_id, table_name, record_id } = req.body;
+    try {
+        if (!user_id || !site_id || !table_name || !record_id) {
+            logger.info('Request logged', {
+              request_method: req.method,
+              api_requested: req.originalUrl,
+              body: req.body,
+              headers: req.headers,
+              user_ip: req.headers['x-forwarded-for'] || req.ip,
+              user_os: req.headers['user-agent'] || 'UNKNOWN_USER_OS', // Provide a fallback value if undefined
+              error_message: "Missing Parameters", // Ensure error_message is defined
+              site_id: req.site_id !== undefined ? parseInt(req.site_id, 10) : null,
+              user_id: req.user_id !== undefined ? parseInt(req.user_id, 10) : null,
+          });
+            return res.status(400).json({ error: 'Missing required fields' });
 
-//         }
+        }
 
-//         const result = await creationModel.insertCreation(user_id, site_id, table_name, record_id);
-//         res.status(200).json({ message: 'Creation logged successfully', result });
-//         next();
-//       } catch (error) {
+        const result = await creationModel.insertCreation(user_id, site_id, table_name, record_id);
+        res.status(200).json({ message: 'Creation logged successfully', result });
+        next();
+      } catch (error) {
 
-//         logger.info('Request logged', {
-//           request_method: req.method,
-//           api_requested: req.originalUrl,
-//           body: req.body,
-//           headers: req.headers,
-//           user_ip: req.headers['x-forwarded-for'] || req.ip,
-//           user_os: req.headers['user-agent'] || 'UNKNOWN_USER_OS', // Provide a fallback value if undefined
-//           error_message: error || 'No error', // Ensure error_message is defined
-//           site_id: req.site_id !== undefined ? parseInt(req.site_id, 10) : null,
-//           user_id: req.user_id !== undefined ? parseInt(req.user_id, 10) : null,
-//       });
+        logger.info('Request logged', {
+          request_method: req.method,
+          api_requested: req.originalUrl,
+          body: req.body,
+          headers: req.headers,
+          user_ip: req.headers['x-forwarded-for'] || req.ip,
+          user_os: req.headers['user-agent'] || 'UNKNOWN_USER_OS', // Provide a fallback value if undefined
+          error_message: error || 'No error', // Ensure error_message is defined
+          site_id: req.site_id !== undefined ? parseInt(req.site_id, 10) : null,
+          user_id: req.user_id !== undefined ? parseInt(req.user_id, 10) : null,
+      });
         
-//         res.status(500).json({ error: 'Internal server error' });
-//     }
-// }
-
-/*
-    gabriel note
-    im just assuming we get all our values from the body. will work on this later
-*/
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
 
 // read
 

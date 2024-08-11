@@ -5,7 +5,7 @@ import * as jwtController from "../middlewares/jwtMiddleware.js";
 
 // insert request
 
-// router.post('/input', requestController.createRequest);
+router.post('/input', jwtController.verifyToken, requestController.createRequest);
 
 // ===================
 // select all request
