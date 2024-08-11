@@ -3,7 +3,7 @@ const router = express.Router();
 import { logRequestMiddleware } from "../middlewares/logRequestMiddleware.js";
 import * as creationController from "../controllers/creationController.js";
 import * as jwtController from "../middlewares/jwtMiddleware.js";
-
+ 
 // ===================
 // w/o authentication
 // ===================
