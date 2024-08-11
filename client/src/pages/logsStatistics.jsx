@@ -20,6 +20,7 @@ const LogStatistics = () => {
         deletionLogs: [],
         requestLogs: []
     });
+    const apiUrl = import.meta.env[`VITE_G6_API_URL`];
     const [error, setError] = useState([]);
     const [creationLogs, setCreationLogs] = useState([]);
     const [modLogs, setModLogs] = useState([]);
@@ -33,10 +34,10 @@ const LogStatistics = () => {
         setLoading(true);
         try {
             //const response = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/${filter}/viewAll`) : await axios.get(`http://localhost:8081/api/${filter}/viewAll`);
-            const createLogs = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/creation/viewAll`) : await axios.get(`http://localhost:8081/api/creation/viewAll`);
-            const modifyLogs = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/modification/viewAll`) : await axios.get(`http://localhost:8081/api/modification/viewAll`);
-            const deleteLogs = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/deletion/viewAll`) : await axios.get(`http://localhost:8081/api/deletion/viewAll`);
-            const reqLogs = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/request/viewAll`) : await axios.get(`http://localhost:8081/api/request/viewAll`);
+            const createLogs = useRender ? await axios.get(`${apiUrl}/api/creation/viewAll`) : await axios.get(`http://localhost:8081/api/creation/viewAll`);
+            const modifyLogs = useRender ? await axios.get(`${apiUrl}/api/modification/viewAll`) : await axios.get(`http://localhost:8081/api/modification/viewAll`);
+            const deleteLogs = useRender ? await axios.get(`${apiUrl}/api/deletion/viewAll`) : await axios.get(`http://localhost:8081/api/deletion/viewAll`);
+            const reqLogs = useRender ? await axios.get(`${apiUrl}/api/request/viewAll`) : await axios.get(`http://localhost:8081/api/request/viewAll`);
             setLogs({
                 creationLogs: createLogs,
                 modificationLogs: modifyLogs,
