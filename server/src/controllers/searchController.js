@@ -5,8 +5,8 @@ import validator from 'validator';
 // Search logs for creation
 export async function searchLogsCreate(req, res) {
     const { searchValue } = req.query; // Use req.query for GET request
-    //    const site_id = res.locals.site_id;
-    const site_id = 1;
+       const site_id = res.locals.site_id;
+    //const site_id = 1;
     console.log(site_id);
     console.log(searchValue);
     try {
@@ -28,8 +28,8 @@ export async function searchLogsCreate(req, res) {
 // Search logs for modification
 export async function searchLogsModification(req, res) {
     const { searchValue } = req.query; // Use req.query for GET request
-    //    const site_id = res.locals.site_id;
-    const site_id = 1;
+       const site_id = res.locals.site_id;
+    //const site_id = 1;
     console.log(searchValue);
     try {
         const cleanedSearchValue = validator.trim(searchValue);
@@ -48,8 +48,8 @@ export async function searchLogsModification(req, res) {
 // Search logs for deletion
 export async function searchLogsDelete(req, res) {
     const { searchValue } = req.query; // Use req.query for GET request
-    //    const site_id = res.locals.site_id;
-    const site_id = 1;
+       const site_id = res.locals.site_id;
+    //const site_id = 1;
     console.log(site_id);
     console.log(searchValue);
     try {
@@ -70,8 +70,8 @@ export async function searchLogsDelete(req, res) {
 // Search request logs
 export async function searchLogsRequest(req, res) {
     const { searchValue } = req.query; // Use req.query for GET request
-    //    const site_id = res.locals.site_id;
-    const site_id = 1;
+       const site_id = res.locals.site_id;
+    //const site_id = 1;
     console.log(site_id);
     console.log(searchValue);
     try {
@@ -95,8 +95,8 @@ export async function searchLogsRequest(req, res) {
 // Controller to handle creation logs
 export const getCreationLogs = async (req, res) => {
   try {
-    // const site_id = res.locals.site_id;
-    const site_id = 1;
+       const site_id = res.locals.site_id;
+    //const site_id = 1;
     let { searchValue, selectedSearchOption } = req.query;
     searchValue = searchValue.trim();
     selectedSearchOption = selectedSearchOption.trim();
@@ -118,8 +118,8 @@ export const getCreationLogs = async (req, res) => {
 // Controller to handle modification logs
 export const getModificationLogs = async (req, res) => {
   try {
-    // const site_id = res.locals.site_id;
-    const site_id = 1;
+       const site_id = res.locals.site_id;
+    //const site_id = 1;
     let { searchValue, selectedSearchOption } = req.query;
     searchValue = searchValue.trim();
     selectedSearchOption = selectedSearchOption.trim();
@@ -141,8 +141,8 @@ export const getModificationLogs = async (req, res) => {
 // Controller to handle deletion logs
 export const getDeletionLogs = async (req, res) => {
   try {
-    // const site_id = res.locals.site_id;
-    const site_id = 1;
+       const site_id = res.locals.site_id;
+    //const site_id = 1;
     let { searchValue, selectedSearchOption } = req.query;
     searchValue = searchValue.trim();
     selectedSearchOption = selectedSearchOption.trim();
