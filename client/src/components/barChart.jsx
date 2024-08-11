@@ -3,9 +3,9 @@ import Chart from 'chart.js/auto';
 
 const BarChart = ({ logs, title }) => {
 
-    const creationLogs = logs.creationLogs;
-    const modificationLogs = logs.modificationLogs;
-    const deletionLogs = logs.deletionLogs;
+    const creationLogs = logs.creationLogs.length;
+    const modificationLogs = logs.modificationLogs.length;
+    const deletionLogs = logs.deletionLogs.length;
 
     const barRef = useRef(null);
     const barInstance = useRef(null);
@@ -21,7 +21,8 @@ const BarChart = ({ logs, title }) => {
         barInstance.current=new Chart(myBarRef, {
             type: 'bar',
             data: {
-                datasets:[
+                labels:["POST", "PUT", "DELETE"],
+                datasets:[/*
                     {
                         label: "POST",
                         backgroundColor: "rgb(255, 99, 132)",
@@ -36,7 +37,11 @@ const BarChart = ({ logs, title }) => {
                         label: "DELETE",
                         backgroundColor: "rgb(255, 205, 86)",
                         data: [deletionLogs.length]
-                    }
+                    }*/
+                   {
+                    data: [creationLogs, modificationLogs, deletionLogs],
+                    backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)", "rgb(255, 205, 86)"]
+                   }
                 ]
             },
             options: {
@@ -46,6 +51,9 @@ const BarChart = ({ logs, title }) => {
                         display: true,
                         text: title
                     }
+                },
+                animation: {
+                    duration: 0
                 }
             }  
         }) 

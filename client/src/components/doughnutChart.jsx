@@ -41,6 +41,9 @@ const DonutChart = ({ logs }) => {
                         display: true,
                         text: 'Request Success Rate'
                     }
+                },
+                animation: {
+                    duration: 0
                 }
             }  
         })
