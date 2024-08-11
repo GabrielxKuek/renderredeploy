@@ -127,7 +127,7 @@ const LogStatistics = () => {
 
                         </div>
                     )}
-
+                    {/*
                     <div className="relative">
                         <button
                             onClick={toggleDropdown}
@@ -165,7 +165,7 @@ const LogStatistics = () => {
                                 </ul>
                             </div>
                         )}
-                    </div>
+                    </div> */}
                 </div>
                 {!error?(
                 <div className="chart container py-3">
