@@ -11,8 +11,15 @@ export async function searchLogsCreate(req, res) {
     console.log(site_id);
     console.log(searchValue);
     try {
-      const result = await searchModel.searchCreationLogs(searchValue, site_id);
-      res.json(result);
+        const cleanedSearchValue = validator.trim(searchValue);
+        const result = await searchModel.searchCreationLogs(cleanedSearchValue, site_id);
+        const sanitizedResult = result.map(log => {
+            return {
+                ...log,
+                fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+            };
+        }); 
+      res.json(sanitizedResult);
     } catch (error) {
       console.log('Error searching creation logs:', error);
       res.status(500).json({ error: 'Internal server error' });
@@ -26,8 +33,13 @@ export async function searchLogsModification(req, res) {
     const site_id = 1;
     console.log(searchValue);
     try {
-        const result = await searchModel.searchModificationLogs(searchValue, site_id);
-        res.json(result);
+        const cleanedSearchValue = validator.trim(searchValue);
+        const result = await searchModel.searchModificationLogs(cleanedSearchValue, site_id);
+        const sanitizedResult = result.map(log => ({
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        }));
+        res.json(sanitizedResult);
     } catch (error) {
         console.log('Error searching modification logs:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -42,8 +54,14 @@ export async function searchLogsDelete(req, res) {
     console.log(site_id);
     console.log(searchValue);
     try {
-        const result = await searchModel.searchDeletionLogs(searchValue, site_id);
-        res.json(result);
+        const cleanedSearchValue = validator.trim(searchValue);
+        const result = await searchModel.searchDeletionLogs(cleanedSearchValue, site_id);
+        const sanitizedResult = result.map(log => ({
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        }));
+
+        res.json(sanitizedResult);
     } catch (error) {
         console.log('Error searching deletion logs:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -58,8 +76,13 @@ export async function searchLogsRequest(req, res) {
     console.log(site_id);
     console.log(searchValue);
     try {
-        const result = await searchModel.searchRequestLogs(searchValue, site_id);
-        res.json(result);
+        const cleanedSearchValue = validator.trim(searchValue);
+        const result = await searchModel.searchRequestLogs(cleanedSearchValue, site_id);
+        const sanitizedResult = result.map(log => ({
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        }));
+        res.json(sanitizedResult);
     } catch (error) {
         console.log('Error searching deletion logs:', error);
         res.status(500).json({ error: 'Internal server error' });
