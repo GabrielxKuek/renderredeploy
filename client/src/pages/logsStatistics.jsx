@@ -167,6 +167,7 @@ const LogStatistics = () => {
                         )}
                     </div>
                 </div>
+                {!error?(
                 <div className="chart container py-3">
                     <div className="row">
                     <div className="pie-container col-2">
@@ -258,6 +259,7 @@ const LogStatistics = () => {
 
                     </div>
                 </div>
+                ): (<></>)}   {/*(<div class="ml-4 text-red-500">Error fetching logs. Please try again.</div>)*/}
             </div>
         </>   
     );

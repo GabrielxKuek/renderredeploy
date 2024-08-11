@@ -8,15 +8,11 @@ const DonutChart = ({ logs }) => {
     const donutRef = useRef(null);
     const donutInstance = useRef(null);
 
-    let data = [
+    // Uses dummy data as a placeholder if there are no requests available
+    let data = requestLogs.length > 0 ? [
         requestLogs.filter(e => e.error_message != "NO_ERROR").length,
         requestLogs.filter(e => e.error_message == "NO_ERROR").length,
-    ]
-
-    // Uses dummy data as a placeholder if there are no requests available
-    if (data[0].length == undefined && data[1].length == undefined) {
-        data = [10, 95]
-    }
+    ] : [10, 95]
 
     // Stacked bar chart
     useEffect(() => {      
