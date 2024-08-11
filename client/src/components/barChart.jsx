@@ -51,6 +51,9 @@ const BarChart = ({ logs, title }) => {
                         display: true,
                         text: title
                     }
+                },
+                animation: {
+                    duration: 0
                 }
             }  
         }) 

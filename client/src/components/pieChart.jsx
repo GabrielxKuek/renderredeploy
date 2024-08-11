@@ -39,6 +39,9 @@ const PieChart = ({ logs }) => {
                         display: true,
                         text: 'Requests by Type'
                     }
+                },
+                animation: {
+                    duration: 0
                 }
             }  
         });
