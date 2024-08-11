@@ -39,12 +39,11 @@ const LogStatistics = () => {
             const deleteLogs = useRender ? await axios.get(`${apiUrl}/api/deletion/viewAll`) : await axios.get(`http://localhost:8081/api/deletion/viewAll`);
             const reqLogs = useRender ? await axios.get(`${apiUrl}/api/request/viewAll`) : await axios.get(`http://localhost:8081/api/request/viewAll`);
             setLogs({
-                creationLogs: createLogs,
-                modificationLogs: modifyLogs,
-                deletionLogs: deleteLogs,
-                requestLogs: reqLogs
+                creationLogs: createLogs.data,
+                modificationLogs: modifyLogs.data,
+                deletionLogs: deleteLogs.data,
+                requestLogs: reqLogs.data
             })
-            console.log(logs)
             setError(null);
         } catch (error) {
             setError('Error fetching logs. Please try again.');
@@ -54,14 +53,18 @@ const LogStatistics = () => {
             setLoading(false);
         }
     };
-    
+
     useEffect(() => {
         fetchLogs(selectedFilter, setLogs);
-        fetchLogs('creation', setCreationLogs);
-        fetchLogs('modification', setModLogs);
-        fetchLogs('deletion', setDeletionLogs);
-        fetchLogs('request', setRequestLogs);
     }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            fetchLogs(selectedFilter, setLogs);
+        }, 1000); // Update logs every second
+
+        return () => clearInterval(interval); // Clear interval on component unmount
+    }, [selectedFilter]);
 
     const toggleDropdown = () => {
         setIsDropdownVisible(!isDropdownVisible);
@@ -100,7 +103,7 @@ const LogStatistics = () => {
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                                     </svg>
                                 ) : null}
-                                Retry
+                                Refreshing logs
                             </button>
 
                             <div className="ml-4 text-red-500">
@@ -121,51 +124,12 @@ const LogStatistics = () => {
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                                     </svg>
                                 ) : null}
-                                Refresh
+                                Refreshing data
                             </button>
 
 
                         </div>
                     )}
-
-                    <div className="relative">
-                        <button
-                            onClick={toggleDropdown}
-                            className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
-                        >
-                            Filter
-                        </button>
-                        {isDropdownVisible && (
-                            <div className="absolute right-0 mt-2 w-48 bg-slate-700 rounded-md shadow-lg z-50">
-                                <ul className="py-1">
-                                    <li
-                                        onClick={() => handleFilterSelect('request')}
-                                        className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-b"
-                                    >
-                                        um_request_log
-                                    </li>
-                                    <li
-                                        onClick={() => handleFilterSelect('creation')}
-                                        className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-t border-b"
-                                    >
-                                        um_creation_log
-                                    </li>
-                                    <li
-                                        onClick={() => handleFilterSelect('modification')}
-                                        className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-t border-b"
-                                    >
-                                        um_modification_log
-                                    </li>
-                                    <li
-                                        onClick={() => handleFilterSelect('deletion')}
-                                        className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-t"
-                                    >
-                                        um_deletion_log
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
-                    </div>
                 </div>
                 {!error?(
                 <div className="chart container py-3">
@@ -173,9 +137,6 @@ const LogStatistics = () => {
                     <div className="pie-container col-2">
                         <PieChart 
                             logs={{
-                                // creationLogs: creationLogs,
-                                // modificationLogs: modLogs,
-                                // deletionLogs: deletionLogs
                                 creationLogs: logs.creationLogs,
                                 modificationLogs: logs.modificationLogs,
                                 deletionLogs: logs.deletionLogs
@@ -186,9 +147,6 @@ const LogStatistics = () => {
                     <div className="bar-container col-4">
                         <BarChart 
                             logs={{
-                                // creationLogs: creationLogs,
-                                // modificationLogs: modLogs,
-                                // deletionLogs: deletionLogs
                                 creationLogs: logs.creationLogs,
                                 modificationLogs: logs.modificationLogs,
                                 deletionLogs: logs.deletionLogs
@@ -200,7 +158,7 @@ const LogStatistics = () => {
                             <div className='row'>
                                 <div className="dataCard col-3">
                                     <DataCard
-                                        logsArgument={logs.requestLogs}//{requestLogs}
+                                        logsArgument={logs.requestLogs}
                                         title={"Total Requests per Minute"}
                                         unit={"requests/min"}
                                     />
@@ -208,7 +166,7 @@ const LogStatistics = () => {
 
                                 <div className="dataCard col-3">
                                     <DataCard
-                                        logsArgument={logs.creationLogs}//{creationLogs}
+                                        logsArgument={logs.creationLogs}
                                         title={"POST per Minute"}
                                         unit={"requests/min"}
                                     />
@@ -218,7 +176,7 @@ const LogStatistics = () => {
                             <div className='row'>
                                 <div className="dataCard col-3">
                                     <DataCard
-                                        logsArgument={logs.modificationLogs}//{modLogs}
+                                        logsArgument={logs.modificationLogs}
                                         title={"PUT per Minute"}
                                         unit={"requests/min"}
                                     />
@@ -226,7 +184,7 @@ const LogStatistics = () => {
 
                                 <div className="dataCard col-3">
                                     <DataCard
-                                        logsArgument={logs.deletionLogs}//{deletionLogs}
+                                        logsArgument={logs.deletionLogs}
                                         title={"DELETE per Minute"}
                                         unit={"requests/min"}
                                     />
@@ -240,16 +198,13 @@ const LogStatistics = () => {
                         <div className="doughnut-container col-3">
                             <DonutChart 
                                 logs={{
-                                    requestLogs: logs.requestLogs//requestLogs
+                                    requestLogs: logs.requestLogs
                                 }}
                             />
                         </div>
                         <div className="line-container col-8">
                             <LineChart 
                                 logs={{
-                                    // creationLogs: creationLogs,
-                                    // modificationLogs: modLogs,
-                                    // deletionLogs: deletionLogs
                                     creationLogs: logs.creationLogs,
                                     modificationLogs: logs.modificationLogs,
                                     deletionLogs: logs.deletionLogs
@@ -259,7 +214,7 @@ const LogStatistics = () => {
 
                     </div>
                 </div>
-                ): (<></>)}   {/*(<div class="ml-4 text-red-500">Error fetching logs. Please try again.</div>)*/}
+                ): (<></>)}
             </div>
         </>   
     );

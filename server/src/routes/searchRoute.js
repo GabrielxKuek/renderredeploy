@@ -37,3 +37,4 @@ router.get("/request", jwtController.verifyToken, searchController.searchLogsReq
 
 
 export default router;
+

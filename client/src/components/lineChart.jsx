@@ -121,6 +121,9 @@ const LineChart = ({ logs }) => {
                         display: true,
                         text: 'Number of Requests by Type Over Time'
                     }
+                },
+                animation: {
+                    duration: 0
                 }
             }  
         });
