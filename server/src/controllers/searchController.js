@@ -97,9 +97,11 @@ export const getCreationLogs = async (req, res) => {
   try {
     // const site_id = res.locals.site_id;
     const site_id = 1;
-    const { searchValue, selectedSearchOption } = req.query;
+    let { searchValue, selectedSearchOption } = req.query;
+    searchValue = searchValue.trim();
+    selectedSearchOption = selectedSearchOption.trim();
+
     const logs = await searchModel.queryCreationLogs(searchValue, site_id, selectedSearchOption);
-    
     const sanitizedResult = logs.map(log => {
         return {
             ...log,
@@ -118,7 +120,10 @@ export const getModificationLogs = async (req, res) => {
   try {
     // const site_id = res.locals.site_id;
     const site_id = 1;
-    const { searchValue, selectedSearchOption } = req.query;
+    let { searchValue, selectedSearchOption } = req.query;
+    searchValue = searchValue.trim();
+    selectedSearchOption = selectedSearchOption.trim();
+
     const logs = await searchModel.queryModificationLogs(searchValue, site_id, selectedSearchOption);
     const sanitizedResult = logs.map(log => {
         return {
@@ -138,7 +143,10 @@ export const getDeletionLogs = async (req, res) => {
   try {
     // const site_id = res.locals.site_id;
     const site_id = 1;
-    const { searchValue, selectedSearchOption } = req.query;
+    let { searchValue, selectedSearchOption } = req.query;
+    searchValue = searchValue.trim();
+    selectedSearchOption = selectedSearchOption.trim();
+
     const logs = await searchModel.queryDeletionLogs(searchValue, site_id, selectedSearchOption);    
     const sanitizedResult = logs.map(log => {
         return {
