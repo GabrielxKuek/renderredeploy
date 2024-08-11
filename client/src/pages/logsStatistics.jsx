@@ -12,7 +12,7 @@ import { MoveDownLeftIcon } from 'lucide-react';
 
 const LogStatistics = () => {
 
-    const useRender = true;
+    const useRender = !true;
     const navigate = useNavigate();
     const [logs, setLogs] = useState({
         creationLogs: [],
