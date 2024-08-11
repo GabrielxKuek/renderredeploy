@@ -29,7 +29,7 @@ const LogsBoard = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-    const [selectedtableDisplay, setSelectedtableDisplay] = useState('creation');
+    const [selectedTableDisplay, setSelectedtableDisplay] = useState('creation');
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
     const totalPages = Math.ceil((isSearching ? searchResults : logs).length / logsPerPage);
@@ -38,6 +38,7 @@ const LogsBoard = () => {
     const [displaySearchResults, setDisplaySearchResults] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
     const [searchInput, setSearchInput] = useState(null);
+    const [selectedSearchOption, setSelectedSearchOption] = useState('log_id');
 
     const fetchLogs = async (tableDisplay) => {
         setLoading(true);
@@ -79,11 +80,11 @@ const LogsBoard = () => {
     //     event.preventDefault();
     //     try {
     //         const response = useRender
-    //             ? await axios.get(`${apiUrl}/api/search/${selectedtableDisplay}`, {
+    //             ? await axios.get(`${apiUrl}/api/search/${selectedTableDisplay}`, {
     //                 headers: { Authorization: `Bearer ${jwt}` },
     //                 params: { searchValue }
     //             })
-    //             : await axios.get(`http://localhost:8081/api/search/${selectedtableDisplay}`, {
+    //             : await axios.get(`http://localhost:8081/api/search/${selectedTableDisplay}`, {
     //                 headers: { Authorization: `Bearer ${jwt}` },
     //                 params: { searchValue }
     //             });
@@ -102,11 +103,11 @@ const LogsBoard = () => {
     //     event.preventDefault();
     //     try {
     //         const response = useRender
-    //             ? await axios.get(`${apiUrl}/api/search/${selectedtableDisplay}`, {
+    //             ? await axios.get(`${apiUrl}/api/search/${selectedTableDisplay}`, {
     //                 headers: { Authorization: `Bearer ${jwt}` },
     //                 params: { searchValue }
     //             })
-    //             : await axios.get(`http://localhost:8081/api/search/${selectedtableDisplay}`, {
+    //             : await axios.get(`http://localhost:8081/api/search/${selectedTableDisplay}`, {
     //                 headers: { Authorization: `Bearer ${jwt}` },
     //                 params: { searchValue }
     //             });
@@ -132,16 +133,22 @@ const LogsBoard = () => {
         setLoading(true);
         event.preventDefault();
         try {
+            const validOptions = ['table_name', 'record_id', 'log_id', 'user_id'];
+            
+            if (!validOptions.includes(selectedSearchOption)) {
+                throw new Error(`Invalid selectedSearchOption: ${selectedSearchOption}. Must be one of ${validOptions.join(', ')}.`);
+              }
+
             const response = useRender
-                ? await axios.get(`${apiUrl}/api/search/${selectedtableDisplay}`, {
+                ? await axios.get(`${apiUrl}/api/search/${selectedTableDisplay}`, {
                     headers: { Authorization: `Bearer ${jwt}` },
-                    params: { searchValue }
+                    params: { searchValue, selectedSearchOption }
                 })
-                : await axios.get(`http://localhost:8081/api/search/${selectedtableDisplay}`, {
+                : await axios.get(`http://localhost:8081/api/search/${selectedTableDisplay}`, {
                     headers: { Authorization: `Bearer ${jwt}` },
-                    params: { searchValue }
+                    params: { searchValue, selectedSearchOption }
                 });
-    
+
                 if (response.data.length === 0) {
                     setError('No logs found for \'' + searchValue + '\'');
                     setSearchResults([]);
@@ -192,7 +199,7 @@ const LogsBoard = () => {
 
     const handleRowClick = (log) => {
         console.log("Row clicked:", log);
-        if (selectedtableDisplay == 'modification' || selectedtableDisplay == 'deletion'){
+        if (selectedTableDisplay == 'modification' || selectedTableDisplay == 'deletion'){
             setExpandedRow(expandedRow === log.log_id ? null : log.log_id);
         }
     }
@@ -210,6 +217,10 @@ const LogsBoard = () => {
         navigate(`/logsBoard`);
     }
 
+    const handleSearchOptionChange = (event) => {
+        setSelectedSearchOption(event.target.value);
+    }
+
     const openModal = (log) => {
         setSelectedLog(log);
         setIsModalOpen(true);
@@ -221,8 +232,8 @@ const LogsBoard = () => {
     };
 
     useEffect(() => {
-        fetchLogs(selectedtableDisplay);
-    }, [selectedtableDisplay, page]);
+        fetchLogs(selectedTableDisplay);
+    }, [selectedTableDisplay, page]);
 
     useEffect(() => {
         console.log("Expanded Row:", expandedRow);
@@ -242,12 +253,66 @@ const LogsBoard = () => {
                     Collection of logs for Auth INC
                 </p>
 
-                {/* Search Bar */}
+                {/* Logs Filter and Search */}
                 <div className="w-11/12 max-w-4xl mb-4 mt-4">
-                    <p className="text-md text-gray-300 mb-2">
-                        Search for log_id, user_id, table_name or record_id...
-                    </p>
-                    <form onSubmit={handleSearchSubmit} className="flex items-center">
+                    
+                <form onSubmit={handleSearchSubmit} className="flex flex-col items-start w-full">
+                    <div className="flex items-center mb-4 w-full">
+                        {/* Descriptive Text */}
+                        <p className="text-md text-gray-50 mb-0">
+                            Search for log id, user id, table name or record id...
+                        </p>
+
+                        {/* Radio Buttons */}
+                        <div className="flex ml-auto">
+                            <label className="mr-4 text-gray-50">
+                                <input
+                                    type="radio"
+                                    value="log_id"
+                                    checked={selectedSearchOption === 'log_id'}
+                                    onChange={handleSearchOptionChange}
+                                    className="mr-2"
+                                />
+                                Log ID
+                            </label>
+
+                            <label className="mr-4 text-gray-50">
+                                <input
+                                    type="radio"
+                                    value="user_id"
+                                    checked={selectedSearchOption === 'user_id'}
+                                    onChange={handleSearchOptionChange}
+                                    className="mr-2"
+                                />
+                                User ID
+                            </label>
+
+                            <label className="text-gray-50">
+                                <input
+                                    type="radio"
+                                    value="table_name"
+                                    checked={selectedSearchOption === 'table_name'}
+                                    onChange={handleSearchOptionChange}
+                                    className="mr-2"
+                                />
+                                Table Name
+                            </label>
+                            
+                            <label className="text-gray-50">
+                                <input
+                                    type="radio"
+                                    value="record_id"
+                                    checked={selectedSearchOption === 'record_id'}
+                                    onChange={handleSearchOptionChange}
+                                    className="mr-2"
+                                />
+                                Record ID
+                            </label>
+                        </div>
+                    </div>
+
+                    {/* Search Box */}
+                    <div className="flex items-center w-full">
                         <input
                             type="text"
                             placeholder="Search..."
@@ -261,7 +326,9 @@ const LogsBoard = () => {
                         >
                             Search
                         </button>
-                    </form>
+                    </div>
+                </form>
+
                 </div>
                 
                 {/* fetch data */}
@@ -269,7 +336,7 @@ const LogsBoard = () => {
                     {error && (
                         <div className="flex justify-between items-center">
                             <button
-                                onClick={() => fetchLogs(selectedtableDisplay)}
+                                onClick={() => fetchLogs(selectedTableDisplay)}
                                 className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700 flex items-center"
                                 disabled={loading}
                             >
@@ -290,7 +357,7 @@ const LogsBoard = () => {
                     {!error && (
                         <div className="flex justify-between items-center">
                             <button
-                                onClick={() => fetchLogs(selectedtableDisplay)}
+                                onClick={() => fetchLogs(selectedTableDisplay)}
                                 className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700 flex items-center"
                                 disabled={loading}
                             >
@@ -364,7 +431,7 @@ const LogsBoard = () => {
                                         <th className="py-2 px-4 border-b border-gray-600">Table Name</th>
                                         <th className="py-2 px-4 border-b border-gray-600">Record ID</th>
                                         <th className="py-2 px-4 border-b border-gray-600">Created At</th>
-                                        {selectedtableDisplay === 'modification' || selectedtableDisplay === 'deletion' ? (
+                                        {selectedTableDisplay === 'modification' || selectedTableDisplay === 'deletion' ? (
                                             <th className="py-2 px-4 border-b border-gray-600">{null}</th>
                                         ) : null}
                                     </tr>
@@ -388,7 +455,7 @@ const LogsBoard = () => {
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.record_id}</td>
                                                 <td className="py-2 px-4 border-b border-gray-600">{format(new Date(log.created_at), 'MMMM do, yyyy, h:mm:ss a')}</td>
                                                 <td>
-                                                    {selectedtableDisplay === 'modification' || selectedtableDisplay === 'deletion' ? (
+                                                    {selectedTableDisplay === 'modification' || selectedTableDisplay === 'deletion' ? (
                                                         <button 
                                                             onClick={(e) => {
                                                                 e.stopPropagation(); // Prevent triggering row click
@@ -414,7 +481,7 @@ const LogsBoard = () => {
                 {/* pagination */}
                 {!error ? (<div className="flex justify-center max-w-4xl mt-2 mb-12 w-full ">
                     <div className="flex items-end text-white">
-                        Displaying results for&nbsp;<span className="text-orange-300">um_{selectedtableDisplay}_log</span>
+                        Displaying results for&nbsp;<span className="text-orange-300">um_{selectedTableDisplay}_log</span>
                     </div>
                     
                     <div className="flex items-center ml-auto space-x-2">
@@ -466,7 +533,7 @@ const LogsBoard = () => {
                                     <p><strong>Table Name:</strong> {selectedLog.table_name}</p>
                                     <p><strong>Record ID:</strong> {selectedLog.record_id}</p>
                                     <p><strong>Created At:</strong> {format(new Date(selectedLog.created_at), 'MMMM do, yyyy, h:mm:ss a')}</p>
-                                    {selectedtableDisplay === 'modification' || selectedtableDisplay === 'deletion' ? (
+                                    {selectedTableDisplay === 'modification' || selectedTableDisplay === 'deletion' ? (
                                         <>
                                             <p><strong>Modification ID:</strong> {selectedLog.field_modification_id}</p>
                                             <p><strong>Field Name:</strong> {selectedLog.field_name}</p>

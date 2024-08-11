@@ -1,6 +1,5 @@
 import * as searchModel from '../models/searchModel.js';
 import 'dotenv/config';
-
 import validator from 'validator';
 
 // Search logs for creation
@@ -88,3 +87,68 @@ export async function searchLogsRequest(req, res) {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+// ======================
+// poop
+// ======================
+
+// Controller to handle creation logs
+export const getCreationLogs = async (req, res) => {
+  try {
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue, selectedSearchOption } = req.query;
+    const logs = await searchModel.queryCreationLogs(searchValue, site_id, selectedSearchOption);
+    
+    const sanitizedResult = logs.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
+  } catch (error) {
+    console.error('Error fetching creation logs:', error);
+    res.status(500).json({ error: 'Failed to fetch creation logs' });
+  }
+};
+
+// Controller to handle modification logs
+export const getModificationLogs = async (req, res) => {
+  try {
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue, selectedSearchOption } = req.query;
+    const logs = await searchModel.queryModificationLogs(searchValue, site_id, selectedSearchOption);
+    const sanitizedResult = logs.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
+  } catch (error) {
+    console.error('Error fetching modification logs:', error);
+    res.status(500).json({ error: 'Failed to fetch modification logs' });
+  }
+};
+
+// Controller to handle deletion logs
+export const getDeletionLogs = async (req, res) => {
+  try {
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue, selectedSearchOption } = req.query;
+    const logs = await searchModel.queryDeletionLogs(searchValue, site_id, selectedSearchOption);    
+    const sanitizedResult = logs.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
+  } catch (error) {
+    console.error('Error fetching deletion logs:', error);
+    res.status(500).json({ error: 'Failed to fetch deletion logs' });
+  }
+};

@@ -8,13 +8,13 @@ import * as jwtController from "../middlewares/jwtMiddleware.js";
 // ===================
 
 // Search creation logs
-router.get("/creation", searchController.searchLogsCreate);
+router.get("/creation", searchController.getCreationLogs);
 
 // Search modificaton logs
-router.get("/modification", searchController.searchLogsModification);
+router.get("/modification", searchController.getModificationLogs);
 
 // Search deletion logs
-router.get("/deletion", searchController.searchLogsDelete);
+router.get("/deletion", searchController.getDeletionLogs);
 
 // Search request logs
 router.get("/request", searchController.searchLogsRequest);

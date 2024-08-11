@@ -117,3 +117,58 @@ export async function searchRequestLogs(searchValue, site_id) {
       AND site_id = ${site_id}
   `;
 }
+
+async function searchLogs(tableName, searchValue, site_id, selectedSearchOption) {
+  const isNumeric = !isNaN(parseInt(searchValue));
+
+  let searchCondition = {};
+
+  switch (selectedSearchOption) {
+    case 'log_id':
+      if (isNumeric) {
+        searchCondition = { log_id: parseInt(searchValue) };
+      }
+      break;
+    case 'user_id':
+      if (isNumeric) {
+        searchCondition = { user_id: parseInt(searchValue) };
+      }
+      break;
+    case 'record_id':
+      searchCondition = { record_id: { equals: searchValue } };
+      break;
+    case 'table_name':
+      searchCondition = { table_name: { equals: searchValue } };
+      break;
+    default:
+      throw new Error('Invalid search option provided.');
+  }
+
+  return await prisma[tableName].findMany({
+    where: {
+      AND: [
+        { site_id: parseInt(site_id) },
+        searchCondition
+      ]
+    },
+    include: {
+      um_user: {
+        select: {
+          email: true,
+        },
+      },
+    },
+  });
+}
+
+export async function queryCreationLogs(searchValue, site_id, selectedSearchOption) {
+  return await searchLogs('um_creation_log', searchValue, site_id, selectedSearchOption);
+}
+
+export async function queryModificationLogs(searchValue, site_id, selectedSearchOption) {
+  return await searchLogs('um_modification_log', searchValue, site_id, selectedSearchOption);
+}
+
+export async function queryDeletionLogs(searchValue, site_id, selectedSearchOption) {
+  return await searchLogs('um_deletion_log', searchValue, site_id, selectedSearchOption);
+}
