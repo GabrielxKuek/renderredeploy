@@ -151,13 +151,15 @@ export async function readAllRequestBySite(req, res) {
 
 export async function readAllRequestByDate(req, res) {
   try {
-    const { site_id, date } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
 
     if (!site_id || !date) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const result = await requestModel.selectAllRequestByDate(site_id, date);
+    const result = await requestModel.selectAllRequestByDate(site_id, searchValue);
         
     const sanitizedResult = result.map(log => {
         return {
@@ -174,13 +176,15 @@ export async function readAllRequestByDate(req, res) {
 
 export async function readAllRequestByIp(req, res) {
   try {
-    const { site_id, ip } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
 
-    if (!ip) {
+    if (!searchValue) {
       return res.status(400).json({ error: 'Missing IP address' });
     }
 
-    const result = await requestModel.selectAllRequestByIp(site_id, ip);
+    const result = await requestModel.selectAllRequestByIp(site_id, searchValue);
         
     const sanitizedResult = result.map(log => {
         return {
@@ -197,13 +201,15 @@ export async function readAllRequestByIp(req, res) {
 
 export async function readAllRequestByOs(req, res) {
   try {
-    const { site_id, os } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
 
-    if (!os) {
+    if (!searchValue) {
       return res.status(400).json({ error: 'Missing OS' });
     }
 
-    const result = await requestModel.selectAllRequestByOs(site_id, os);
+    const result = await requestModel.selectAllRequestByOs(site_id, searchValue);
         
     const sanitizedResult = result.map(log => {
         return {
@@ -224,13 +230,15 @@ export async function readAllRequestByOs(req, res) {
 
 export async function readGetRequestByDate(req, res) {
   try {
-    const { site_id, date } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
 
-    if (!site_id || !date) {
+    if (!site_id || !searchValue) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const result = await requestModel.selectGetRequestByDate(site_id, date);
+    const result = await requestModel.selectGetRequestByDate(site_id, searchValue);
         
     const sanitizedResult = result.map(log => {
         return {
@@ -247,13 +255,15 @@ export async function readGetRequestByDate(req, res) {
 
 export async function readGetRequestByIp(req, res) {
   try {
-    const { site_id, ip } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
 
-    if (!ip) {
+    if (!searchValue) {
       return res.status(400).json({ error: 'Missing IP address' });
     }
 
-    const result = await requestModel.selectGetRequestByIp(site_id, ip);
+    const result = await requestModel.selectGetRequestByIp(site_id, searchValue);
         
     const sanitizedResult = result.map(log => {
         return {
@@ -270,20 +280,24 @@ export async function readGetRequestByIp(req, res) {
 
 export async function readGetRequestByOs(req, res) {
   try {
-    const { site_id, os } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
+    console.log(searchValue)
 
-    if (!os) {
+    if (!searchValue) {
       return res.status(400).json({ error: 'Missing OS' });
     }
 
-    const result = await requestModel.selectGetRequestByOs(site_id, os);
-        
+    const result = await requestModel.selectGetRequestByOs(site_id, searchValue);
+    console.log(result)
     const sanitizedResult = result.map(log => {
         return {
             ...log,
             fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
         };
     }); 
+    console.log(sanitizedResult)
     res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting get logs by OS:', error);
@@ -297,13 +311,15 @@ export async function readGetRequestByOs(req, res) {
 
 export async function readPostRequestByDate(req, res) {
   try {
-    const { site_id, date } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
 
-    if (!site_id || !date) {
+    if (!site_id || !searchValue) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const result = await requestModel.selectPostRequestByDate(site_id, date);
+    const result = await requestModel.selectPostRequestByDate(site_id, searchValue);
         
     const sanitizedResult = result.map(log => {
         return {
@@ -320,13 +336,15 @@ export async function readPostRequestByDate(req, res) {
 
 export async function readPostRequestByIp(req, res) {
   try {
-    const { site_id, ip } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
 
-    if (!ip) {
+    if (!searchValue) {
       return res.status(400).json({ error: 'Missing IP address' });
     }
 
-    const result = await requestModel.selectPostRequestByIp(site_id, ip);
+    const result = await requestModel.selectPostRequestByIp(site_id, searchValue);
         
     const sanitizedResult = result.map(log => {
         return {
@@ -343,13 +361,15 @@ export async function readPostRequestByIp(req, res) {
 
 export async function readPostRequestByOs(req, res) {
   try {
-    const { site_id, os } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
 
-    if (!os) {
+    if (!searchValue) {
       return res.status(400).json({ error: 'Missing OS' });
     }
 
-    const result = await requestModel.selectPostRequestByOs(site_id, os);
+    const result = await requestModel.selectPostRequestByOs(site_id, searchValue);
         
     const sanitizedResult = result.map(log => {
         return {
@@ -370,13 +390,15 @@ export async function readPostRequestByOs(req, res) {
 
 export async function readPutRequestByDate(req, res) {
   try {
-    const { site_id, date } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
 
-    if (!site_id || !date) {
+    if (!site_id || !searchValue) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const result = await requestModel.selectPutRequestByDate(site_id, date);
+    const result = await requestModel.selectPutRequestByDate(site_id, searchValue);
         
     const sanitizedResult = result.map(log => {
         return {
@@ -393,13 +415,15 @@ export async function readPutRequestByDate(req, res) {
 
 export async function readPutRequestByIp(req, res) {
   try {
-    const { site_id, ip } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
 
-    if (!ip) {
+    if (!searchValue) {
       return res.status(400).json({ error: 'Missing IP address' });
     }
 
-    const result = await requestModel.selectPutRequestByIp(site_id, ip);
+    const result = await requestModel.selectPutRequestByIp(site_id, searchValue);
         
     const sanitizedResult = result.map(log => {
         return {
@@ -416,13 +440,15 @@ export async function readPutRequestByIp(req, res) {
 
 export async function readPutRequestByOs(req, res) {
   try {
-    const { site_id, os } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
 
-    if (!os) {
+    if (!searchValue) {
       return res.status(400).json({ error: 'Missing OS' });
     }
 
-    const result = await requestModel.selectPutRequestByOs(site_id, os);
+    const result = await requestModel.selectPutRequestByOs(site_id, searchValue);
         
     const sanitizedResult = result.map(log => {
         return {
@@ -443,13 +469,15 @@ export async function readPutRequestByOs(req, res) {
 
 export async function readDeleteRequestByDate(req, res) {
   try {
-    const { site_id, date } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
 
-    if (!site_id || !date) {
+    if (!site_id || !searchValue) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const result = await requestModel.selectDeleteRequestByDate(site_id, date);
+    const result = await requestModel.selectDeleteRequestByDate(site_id, searchValue);
         
     const sanitizedResult = result.map(log => {
         return {
@@ -466,13 +494,15 @@ export async function readDeleteRequestByDate(req, res) {
 
 export async function readDeleteRequestByIp(req, res) {
   try {
-    const { site_id, ip } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
 
-    if (!ip) {
+    if (!searchValue) {
       return res.status(400).json({ error: 'Missing IP address' });
     }
 
-    const result = await requestModel.selectDeleteRequestByIp(site_id, ip);
+    const result = await requestModel.selectDeleteRequestByIp(site_id, searchValue);
         
     const sanitizedResult = result.map(log => {
         return {
@@ -489,13 +519,15 @@ export async function readDeleteRequestByIp(req, res) {
 
 export async function readDeleteRequestByOs(req, res) {
   try {
-    const { site_id, os } = req.body;
+    // const site_id = res.locals.site_id;
+    const site_id = 1;
+    const { searchValue } = req.query;
 
-    if (!os) {
+    if (!searchValue) {
       return res.status(400).json({ error: 'Missing OS' });
     }
 
-    const result = await requestModel.selectDeleteRequestByOs(site_id, os);
+    const result = await requestModel.selectDeleteRequestByOs(site_id, searchValue);
         
     const sanitizedResult = result.map(log => {
         return {

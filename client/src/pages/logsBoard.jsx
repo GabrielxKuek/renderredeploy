@@ -14,6 +14,10 @@ const LogsBoard = () => {
     // config
     const logsPerPage = 10;
     const useRender = !true;
+    const tableLength = {
+        request: "w-11/12 max-w-5xl",
+        other: "w-11/12 max-w-4xl"
+    };
 
     // declaration
     const useQuery = () => {
@@ -39,6 +43,23 @@ const LogsBoard = () => {
     const [hasSearched, setHasSearched] = useState(false);
     const [searchInput, setSearchInput] = useState(null);
     const [selectedSearchOption, setSelectedSearchOption] = useState('log_id');
+    const [showMethodDropdown, setshowMethodDropdown] = useState(false);
+    const [uiErrorMessage, setUiErrorMessage] = useState('');
+    const [selectedMethods, setSelectedMethods] = useState({
+        Get: false,
+        Post: false,
+        Put: false,
+        Delete: false
+    });
+
+    const toggleMethodDropdown = () => setshowMethodDropdown(!showMethodDropdown);
+
+    const handleCheckboxChange = (e) => {
+        setSelectedMethods({
+            ...selectedMethods,
+            [e.target.value]: e.target.checked
+        });
+    };
 
     const fetchLogs = async (tableDisplay) => {
         setLoading(true);
@@ -129,6 +150,63 @@ const LogsBoard = () => {
     //     }
     // };
 
+    const handleRequestSearchSubmit = async (event) => {
+        setLoading(true);
+        event.preventDefault();
+        try {
+            const requestEndpoint = ['log_id', 'user_id', 'ip', 'os', 'date', 'api_requested'];
+            let hugeLogs = [];
+            
+            setUiErrorMessage('');
+            setshowMethodDropdown(false)
+            
+            const selectedMethodsArray = Object.keys(selectedMethods).filter(method => selectedMethods[method]);
+            if (selectedMethodsArray.length === 0) {
+                setUiErrorMessage('Please select at least one request method.');
+                setLoading(false);
+                return;
+            }
+    
+            if (!requestEndpoint.includes(selectedSearchOption.toLowerCase())) {
+                throw new Error(`Invalid selectedSearchOption: ${selectedSearchOption}. Must be one of ${requestEndpoint.join(', ')}.`);
+            }
+            
+            // Combine the result based on selection
+            for (let i = 0; i < selectedMethodsArray.length; i++) {
+                const method = selectedMethodsArray[i];
+                const response = useRender
+                    ? await axios.get(`${apiUrl}/api/request/view${method}By${selectedSearchOption}`, {
+                        headers: { Authorization: `Bearer ${jwt}` },
+                        params: { searchValue }
+                    })
+                    : await axios.get(`http://localhost:8081/api/request/view${method}By${selectedSearchOption}`, {
+                        headers: { Authorization: `Bearer ${jwt}` },
+                        params: { searchValue }
+                    });
+                hugeLogs.push(...response.data);
+            }
+    
+            if (hugeLogs.length === 0) {
+                setUiErrorMessage(`No logs found for '${searchValue}'`);
+                setSearchResults([]);
+            } else {
+                setSearchResults(hugeLogs);
+                setUiErrorMessage(''); // Clear any previous error message
+            }
+            setIsSearching(true);
+            setHasSearched(true);
+        } catch (error) {
+            console.error('Error searching logs:', error);
+            setError('Error searching logs. Please try again.');
+            setSearchResults([]);
+        } finally {
+            setLoading(false);
+            setDisplaySearchResults(true);
+            setSearchInput(searchValue);
+            setsearchValue('');
+        }
+    };
+
     const handleSearchSubmit = async (event) => {
         setLoading(true);
         event.preventDefault();
@@ -214,6 +292,7 @@ const LogsBoard = () => {
         setIsDropdownVisible(false);
         setDisplaySearchResults(false);
         setHasSearched(false);
+        setUiErrorMessage('');
         navigate(`/logsBoard`);
     }
 
@@ -253,61 +332,161 @@ const LogsBoard = () => {
                     Collection of logs for Auth INC
                 </p>
 
+                {uiErrorMessage && (
+                    <div className="bg-red-500 text-white p-2 rounded mb-4">
+                        {uiErrorMessage}
+                    </div>
+                )}
+
                 {/* Logs Filter and Search */}
                 <div className="w-11/12 max-w-4xl mb-4 mt-4">
                     
-                <form onSubmit={handleSearchSubmit} className="flex flex-col items-start w-full">
+                <form onSubmit={selectedTableDisplay != 'request' ? handleSearchSubmit : handleRequestSearchSubmit} className="flex flex-col items-start w-full">
                     <div className="flex items-center mb-4 w-full">
                         {/* Descriptive Text */}
                         <p className="text-md text-gray-50 mb-0">
-                            Search for log id, user id, table name or record id...
+                            Search for logs..
                         </p>
 
                         {/* Radio Buttons */}
                         <div className="flex ml-auto">
-                            <label className="mr-4 text-gray-50">
-                                <input
-                                    type="radio"
-                                    value="log_id"
-                                    checked={selectedSearchOption === 'log_id'}
-                                    onChange={handleSearchOptionChange}
-                                    className="mr-2"
-                                />
-                                Log ID
-                            </label>
+                        {selectedTableDisplay !== 'request' ? (
+                            <>
+                                <label className="mr-4 text-gray-50">
+                                    <input
+                                        type="radio"
+                                        value="log_id"
+                                        checked={selectedSearchOption === 'log_id'}
+                                        onChange={handleSearchOptionChange}
+                                        className="mr-2"
+                                    />
+                                    Log ID
+                                </label>
 
-                            <label className="mr-4 text-gray-50">
-                                <input
-                                    type="radio"
-                                    value="user_id"
-                                    checked={selectedSearchOption === 'user_id'}
-                                    onChange={handleSearchOptionChange}
-                                    className="mr-2"
-                                />
-                                User ID
-                            </label>
+                                <label className="mr-4 text-gray-50">
+                                    <input
+                                        type="radio"
+                                        value="user_id"
+                                        checked={selectedSearchOption === 'user_id'}
+                                        onChange={handleSearchOptionChange}
+                                        className="mr-2"
+                                    />
+                                    User ID
+                                </label>
 
-                            <label className="text-gray-50">
-                                <input
-                                    type="radio"
-                                    value="table_name"
-                                    checked={selectedSearchOption === 'table_name'}
-                                    onChange={handleSearchOptionChange}
-                                    className="mr-2"
-                                />
-                                Table Name
-                            </label>
-                            
-                            <label className="text-gray-50">
-                                <input
-                                    type="radio"
-                                    value="record_id"
-                                    checked={selectedSearchOption === 'record_id'}
-                                    onChange={handleSearchOptionChange}
-                                    className="mr-2"
-                                />
-                                Record ID
-                            </label>
+                                <label className="text-gray-50 mr-4">
+                                    <input
+                                        type="radio"
+                                        value="table_name"
+                                        checked={selectedSearchOption === 'table_name'}
+                                        onChange={handleSearchOptionChange}
+                                        className="mr-2"
+                                    />
+                                    Table Name
+                                </label>
+                                
+                                <label className="text-gray-50">
+                                    <input
+                                        type="radio"
+                                        value="record_id"
+                                        checked={selectedSearchOption === 'record_id'}
+                                        onChange={handleSearchOptionChange}
+                                    />
+                                    Record ID
+                                </label>
+                            </>
+                        ) : (
+                            <>
+
+                                <label className="mr-4 text-gray-50">
+                                    <input
+                                        type="radio"
+                                        value="Ip"
+                                        checked={selectedSearchOption === 'Ip'}
+                                        onChange={handleSearchOptionChange}
+                                        className="mr-2"
+                                    />
+                                    IP
+                                </label>
+
+                                <label className="mr-4 text-gray-50">
+                                    <input
+                                        type="radio"
+                                        value="Os"
+                                        checked={selectedSearchOption === 'Os'}
+                                        onChange={handleSearchOptionChange}
+                                        className="mr-2"
+                                    />
+                                    OS
+                                </label>
+
+                                <label className="mr-4 text-gray-50">
+                                    <input
+                                        type="radio"
+                                        value="Date"
+                                        checked={selectedSearchOption === 'Date'}
+                                        onChange={handleSearchOptionChange}
+                                        className="mr-2"
+                                    />
+                                    Created At
+                                </label>
+
+                                {/* Dropdown for Request Method Checkboxes */}
+                                <div className="relative">
+                                    <button
+                                        type="button"
+                                        onClick={toggleMethodDropdown}
+                                        className="text-gray-50 border border-gray-50 px-4 py-2"
+                                    >
+                                        Request Method
+                                    </button>
+                                    {showMethodDropdown && (
+                                        <div className="absolute mt-2 bg-white border rounded shadow-lg p-4 z-50">
+                                            <label className="block mb-2">
+                                                <input
+                                                    type="checkbox"
+                                                    value="Get"
+                                                    checked={selectedMethods.Get}
+                                                    onChange={handleCheckboxChange}
+                                                    className="mr-2"
+                                                />
+                                                GET
+                                            </label>
+                                            <label className="block mb-2">
+                                                <input
+                                                    type="checkbox"
+                                                    value="Post"
+                                                    checked={selectedMethods.Post}
+                                                    onChange={handleCheckboxChange}
+                                                    className="mr-2"
+                                                />
+                                                POST
+                                            </label>
+                                            <label className="block mb-2">
+                                                <input
+                                                    type="checkbox"
+                                                    value="Put"
+                                                    checked={selectedMethods.Put}
+                                                    onChange={handleCheckboxChange}
+                                                    className="mr-2"
+                                                />
+                                                PUT
+                                            </label>
+                                            <label className="block">
+                                                <input
+                                                    type="checkbox"
+                                                    value="Delete"
+                                                    checked={selectedMethods.Delete}
+                                                    onChange={handleCheckboxChange}
+                                                    className="mr-2"
+                                                />
+                                                DELETE
+                                            </label>
+                                        </div>
+                                    )}
+                                </div>
+                            </>
+                        )}
                         </div>
                     </div>
 
@@ -419,22 +598,40 @@ const LogsBoard = () => {
                 </div>
 
                 {/* table */}
-                <div className="w-11/12 max-w-4xl" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+                <div className={selectedTableDisplay == 'request' ? tableLength.request : tableLength.other} style={{ maxHeight: '70vh', overflowY: 'auto' }}>
                     {logs.length > 0 && !error ? (
                         <div style={{ maxHeight: '100%', overflowY: 'auto' }}>
                             <table className="min-w-full bg-gray-700 text-white rounded" style={{ tableLayout: 'fixed' }}>
                                 <thead className="sticky top-0 bg-gray-700 shadow-md">
-                                    <tr>
-                                        <th className="py-2 px-4 border-b border-gray-600">Log ID</th>
-                                        <th className="py-2 px-4 border-b border-gray-600">User</th>
-                                        {/* <th className="py-2 px-4 border-b border-gray-600">Site ID</th> */}
-                                        <th className="py-2 px-4 border-b border-gray-600">Table Name</th>
-                                        <th className="py-2 px-4 border-b border-gray-600">Record ID</th>
-                                        <th className="py-2 px-4 border-b border-gray-600">Created At</th>
-                                        {selectedTableDisplay === 'modification' || selectedTableDisplay === 'deletion' ? (
+                                    {selectedTableDisplay == 'request' ? (
+                                        <tr>
+                                            <th className="py-2 px-4 border-b border-gray-600">Log ID</th>
+                                            <th className="py-2 px-4 border-b border-gray-600">User</th>
+                                            {/* <th className="py-2 px-4 border-b border-gray-600">Site ID</th> */}
+                                            <th className="py-2 px-4 border-b border-gray-600">Req Method</th>
+                                            <th className="py-2 px-4 border-b border-gray-600">Ip</th>
+                                            <th className="py-2 px-4 border-b border-gray-600">Os</th>
+                                            <th className="py-2 px-4 border-b border-gray-600">Api Requested</th>
+                                            <th className="py-2 px-4 border-b border-gray-600">Created At</th>
+                                            {selectedTableDisplay === 'modification' || selectedTableDisplay === 'deletion' ? (
+                                                <th className="py-2 px-4 border-b border-gray-600">{null}</th>
+                                            ) : null}
                                             <th className="py-2 px-4 border-b border-gray-600">{null}</th>
-                                        ) : null}
-                                    </tr>
+                                        </tr>
+                                    ) : (
+                                        <tr>
+                                            <th className="py-2 px-4 border-b border-gray-600">Log ID</th>
+                                            <th className="py-2 px-4 border-b border-gray-600">User</th>
+                                            {/* <th className="py-2 px-4 border-b border-gray-600">Site ID</th> */}
+                                            <th className="py-2 px-4 border-b border-gray-600">Table Name</th>
+                                            <th className="py-2 px-4 border-b border-gray-600">Record ID</th>
+                                            <th className="py-2 px-4 border-b border-gray-600">Created At</th>
+                                            {selectedTableDisplay === 'modification' || selectedTableDisplay === 'deletion' ? (
+                                                <th className="py-2 px-4 border-b border-gray-600">{null}</th>
+                                            ) : null}
+                                        </tr>
+                                    )}
+                                    
                                 </thead>
                                 <tbody>
                                     {(isSearching ? searchResults : logs)
@@ -442,20 +639,38 @@ const LogsBoard = () => {
                                     .slice(page * logsPerPage - logsPerPage, page * logsPerPage)
                                     .map((log, index) => (
                                         <React.Fragment key={log.log_id}>
-                                            <tr className={index % 2 === 0 ? "bg-slate-600" : ""} onClick={() => handleRowClick(log)} style={{cursor: 'pointer'}}>
+                                            <tr 
+                                                className={index % 2 === 0 ? "bg-slate-600" : ""} 
+                                                onClick={() => handleRowClick(log)} 
+                                                style={{cursor: 'pointer'}}
+                                            >
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.log_id}</td>
-                                                {displaySearchResults ? (
-                                                    <td className="py-2 px-4 border-b border-gray-600">{log.um_user.email}</td>
-                                                ) : (
-                                                    <td className="py-2 px-4 border-b border-gray-600">{log.email}</td>
-                                                )}
+                                                <td className="py-2 px-4 border-b border-gray-600">
+                                                    {displaySearchResults && selectedTableDisplay != 'request' ? log.um_user?.email || 'N/A' : log.email || 'N/A'}
+                                                </td>
 
-                                                {/* <td className="py-2 px-4 border-b border-gray-600">{log.site_id}</td> */}
-                                                <td className="py-2 px-4 border-b border-gray-600">{log.table_name}</td>
-                                                <td className="py-2 px-4 border-b border-gray-600">{log.record_id}</td>
-                                                <td className="py-2 px-4 border-b border-gray-600">{format(new Date(log.created_at), 'MMMM do, yyyy, h:mm:ss a')}</td>
+                                                {selectedTableDisplay === 'request' ? (
+                                                    <>
+                                                        {/* <td className="py-2 px-4 border-b border-gray-600">{log.site_id}</td> */}
+                                                        <td className="py-2 px-4 border-b border-gray-600">{log.request_method}</td>
+                                                        <td className="py-2 px-4 border-b border-gray-600">{log.user_ip}</td>
+                                                        <td className="py-2 px-4 border-b border-gray-600">{log.user_os}</td>
+                                                        <td className="py-2 px-4 border-b border-gray-600">{log.api_requested}</td>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        {/* <td className="py-2 px-4 border-b border-gray-600">{log.site_id}</td> */}
+                                                        <td className="py-2 px-4 border-b border-gray-600">{log.table_name}</td>
+                                                        <td className="py-2 px-4 border-b border-gray-600">{log.record_id}</td>
+                                                    </>
+                                                )}
+                                                
+                                                <td className="py-2 px-4 border-b border-gray-600">
+                                                    {format(new Date(log.created_at), 'MMMM do, yyyy, h:mm:ss a')}
+                                                </td>
+
                                                 <td>
-                                                    {selectedTableDisplay === 'modification' || selectedTableDisplay === 'deletion' ? (
+                                                    {['modification', 'deletion', 'request'].includes(selectedTableDisplay) && (
                                                         <button 
                                                             onClick={(e) => {
                                                                 e.stopPropagation(); // Prevent triggering row click
@@ -465,7 +680,7 @@ const LogsBoard = () => {
                                                         >
                                                             Details
                                                         </button>
-                                                    ) : null}
+                                                    )}
                                                 </td>
                                             </tr>
                                         </React.Fragment>
@@ -513,7 +728,7 @@ const LogsBoard = () => {
                     </div>
                 </div>) : null}
 
-                {/* Modal for expanded row */}
+                {/* Modal for details */}
                 <Modal
                     isOpen={expandedRow !== null}
                     onRequestClose={() => setExpandedRow(null)}
@@ -528,8 +743,7 @@ const LogsBoard = () => {
                                 <div>
                                     <h2 className="text-xl font-bold mb-4">Log Details</h2>
                                     <p><strong>Log ID:</strong> {selectedLog.log_id}</p>
-                                    <p><strong>User ID:</strong> {selectedLog.email}</p>
-                                    {/* <p><strong>Site ID:</strong> {selectedLog.site_id}</p> */}
+                                    <p><strong>User:</strong> {selectedLog.email}</p>
                                     <p><strong>Table Name:</strong> {selectedLog.table_name}</p>
                                     <p><strong>Record ID:</strong> {selectedLog.record_id}</p>
                                     <p><strong>Created At:</strong> {format(new Date(selectedLog.created_at), 'MMMM do, yyyy, h:mm:ss a')}</p>
@@ -540,6 +754,15 @@ const LogsBoard = () => {
                                             <p><strong>Old Value:</strong></p>
                                             <pre>{JSON.stringify(selectedLog.old_value, null, 4)}</pre>
                                         </>
+                                    ) : selectedTableDisplay === 'request' ? (
+                                        <>
+                                            <p><strong>Error Message:</strong></p>
+                                            <pre>{JSON.stringify(selectedLog.error_message, null, 4)}</pre>
+                                            <p><strong>Body:</strong></p>
+                                            <pre>{JSON.stringify(selectedLog.body, null, 4)}</pre>
+                                            <p><strong>Headers:</strong></p>
+                                            <pre>{JSON.stringify(selectedLog.headers, null, 4)}</pre>
+                                        </>
                                     ) : null}
                                     <button
                                         onClick={() => setExpandedRow(null)}
@@ -549,6 +772,7 @@ const LogsBoard = () => {
                                     </button>
                                 </div>
                             ) : null;
+                            
                         })()}
                     </div>
                 </Modal>
