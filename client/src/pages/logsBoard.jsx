@@ -21,6 +21,7 @@ const LogsBoard = () => {
     }
 
     const jwt = Cookies.get('jwt');
+    const apiUrl = import.meta.env[`VITE_G6_API_URL`];
     const navigate = useNavigate();
     const query = useQuery();
     const page = parseInt(query.get('page')) || 1;
@@ -41,7 +42,7 @@ const LogsBoard = () => {
     const fetchLogs = async (tableDisplay) => {
         setLoading(true);
         try {
-            const response = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/${tableDisplay}/viewAll`, {
+            const response = useRender ? await axios.get(`${apiUrl}/api/${tableDisplay}/viewAll`, {
                 headers: {
                   Authorization: `Bearer ${jwt}`
                 }
@@ -78,7 +79,7 @@ const LogsBoard = () => {
     //     event.preventDefault();
     //     try {
     //         const response = useRender
-    //             ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedtableDisplay}`, {
+    //             ? await axios.get(`${apiUrl}/api/search/${selectedtableDisplay}`, {
     //                 headers: { Authorization: `Bearer ${jwt}` },
     //                 params: { searchValue }
     //             })
@@ -101,7 +102,7 @@ const LogsBoard = () => {
     //     event.preventDefault();
     //     try {
     //         const response = useRender
-    //             ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedtableDisplay}`, {
+    //             ? await axios.get(`${apiUrl}/api/search/${selectedtableDisplay}`, {
     //                 headers: { Authorization: `Bearer ${jwt}` },
     //                 params: { searchValue }
     //             })
@@ -132,7 +133,7 @@ const LogsBoard = () => {
         event.preventDefault();
         try {
             const response = useRender
-                ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedtableDisplay}`, {
+                ? await axios.get(`${apiUrl}/api/search/${selectedtableDisplay}`, {
                     headers: { Authorization: `Bearer ${jwt}` },
                     params: { searchValue }
                 })
