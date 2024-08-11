@@ -5,10 +5,7 @@ import NavBarReyes from '../components/navBar';
 import NavBarGroup1 from './Navbar.jsx';
 import Modal from 'react-modal';
 import Cookies from 'js-cookie';
-import { format } from 'date-fns';
-
-console.log(readableDate); // August 9th, 2024, 11:23:47 AM
-
+import { format, set } from 'date-fns';
 
 Modal.setAppElement('#root');
 
@@ -16,7 +13,7 @@ const LogsBoard = () => {
 
     // config
     const logsPerPage = 10;
-    const useRender = true;
+    const useRender = !true;
 
     // declaration
     const useQuery = () => {
@@ -31,21 +28,24 @@ const LogsBoard = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState('creation');
+    const [selectedtableDisplay, setSelectedtableDisplay] = useState('creation');
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
     const totalPages = Math.ceil((isSearching ? searchResults : logs).length / logsPerPage);
     const [expandedRow, setExpandedRow] = useState(null);
     const [searchValue, setsearchValue] = useState(""); 
+    const [displaySearchResults, setDisplaySearchResults] = useState(false);
+    const [hasSearched, setHasSearched] = useState(false);
+    const [searchInput, setSearchInput] = useState(null);
 
-    const fetchLogs = async (filter) => {
+    const fetchLogs = async (tableDisplay) => {
         setLoading(true);
         try {
-            const response = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/${filter}/viewAll`, {
+            const response = useRender ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/${tableDisplay}/viewAll`, {
                 headers: {
                   Authorization: `Bearer ${jwt}`
                 }
-              }) : await axios.get(`http://localhost:8081/api/${filter}/viewAll`, {
+              }) : await axios.get(`http://localhost:8081/api/${tableDisplay}/viewAll`, {
                 headers: {
                   Authorization: `Bearer ${jwt}`
                 }
@@ -53,7 +53,7 @@ const LogsBoard = () => {
 
             const readableLogs = response.data.map(log => ({
                 ...log,
-                userName: log.um_user ? log.um_user.user_name : 'Unknown',
+                email: log.um_user ? log.um_user.email : 'Unknown',
             }));
     
             setLogs(readableLogs);
@@ -78,11 +78,11 @@ const LogsBoard = () => {
     //     event.preventDefault();
     //     try {
     //         const response = useRender
-    //             ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedFilter}`, {
+    //             ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedtableDisplay}`, {
     //                 headers: { Authorization: `Bearer ${jwt}` },
     //                 params: { searchValue }
     //             })
-    //             : await axios.get(`http://localhost:8081/api/search/${selectedFilter}`, {
+    //             : await axios.get(`http://localhost:8081/api/search/${selectedtableDisplay}`, {
     //                 headers: { Authorization: `Bearer ${jwt}` },
     //                 params: { searchValue }
     //             });
@@ -101,18 +101,18 @@ const LogsBoard = () => {
     //     event.preventDefault();
     //     try {
     //         const response = useRender
-    //             ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedFilter}`, {
+    //             ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedtableDisplay}`, {
     //                 headers: { Authorization: `Bearer ${jwt}` },
     //                 params: { searchValue }
     //             })
-    //             : await axios.get(`http://localhost:8081/api/search/${selectedFilter}`, {
+    //             : await axios.get(`http://localhost:8081/api/search/${selectedtableDisplay}`, {
     //                 headers: { Authorization: `Bearer ${jwt}` },
     //                 params: { searchValue }
     //             });
 
     //             const readableLogs = response.data.map(log => ({
     //                 ...log,
-    //                 userName: log.um_user ? log.um_user.user_name : 'Unknown',
+    //                 email: log.um_user ? log.um_user.user_name : 'Unknown',
     //             }));
         
     //         setLogs(readableLogs);
@@ -132,22 +132,33 @@ const LogsBoard = () => {
         event.preventDefault();
         try {
             const response = useRender
-                ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedFilter}`, {
+                ? await axios.get(`https://authinc-inc2024-group6-s17i.onrender.com/api/search/${selectedtableDisplay}`, {
                     headers: { Authorization: `Bearer ${jwt}` },
                     params: { searchValue }
                 })
-                : await axios.get(`http://localhost:8081/api/search/${selectedFilter}`, {
+                : await axios.get(`http://localhost:8081/api/search/${selectedtableDisplay}`, {
                     headers: { Authorization: `Bearer ${jwt}` },
                     params: { searchValue }
                 });
     
-            setSearchResults(response.data);
+                if (response.data.length === 0) {
+                    setError('No logs found for \'' + searchValue + '\'');
+                    setSearchResults([]);
+                } else {
+                    setSearchResults(response.data);
+                    setError(null);
+                }
             setIsSearching(true);
+            setHasSearched(true);
         } catch (error) {
             console.error('Error searching logs:', error);
             setSearchResults([]);
+            setError('Error searching logs. Please try again.');
         } finally {
             setLoading(false);
+            setDisplaySearchResults(true);
+            setSearchInput(searchValue);
+            setsearchValue('');
         }
     };
 
@@ -180,7 +191,7 @@ const LogsBoard = () => {
 
     const handleRowClick = (log) => {
         console.log("Row clicked:", log);
-        if (selectedFilter == 'modification' || selectedFilter == 'deletion'){
+        if (selectedtableDisplay == 'modification' || selectedtableDisplay == 'deletion'){
             setExpandedRow(expandedRow === log.log_id ? null : log.log_id);
         }
     }
@@ -189,10 +200,12 @@ const LogsBoard = () => {
         setIsDropdownVisible(!isDropdownVisible);
     }
 
-    const handleFilterSelect = (filter) => {
-        setSelectedFilter(filter);
+    const handletableDisplaySelect = (tableDisplay) => {
+        setSelectedtableDisplay(tableDisplay);
         setIsSearching(false);
         setIsDropdownVisible(false);
+        setDisplaySearchResults(false);
+        setHasSearched(false);
         navigate(`/logsBoard`);
     }
 
@@ -207,8 +220,8 @@ const LogsBoard = () => {
     };
 
     useEffect(() => {
-        fetchLogs(selectedFilter);
-    }, [selectedFilter, page]);
+        fetchLogs(selectedtableDisplay);
+    }, [selectedtableDisplay, page]);
 
     useEffect(() => {
         console.log("Expanded Row:", expandedRow);
@@ -230,6 +243,9 @@ const LogsBoard = () => {
 
                 {/* Search Bar */}
                 <div className="w-11/12 max-w-4xl mb-4 mt-4">
+                    <p className="text-md text-gray-300 mb-2">
+                        Search for log_id, user_id, table_name or record_id...
+                    </p>
                     <form onSubmit={handleSearchSubmit} className="flex items-center">
                         <input
                             type="text"
@@ -246,12 +262,13 @@ const LogsBoard = () => {
                         </button>
                     </form>
                 </div>
+                
                 {/* fetch data */}
                 <div className="flex justify-between items-center w-11/12 max-w-4xl mb-4 mt-4">
                     {error && (
                         <div className="flex justify-between items-center">
                             <button
-                                onClick={() => fetchLogs(selectedFilter)}
+                                onClick={() => fetchLogs(selectedtableDisplay)}
                                 className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700 flex items-center"
                                 disabled={loading}
                             >
@@ -272,7 +289,7 @@ const LogsBoard = () => {
                     {!error && (
                         <div className="flex justify-between items-center">
                             <button
-                                onClick={() => fetchLogs(selectedFilter)}
+                                onClick={() => fetchLogs(selectedtableDisplay)}
                                 className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700 flex items-center"
                                 disabled={loading}
                             >
@@ -284,6 +301,12 @@ const LogsBoard = () => {
                                 ) : null}
                                 Refresh
                             </button>
+
+                            {hasSearched && (
+                                <div className="text-white text-center ml-4">
+                                    Showing results for <span className="font-bold text-green-500">'{searchInput}'</span>
+                                </div>
+                            )}
                         </div>
                     )}
 
@@ -298,25 +321,25 @@ const LogsBoard = () => {
                             <div className="absolute right-0 mt-2 w-48 bg-slate-700 rounded-md shadow-lg z-50">
                                 <ul className="py-1">
                                     <li
-                                        onClick={() => handleFilterSelect('request')}
+                                        onClick={() => handletableDisplaySelect('request')}
                                         className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-b"
                                     >
                                         um_request_log
                                     </li>
                                     <li
-                                        onClick={() => handleFilterSelect('creation')}
+                                        onClick={() => handletableDisplaySelect('creation')}
                                         className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-t border-b"
                                     >
                                         um_creation_log
                                     </li>
                                     <li
-                                        onClick={() => handleFilterSelect('modification')}
+                                        onClick={() => handletableDisplaySelect('modification')}
                                         className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-t border-b"
                                     >
                                         um_modification_log
                                     </li>
                                     <li
-                                        onClick={() => handleFilterSelect('deletion')}
+                                        onClick={() => handletableDisplaySelect('deletion')}
                                         className="px-4 py-2 cursor-pointer hover:bg-gray-800 text-white border-t"
                                     >
                                         um_deletion_log
@@ -335,11 +358,14 @@ const LogsBoard = () => {
                                 <thead className="sticky top-0 bg-gray-700 shadow-md">
                                     <tr>
                                         <th className="py-2 px-4 border-b border-gray-600">Log ID</th>
-                                        <th className="py-2 px-4 border-b border-gray-600">User ID</th>
-                                        <th className="py-2 px-4 border-b border-gray-600">Site ID</th>
+                                        <th className="py-2 px-4 border-b border-gray-600">User</th>
+                                        {/* <th className="py-2 px-4 border-b border-gray-600">Site ID</th> */}
                                         <th className="py-2 px-4 border-b border-gray-600">Table Name</th>
                                         <th className="py-2 px-4 border-b border-gray-600">Record ID</th>
                                         <th className="py-2 px-4 border-b border-gray-600">Created At</th>
+                                        {selectedtableDisplay === 'modification' || selectedtableDisplay === 'deletion' ? (
+                                            <th className="py-2 px-4 border-b border-gray-600">{null}</th>
+                                        ) : null}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -350,21 +376,26 @@ const LogsBoard = () => {
                                         <React.Fragment key={log.log_id}>
                                             <tr className={index % 2 === 0 ? "bg-slate-600" : ""} onClick={() => handleRowClick(log)} style={{cursor: 'pointer'}}>
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.log_id}</td>
-                                                <td className="py-2 px-4 border-b border-gray-600">{log.userName}</td>
+                                                {displaySearchResults ? (
+                                                    <td className="py-2 px-4 border-b border-gray-600">{log.um_user.email}</td>
+                                                ) : (
+                                                    <td className="py-2 px-4 border-b border-gray-600">{log.email}</td>
+                                                )}
+
                                                 {/* <td className="py-2 px-4 border-b border-gray-600">{log.site_id}</td> */}
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.table_name}</td>
                                                 <td className="py-2 px-4 border-b border-gray-600">{log.record_id}</td>
                                                 <td className="py-2 px-4 border-b border-gray-600">{format(new Date(log.created_at), 'MMMM do, yyyy, h:mm:ss a')}</td>
                                                 <td>
-                                                    {selectedFilter === 'modification' || selectedFilter === 'deletion' ? (
+                                                    {selectedtableDisplay === 'modification' || selectedtableDisplay === 'deletion' ? (
                                                         <button 
                                                             onClick={(e) => {
                                                                 e.stopPropagation(); // Prevent triggering row click
                                                                 setExpandedRow(expandedRow === log.log_id ? null : log.log_id); 
                                                             }} 
-                                                            className="px-1 py-0.5 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
+                                                            className="px-2 py-3 mx-2 my-1 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
                                                         >
-                                                            {expandedRow === log.log_id ? 'Hide Details' : 'Show Details'}
+                                                            Details
                                                         </button>
                                                     ) : null}
                                                 </td>
@@ -382,7 +413,7 @@ const LogsBoard = () => {
                 {/* pagination */}
                 {!error ? (<div className="flex justify-center max-w-4xl mt-2 mb-12 w-full ">
                     <div className="flex items-end text-white">
-                        Displaying results for&nbsp;<span className="text-orange-300">um_{selectedFilter}_log</span>
+                        Displaying results for&nbsp;<span className="text-orange-300">um_{selectedtableDisplay}_log</span>
                     </div>
                     
                     <div className="flex items-center ml-auto space-x-2">
@@ -413,6 +444,7 @@ const LogsBoard = () => {
                         />
                     </div>
                 </div>) : null}
+
                 {/* Modal for expanded row */}
                 <Modal
                     isOpen={expandedRow !== null}
@@ -421,33 +453,38 @@ const LogsBoard = () => {
                     overlayClassName="fixed inset-0"
                 >
                     <div className="bg-white p-6 rounded-md shadow-lg max-w-3xl w-full">
-                        {logs.find(log => log.log_id === expandedRow) && (
-                            <div>
-                                <h2 className="text-xl font-bold mb-4">Log Details</h2>
-                                <p><strong>Log ID:</strong> {logs.find(log => log.log_id === expandedRow).log_id}</p>
-                                <p><strong>User ID:</strong> {logs.find(log => log.log_id === expandedRow).userName}</p>
-                                {/* <p><strong>Site ID:</strong> {logs.find(log => log.log_id === expandedRow).site_id}</p> */}
-                                <p><strong>Table Name:</strong> {logs.find(log => log.log_id === expandedRow).table_name}</p>
-                                <p><strong>Record ID:</strong> {logs.find(log => log.log_id === expandedRow).record_id}</p>
-                                <p><strong>Created At:</strong> {logs.find(log => log.log_id === expandedRow).format(new Date(log.created_at), 'MMMM do, yyyy, h:mm:ss a')}</p>
-                                {selectedFilter === 'modification' || selectedFilter === 'deletion' ? (
-                                    <>
-                                        <p><strong>Modification ID:</strong> {logs.find(log => log.log_id === expandedRow).field_modification_id}</p>
-                                        <p><strong>Field Name:</strong> {logs.find(log => log.log_id === expandedRow).field_name}</p>
-                                        <p><strong>Old Value:</strong></p>
-                                        <pre>{JSON.stringify(logs.find(log => log.log_id === expandedRow).old_value, null, 4)}</pre>
-                                    </>
-                                ) : null}
-                                <button
-                                    onClick={() => setExpandedRow(null)}
-                                    className="mt-4 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
-                                >
-                                    Close
-                                </button>
-                            </div>
-                        )}
+                        {/* Store the result of the find operation in a variable */}
+                        {(() => {
+                            const selectedLog = logs.find(log => log.log_id === expandedRow);
+                            return selectedLog ? (
+                                <div>
+                                    <h2 className="text-xl font-bold mb-4">Log Details</h2>
+                                    <p><strong>Log ID:</strong> {selectedLog.log_id}</p>
+                                    <p><strong>User ID:</strong> {selectedLog.email}</p>
+                                    {/* <p><strong>Site ID:</strong> {selectedLog.site_id}</p> */}
+                                    <p><strong>Table Name:</strong> {selectedLog.table_name}</p>
+                                    <p><strong>Record ID:</strong> {selectedLog.record_id}</p>
+                                    <p><strong>Created At:</strong> {format(new Date(selectedLog.created_at), 'MMMM do, yyyy, h:mm:ss a')}</p>
+                                    {selectedtableDisplay === 'modification' || selectedtableDisplay === 'deletion' ? (
+                                        <>
+                                            <p><strong>Modification ID:</strong> {selectedLog.field_modification_id}</p>
+                                            <p><strong>Field Name:</strong> {selectedLog.field_name}</p>
+                                            <p><strong>Old Value:</strong></p>
+                                            <pre>{JSON.stringify(selectedLog.old_value, null, 4)}</pre>
+                                        </>
+                                    ) : null}
+                                    <button
+                                        onClick={() => setExpandedRow(null)}
+                                        className="mt-4 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
+                                    >
+                                        Close
+                                    </button>
+                                </div>
+                            ) : null;
+                        })()}
                     </div>
                 </Modal>
+
                 
             </div>
         </>
