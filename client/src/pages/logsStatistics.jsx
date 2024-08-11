@@ -85,7 +85,7 @@ const LogStatistics = () => {
                 </h1>
                 
                 {/* fetch data */}
-                {/*
+                
                 <div className="flex justify-between items-center w-11/12 max-w-4xl mb-4 mt-4">
                     {error && (
                         <div className="flex justify-between items-center">
@@ -166,7 +166,7 @@ const LogStatistics = () => {
                             </div>
                         )}
                     </div>
-                </div> */}
+                </div>
                 <div className="chart container py-3">
                     <div className="row">
                     <div className="pie-container col-2">
