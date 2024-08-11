@@ -155,7 +155,7 @@ export async function readAllRequestByDate(req, res) {
 //    const site_id = 1;
     const { searchValue } = req.query;
 
-    if (!site_id || !date) {
+    if (!site_id || !searchValue) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
