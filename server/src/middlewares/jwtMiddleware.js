@@ -87,7 +87,7 @@ export const generateRefreshToken = (req, res, next) => {
 };
 
 // Verify token
-export const verifyToken = (req, res, next) => {
+module.exports.verifyToken = (req, res, next) => {
   console.log("Verify Token Middleware");
   let access_token;
 
@@ -120,7 +120,6 @@ export const verifyToken = (req, res, next) => {
         res.locals.user_id = decoded.user_id;
         res.locals.site_id = decoded.site_id;
         console.log(res.locals.user_id);
-        console.log(res.locals.site_id);
         next();
       }
     });
