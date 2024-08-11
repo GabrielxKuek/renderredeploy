@@ -8,28 +8,28 @@ import * as jwtController from "../middlewares/jwtMiddleware.js";
 // w/o authentication
 // ===================
 
-// Create deletion log
-router.post("/input", deletionController.createDeletion);
+// // Create deletion log
+// router.post("/input", deletionController.createDeletion);
 
-// View all deletion logs
-router.get("/viewAll", deletionController.readDeletionByAll);
-// router.get("/viewAll", jwtController.verifyToken, deletionController.readDeletionByAll);
+// // View all deletion logs
+// router.get("/viewAll", deletionController.readDeletionByAll);
+// // router.get("/viewAll", jwtController.verifyToken, deletionController.readDeletionByAll);
 
-// View deletion logs by date
-router.get("/viewByDate", deletionController.readDeletionByDate);
+// // View deletion logs by date
+// router.get("/viewByDate", deletionController.readDeletionByDate);
 
 // ===================
 // authentication
 // ===================
 
-// // Create deletion log
+// Create deletion log
 // router.post("/input", jwtController.verifyToken, deletionController.createDeletion);
 
-// // View all deletion logs
-// router.get("/viewAll", jwtController.verifyToken, deletionController.readDeletionByAll);
+// View all deletion logs
+router.get("/viewAll", jwtController.verifyToken, deletionController.readDeletionByAll);
 
-// // View deletion logs by date
-// router.get("/viewByDate", jwtController.verifyToken, deletionController.readDeletionByDate);
+// View deletion logs by date
+router.get("/viewByDate", jwtController.verifyToken, deletionController.readDeletionByDate);
 
 // ===================
 // deprecated

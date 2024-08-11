@@ -8,13 +8,13 @@ import * as jwtController from "../middlewares/jwtMiddleware.js";
 // w/o authentication
 // ===================
 
-router.post("/input", creationController.createCreation, logRequestMiddleware);
+// router.post("/input", creationController.createCreation, logRequestMiddleware);
 
-// View all creation logs
-router.get("/viewAll", creationController.readCreationByAll);
+// // View all creation logs
+// router.get("/viewAll", creationController.readCreationByAll);
 
-// View creation log by date
-router.get("/viewByDate", creationController.readCreationByDate);
+// // View creation log by date
+// router.get("/viewByDate", creationController.readCreationByDate);
 
 // ===================
 // authentication
@@ -22,11 +22,11 @@ router.get("/viewByDate", creationController.readCreationByDate);
 
 // router.post("/input", jwtController.verifyToken, creationController.createCreation, logRequestMiddleware);
 
-// // View all creation logs
-// router.get("/viewAll", jwtController.verifyToken, creationController.readCreationByAll);
+// View all creation logs
+router.get("/viewAll", jwtController.verifyToken, creationController.readCreationByAll);
 
-// // View creation log by date
-// router.get("/viewByDate", jwtController.verifyToken, creationController.readCreationByDate);
+// View creation log by date
+router.get("/viewByDate", jwtController.verifyToken, creationController.readCreationByDate);
 
 // ===================
 // deprecated
