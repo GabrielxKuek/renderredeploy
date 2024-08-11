@@ -31,7 +31,14 @@ export async function readDeletionByAll(req, res) {
     const site_id = 1;
 
     const result = await deletionModel.selectDeletionByAll(site_id);
-    res.json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.json(sanitizedResult);
   } catch (error) {
     console.error('Error reading deletion logs:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -42,7 +49,14 @@ export async function readDeletionByDate(req, res) {
   try {
     const { site_id, date } = req.body;
     const result = await deletionModel.selectDeletionByDate(site_id, date);
-    res.json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.json(sanitizedResult);
   } catch (error) {
     console.error('Error reading deletion logs by date:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -53,7 +67,14 @@ export async function readDeletionByIp(req, res) {
   try {
     const { ip } = req.body;
     const result = await deletionModel.selectDeletionByIp(ip);
-    res.json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting deletion logs by IP:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -64,7 +85,14 @@ export async function readDeletionByOs(req, res) {
   try {
     const { os } = req.body;
     const result = await deletionModel.selectDeletionByOs(os);
-    res.json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting deletion logs by OS:', error);
     res.status(500).json({ error: 'Internal server error' });

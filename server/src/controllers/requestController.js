@@ -94,7 +94,14 @@ export async function createRequest(req, res) { // note: logger i comment out ca
       headers || {}
     );
 
-    res.status(200).json({ message: 'Request logged successfully', result });
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error logging request:', error);
 
@@ -128,7 +135,14 @@ export async function readAllRequestBySite(req, res) {
     }
 
     const result = await requestModel.selectAllRequestBySite(site_id);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting all logs:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -144,7 +158,14 @@ export async function readAllRequestByDate(req, res) {
     }
 
     const result = await requestModel.selectAllRequestByDate(site_id, date);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting logs by date:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -160,7 +181,14 @@ export async function readAllRequestByIp(req, res) {
     }
 
     const result = await requestModel.selectAllRequestByIp(site_id, ip);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting logs by IP:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -176,7 +204,14 @@ export async function readAllRequestByOs(req, res) {
     }
 
     const result = await requestModel.selectAllRequestByOs(site_id, os);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting logs by OS:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -196,7 +231,14 @@ export async function readGetRequestByDate(req, res) {
     }
 
     const result = await requestModel.selectGetRequestByDate(site_id, date);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting get logs by date:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -212,7 +254,14 @@ export async function readGetRequestByIp(req, res) {
     }
 
     const result = await requestModel.selectGetRequestByIp(site_id, ip);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting get logs by IP:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -228,7 +277,14 @@ export async function readGetRequestByOs(req, res) {
     }
 
     const result = await requestModel.selectGetRequestByOs(site_id, os);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting get logs by OS:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -248,7 +304,14 @@ export async function readPostRequestByDate(req, res) {
     }
 
     const result = await requestModel.selectPostRequestByDate(site_id, date);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting post logs by date:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -264,7 +327,14 @@ export async function readPostRequestByIp(req, res) {
     }
 
     const result = await requestModel.selectPostRequestByIp(site_id, ip);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting post logs by IP:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -280,7 +350,14 @@ export async function readPostRequestByOs(req, res) {
     }
 
     const result = await requestModel.selectPostRequestByOs(site_id, os);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting post logs by OS:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -300,7 +377,14 @@ export async function readPutRequestByDate(req, res) {
     }
 
     const result = await requestModel.selectPutRequestByDate(site_id, date);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting put logs by date:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -316,7 +400,14 @@ export async function readPutRequestByIp(req, res) {
     }
 
     const result = await requestModel.selectPutRequestByIp(site_id, ip);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting put logs by IP:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -332,7 +423,14 @@ export async function readPutRequestByOs(req, res) {
     }
 
     const result = await requestModel.selectPutRequestByOs(site_id, os);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting put logs by OS:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -352,7 +450,14 @@ export async function readDeleteRequestByDate(req, res) {
     }
 
     const result = await requestModel.selectDeleteRequestByDate(site_id, date);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting delete logs by date:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -368,7 +473,14 @@ export async function readDeleteRequestByIp(req, res) {
     }
 
     const result = await requestModel.selectDeleteRequestByIp(site_id, ip);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting delete logs by IP:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -384,7 +496,14 @@ export async function readDeleteRequestByOs(req, res) {
     }
 
     const result = await requestModel.selectDeleteRequestByOs(site_id, os);
-    res.status(200).json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.status(200).json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting delete logs by OS:', error);
     res.status(500).json({ error: 'Internal server error' });

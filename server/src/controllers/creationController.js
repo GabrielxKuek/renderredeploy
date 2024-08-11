@@ -2,10 +2,7 @@ import * as creationModel from '../models/creationModel.js';
 import 'dotenv/config';
 
 import logger from '../logger.js'
-
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import validator from 'validator';
 
 // create
 
@@ -62,7 +59,14 @@ export async function readCreationByAll (req, res) {
     const site_id = 1;
 
     const result = await creationModel.selectCreationByAll(site_id);
-    res.json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.json(sanitizedResult);
     
   } catch (error) {
     console.error('Error reading creation logs:', error);
@@ -74,7 +78,14 @@ export async function readCreationByDate (req, res) {
   try {
     const { site_id, date } = req.body;
     const result = await creationModel.selectCreationByDate(site_id, date);
-    res.json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.json(sanitizedResult);
   } catch (error) {
     console.error('Error reading creation logs by date:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -85,7 +96,14 @@ export async function readCreationByIp (req, res) {
   try {
     const { ip } = req.body;
     const result = await creationModel.selectCreationByIp(ip);
-    res.json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting creation logs by IP:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -96,7 +114,14 @@ export async function readCreationByOs (req, res) {
   try {
     const { os } = req.body;
     const result = await creationModel.selectCreationByOs(os);
-    res.json(result);
+        
+    const sanitizedResult = result.map(log => {
+        return {
+            ...log,
+            fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
+        };
+    }); 
+    res.json(sanitizedResult);
   } catch (error) {
     console.error('Error selecting creation logs by OS:', error);
     res.status(500).json({ error: 'Internal server error' });

@@ -19,7 +19,7 @@ export async function searchLogsCreate(req, res) {
                 fieldName: log.fieldName ? validator.escape(log.fieldName) : log.fieldName,
             };
         }); 
-      res.json(sanitizedResult);
+        res.json(sanitizedResult);
     } catch (error) {
       console.log('Error searching creation logs:', error);
       res.status(500).json({ error: 'Internal server error' });
