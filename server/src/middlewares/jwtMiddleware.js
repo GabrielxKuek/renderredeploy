@@ -87,7 +87,7 @@ export const generateRefreshToken = (req, res, next) => {
 };
 
 // Verify token
-module.exports.verifyToken = (req, res, next) => {
+export const verifyToken = (req, res, next) => {
   console.log("Verify Token Middleware");
   let access_token;
 
