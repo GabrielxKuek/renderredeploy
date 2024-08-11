@@ -39,10 +39,10 @@ const LogStatistics = () => {
             const deleteLogs = useRender ? await axios.get(`${apiUrl}/api/deletion/viewAll`) : await axios.get(`http://localhost:8081/api/deletion/viewAll`);
             const reqLogs = useRender ? await axios.get(`${apiUrl}/api/request/viewAll`) : await axios.get(`http://localhost:8081/api/request/viewAll`);
             setLogs({
-                creationLogs: createLogs,
-                modificationLogs: modifyLogs,
-                deletionLogs: deleteLogs,
-                requestLogs: reqLogs
+                creationLogs: createLogs.data,
+                modificationLogs: modifyLogs.data,
+                deletionLogs: deleteLogs.data,
+                requestLogs: reqLogs.data
             })
             console.log(logs)
             setError(null);
