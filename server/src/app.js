@@ -70,8 +70,22 @@ const corsOptions = {
 app.use(cors(corsOptions));
 // ==========================
 app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "https:"],
+    },
+  },
+  referrerPolicy: {
+    policy: 'strict-origin-when-cross-origin',
+  },
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.disable('x-powered-by');
 
 // Middleware to attach log data and extract JWT information
 app.use((req, res, next) => {
