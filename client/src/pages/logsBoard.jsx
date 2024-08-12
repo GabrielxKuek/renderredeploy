@@ -784,3 +784,4 @@ const LogsBoard = () => {
 };
 
 export default LogsBoard;
+
