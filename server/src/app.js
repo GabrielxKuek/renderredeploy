@@ -54,6 +54,12 @@ import mainRoutes from './routes/mainRoutes.js';
 const app = express();
 // app.use(cors());
 
+app.use(express.static(path.join(__dirname, 'public'), {
+  dotfiles: 'deny',
+  index: false,
+  extensions: ['html', 'htm']
+}));
+
 // =========testing==========
 const corsOptions = {
   origin: [
