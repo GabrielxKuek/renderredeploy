@@ -49,7 +49,12 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import jwt from 'jsonwebtoken';
+import path from 'path'; 
+import { fileURLToPath } from 'url';
 import mainRoutes from './routes/mainRoutes.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 // app.use(cors()); 
