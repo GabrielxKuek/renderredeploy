@@ -75,9 +75,9 @@ app.use(limiter);
 // =========testing==========
 const corsOptions = {
   origin: [
-    "http://localhost:3000",
-    "https://authinc.onrender.com",
-    "https://authinc.site",
+    LOCALHOST,
+    RENDER,
+    SITE,
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization", "site-api-key", "Set-Cookie"],
