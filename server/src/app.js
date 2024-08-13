@@ -74,15 +74,11 @@ app.use(limiter);
 
 // =========testing==========
 const corsOptions = {
-  origin: [
-    LOCALHOST,
-    RENDER,
-    SITE,
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization", "site-api-key", "Set-Cookie"],
-  credentials: true,
-  maxAge: 600,
+  origin: process.env.CORS_ORIGIN.split(","),
+  methods: process.env.CORS_METHODS.split(","),
+  allowedHeaders: process.env.CORS_ALLOWED_HEADERS.split(","),
+  credentials: process.env.CORS_CREDENTIALS === 'true',
+  maxAge: parseInt(process.env.CORS_MAX_AGE, 10),
 };
 
 app.use(cors(corsOptions));
