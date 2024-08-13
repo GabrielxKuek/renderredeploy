@@ -52,6 +52,7 @@ import jwt from 'jsonwebtoken';
 import path from 'path'; 
 import { fileURLToPath } from 'url';
 import mainRoutes from './routes/mainRoutes.js';
+import rateLimit from 'express-rate-limit';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -64,6 +65,12 @@ app.use(express.static(path.join(__dirname, 'public'), {
   index: false,
   extensions: ['html', 'htm']
 }));
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use(limiter);
 
 // =========testing==========
 const corsOptions = {
