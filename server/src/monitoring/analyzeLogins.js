@@ -1,22 +1,23 @@
 // Monitoring multiple failed password attempts within the last hour.
-async function getFailedLoginsFromLastHour() {
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-  
-    return await prisma.um_request_log.findMany({
-      where: {
-        created_at: {
-          gte: oneHourAgo,
-        },
-        api_requested: 'api/user/login',
-        error_message: 'wrong password',
+module.exports.getFailedLoginsFromLastHour = async function () {
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+
+  return await prisma.um_request_log.findMany({
+    where: {
+      created_at: {
+        gte: oneHourAgo,
       },
-      select: {
-        user_id: true,
-        site_id: true,
-        created_at: true,
-      },
-    });
-  }
+      api_requested: '/api/user/login',
+      // Match the error_message field to 'wrong password'
+      error_message: JSON.stringify({ message: 'Incorrect email or password.' }),
+    },
+    select: {
+      user_id: true,
+      site_id: true,
+      created_at: true,
+    },
+  });
+}
   
   function analyzeFailedLogins(logins) {
     const suspiciousActivities = [];
@@ -62,7 +63,7 @@ async function getFailedLoginsFromLastHour() {
     }
   });
 
-  async function getLoginsForLast12Hours() {
+  module.exports.getLoginsForLast12Hours = async function () {
     const twelveHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000);
   
     return await prisma.um_request_log.findMany({
@@ -70,7 +71,7 @@ async function getFailedLoginsFromLastHour() {
         created_at: {
           gte: twelveHoursAgo,
         },
-        api_requested: 'api/user/login',
+        api_requested: "/api/user/login",
       },
       select: {
         user_id: true,
@@ -79,7 +80,7 @@ async function getFailedLoginsFromLastHour() {
         created_at: true,
       },
     });
-  }
+  };
 
   // Monitoring different ip logins within the past 12 hours
   function analyzeDifferentIPLogins(logins) {
