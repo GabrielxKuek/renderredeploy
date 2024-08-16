@@ -79,7 +79,7 @@ const corsOptions = {
   origin: [
     process.env.LOCAL_FRONTEND_URL,
     process.env.RENDER_FRONTEND_URL,
-    process.env.CUSTOM_DOMAN_FRONTEND_URL,
+    process.env.CUSTOM_DOMAIN_FRONTEND_URL,
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: [
