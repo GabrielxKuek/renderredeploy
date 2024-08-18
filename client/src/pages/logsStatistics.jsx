@@ -201,7 +201,7 @@ const LogStatistics = () => {
                                     requestLogs: logs.requestLogs
                                 }}
                             />
-                        </div>
+                        </div> {/*
                         <div className="line-container col-8">
                             <LineChart 
                                 logs={{
@@ -211,7 +211,7 @@ const LogStatistics = () => {
                                 }}
                             />
                         </div>
-
+*/}
                     </div>
                 </div>
                 ): (<></>)}
