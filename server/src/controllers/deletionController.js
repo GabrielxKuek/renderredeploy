@@ -22,8 +22,8 @@ export async function createDeletion(req, res) {
 
 export async function readDeletionByAll(req, res) {
   try {
-    const site_id = res.locals.site_id;
-//    const site_id = 1;
+    // const site_id = res.locals.site_id;
+   const site_id = 1;
 
     const result = await deletionModel.selectDeletionByAll(site_id);
         
@@ -42,8 +42,8 @@ export async function readDeletionByAll(req, res) {
 
 export async function readDeletionByDate(req, res) {
   try {
-    const site_id = res.locals.site_id;
-//    const site_id = 1;
+    // const site_id = res.locals.site_id;
+   const site_id = 1;
     const { date } = req.body;
     const result = await deletionModel.selectDeletionByDate(site_id, date);
         
