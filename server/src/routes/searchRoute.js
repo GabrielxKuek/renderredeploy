@@ -33,7 +33,7 @@ router.get("/modification", jwtController.verifyToken, searchController.getModif
 router.get("/deletion", jwtController.verifyToken, searchController.getDeletionLogs);
 
 // Search request logs
-router.get("/request", jwtController.verifyToken, searchController.searchLogsRequest);
+router.get("/request", jwtController.verifyToken, searchController.getRequestLogs);
 
 // ===================
 // authentication - deprecated

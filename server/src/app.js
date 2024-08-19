@@ -70,7 +70,7 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: 2000 // limit each IP to 2000 requests per windowMs
 });
 app.use(limiter);
 
@@ -80,6 +80,7 @@ const corsOptions = {
     process.env.LOCAL_FRONTEND_URL,
     process.env.RENDER_FRONTEND_URL,
     process.env.CUSTOM_DOMAN_FRONTEND_URL,
+    "http://localhost:8081",
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: [

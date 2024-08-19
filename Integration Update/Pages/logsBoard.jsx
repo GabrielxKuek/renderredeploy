@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import NavBarReyes from '../components/navBar';
+import { api_group_6 } from '@/interceptors/axios';
+import NavBarReyes from '../components/auditNavBar';
 import NavBarGroup1 from './Navbar.jsx';
 import Modal from 'react-modal';
 import Cookies from 'js-cookie';
 import { format, set } from 'date-fns';
-import ReactDatePicker from '../components/datePicker';
 
 Modal.setAppElement('#root');
 
@@ -14,7 +14,7 @@ const LogsBoard = () => {
 
     // config
     const logsPerPage = 10;
-    const useRender = !true;
+    const useRender = true;
     const tableLength = {
         request: "w-11/12 max-w-5xl",
         other: "w-11/12 max-w-4xl"
@@ -65,13 +65,13 @@ const LogsBoard = () => {
     const fetchLogs = async (tableDisplay) => {
         setLoading(true);
         try {
-            const response = useRender ? await axios.get(`${apiUrl}/api/${tableDisplay}/viewAll`, {
+            const response = useRender ? await api_group_6.get(`${tableDisplay}/viewAll`, {
                 headers: {
-                  Authorization: `Bearer {jwt}`
+                  Authorization: `Bearer ${jwt}`
                 }
               }) : await axios.get(`http://localhost:8081/api/${tableDisplay}/viewAll`, {
                 headers: {
-                  Authorization: `Bearer {jwt}`
+                  Authorization: `Bearer ${jwt}`
                 }
               });
 
@@ -103,11 +103,11 @@ const LogsBoard = () => {
     //     try {
     //         const response = useRender
     //             ? await axios.get(`${apiUrl}/api/search/${selectedTableDisplay}`, {
-    //                 headers: { Authorization: `Bearer {jwt}` },
+    //                 headers: { Authorization: `Bearer ${jwt}` },
     //                 params: { searchValue }
     //             })
     //             : await axios.get(`http://localhost:8081/api/search/${selectedTableDisplay}`, {
-    //                 headers: { Authorization: `Bearer {jwt}` },
+    //                 headers: { Authorization: `Bearer ${jwt}` },
     //                 params: { searchValue }
     //             });
     //         setSearchResults(response.data);
@@ -126,11 +126,11 @@ const LogsBoard = () => {
     //     try {
     //         const response = useRender
     //             ? await axios.get(`${apiUrl}/api/search/${selectedTableDisplay}`, {
-    //                 headers: { Authorization: `Bearer {jwt}` },
+    //                 headers: { Authorization: `Bearer ${jwt}` },
     //                 params: { searchValue }
     //             })
     //             : await axios.get(`http://localhost:8081/api/search/${selectedTableDisplay}`, {
-    //                 headers: { Authorization: `Bearer {jwt}` },
+    //                 headers: { Authorization: `Bearer ${jwt}` },
     //                 params: { searchValue }
     //             });
 
@@ -167,45 +167,29 @@ const LogsBoard = () => {
                 setLoading(false);
                 return;
             }
-            
-            if (['log_id', 'user_id', 'api_requested'].includes(selectedSearchOption)) {
-                for (let i = 0; i < selectedMethodsArray.length; i++) {
-                    const selectedMethod = selectedMethodsArray[i].toUpperCase();
-                    const response = useRender
-                        ? await axios.get(`${apiUrl}/api/search/${selectedTableDisplay}`, {
-                            headers: { Authorization: `Bearer {jwt}` },
-                            params: { searchValue, selectedSearchOption, selectedMethod }
-                        })
-                        : await axios.get(`http://localhost:8081/api/search/${selectedTableDisplay}`, {
-                            headers: { Authorization: `Bearer {jwt}` },
-                            params: { searchValue, selectedSearchOption, selectedMethod }
-                        });
-                    hugeLogs.push(...response.data);
-                }
-
-            } else if (['Ip', 'Os', 'Date'].includes(selectedSearchOption)) {
-                for (let i = 0; i < selectedMethodsArray.length; i++) {
-                    const method = selectedMethodsArray[i];
-                    const response = useRender
-                        ? await axios.get(`${apiUrl}/api/request/view${method}By${selectedSearchOption}`, {
-                            headers: { Authorization: `Bearer {jwt}` },
-                            params: { searchValue }
-                        })
-                        : await axios.get(`http://localhost:8081/api/request/view${method}By${selectedSearchOption}`, {
-                            headers: { Authorization: `Bearer {jwt}` },
-                            params: { searchValue }
-                        });
-                    hugeLogs.push(...response.data);
-                }
-            } else {
+    
+            if (!requestEndpoint.includes(selectedSearchOption.toLowerCase())) {
                 throw new Error(`Invalid selectedSearchOption: ${selectedSearchOption}. Must be one of ${requestEndpoint.join(', ')}.`);
             }
-
+            
             // Combine the result based on selection
+            for (let i = 0; i < selectedMethodsArray.length; i++) {
+                const method = selectedMethodsArray[i];
+                const response = useRender
+                    ? await api_group_6.get(`request/view${method}By${selectedSearchOption}`, {
+                        headers: { Authorization: `Bearer ${jwt}` },
+                        params: { searchValue }
+                    })
+                    : await axios.get(`http://localhost:8081/api/request/view${method}By${selectedSearchOption}`, {
+                        headers: { Authorization: `Bearer ${jwt}` },
+                        params: { searchValue }
+                    });
+                hugeLogs.push(...response.data);
+            }
+    
             if (hugeLogs.length === 0) {
-                console.log('huge logs is empty')
+                setUiErrorMessage(`No logs found for '${searchValue}'`);
                 setSearchResults([]);
-                setError(`No logs found for '${searchValue}'`);
             } else {
                 setSearchResults(hugeLogs);
                 setUiErrorMessage(''); // Clear any previous error message
@@ -235,12 +219,12 @@ const LogsBoard = () => {
               }
 
             const response = useRender
-                ? await axios.get(`${apiUrl}/api/search/${selectedTableDisplay}`, {
-                    headers: { Authorization: `Bearer {jwt}` },
+                ? await api_group_6.get(`api/search/${selectedTableDisplay}`, {
+                    headers: { Authorization: `Bearer ${jwt}` },
                     params: { searchValue, selectedSearchOption }
                 })
                 : await axios.get(`http://localhost:8081/api/search/${selectedTableDisplay}`, {
-                    headers: { Authorization: `Bearer {jwt}` },
+                    headers: { Authorization: `Bearer ${jwt}` },
                     params: { searchValue, selectedSearchOption }
                 });
 
@@ -418,28 +402,6 @@ const LogsBoard = () => {
                                 <label className="mr-4 text-gray-50">
                                     <input
                                         type="radio"
-                                        value="log_id"
-                                        checked={selectedSearchOption === 'log_id'}
-                                        onChange={handleSearchOptionChange}
-                                        className="mr-2"
-                                    />
-                                    Log ID
-                                </label>
-
-                                <label className="mr-4 text-gray-50">
-                                    <input
-                                        type="radio"
-                                        value="user_id"
-                                        checked={selectedSearchOption === 'user_id'}
-                                        onChange={handleSearchOptionChange}
-                                        className="mr-2"
-                                    />
-                                    User ID
-                                </label>
-
-                                <label className="mr-4 text-gray-50">
-                                    <input
-                                        type="radio"
                                         value="Ip"
                                         checked={selectedSearchOption === 'Ip'}
                                         onChange={handleSearchOptionChange}
@@ -468,17 +430,6 @@ const LogsBoard = () => {
                                         className="mr-2"
                                     />
                                     Created At
-                                </label>
-
-                                <label className="mr-4 text-gray-50">
-                                    <input
-                                        type="radio"
-                                        value="api_requested"
-                                        checked={selectedSearchOption === 'api_requested'}
-                                        onChange={handleSearchOptionChange}
-                                        className="mr-2"
-                                    />
-                                    API Requested
                                 </label>
 
                                 {/* Dropdown for Request Method Checkboxes */}
@@ -541,23 +492,14 @@ const LogsBoard = () => {
                     </div>
 
                     {/* Search Box */}
-                    <div 
-                    className="flex items-center w-full"
-                    >
-                        {selectedSearchOption === 'Date' ? (
-                            <ReactDatePicker
-                                searchValue={searchValue} // Pass searchValue
-                                setSearchValue={setsearchValue} // Pass setSearchValue
-                            ></ReactDatePicker>
-                        ) : (
-                            <input
-                                type="text"
-                                placeholder="Search..."
-                                value={searchValue}
-                                onChange={handleSearchChange}
-                                className="flex-grow px-4 py-2 border border-gray-300 rounded-l-md text-black"
-                            />
-                        )}
+                    <div className="flex items-center w-full">
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            value={searchValue}
+                            onChange={handleSearchChange}
+                            className="flex-grow px-4 py-2 border border-gray-300 rounded-l-md text-black"
+                        />
                         <button
                             type="submit"
                             className="px-4 py-2 bg-indigo-500 text-white rounded-r-md hover:bg-indigo-600 active:bg-indigo-700"
@@ -610,7 +552,7 @@ const LogsBoard = () => {
 
                             {hasSearched && (
                                 <div className="text-white text-center ml-4">
-                                    Showing results for <span className="font-bold text-green-500">'{selectedSearchOption === 'Date' ? format(new Date(searchInput), 'MMMM do, yyyy, h:mm:ss a') : searchInput}'</span>
+                                    Showing results for <span className="font-bold text-green-500">'{searchInput}'</span>
                                 </div>
                             )}
                         </div>
@@ -803,35 +745,26 @@ const LogsBoard = () => {
                                     <h2 className="text-xl font-bold mb-4">Log Details</h2>
                                     <p><strong>Log ID:</strong> {selectedLog.log_id}</p>
                                     <p><strong>User:</strong> {selectedLog.email}</p>
+                                    <p><strong>Table Name:</strong> {selectedLog.table_name}</p>
+                                    <p><strong>Record ID:</strong> {selectedLog.record_id}</p>
+                                    <p><strong>Created At:</strong> {format(new Date(selectedLog.created_at), 'MMMM do, yyyy, h:mm:ss a')}</p>
                                     {selectedTableDisplay === 'modification' || selectedTableDisplay === 'deletion' ? (
                                         <>
-                                            <p><strong>Field Change ID:</strong> {selectedLog.field_modification_id}</p>
-                                            <p><strong>Table Name:</strong> {selectedLog.table_name}</p>
-                                            <p><strong>Record ID:</strong> {selectedLog.record_id}</p>
+                                            <p><strong>Modification ID:</strong> {selectedLog.field_modification_id}</p>
                                             <p><strong>Field Name:</strong> {selectedLog.field_name}</p>
                                             <p><strong>Old Value:</strong></p>
                                             <pre>{JSON.stringify(selectedLog.old_value, null, 4)}</pre>
                                         </>
                                     ) : selectedTableDisplay === 'request' ? (
                                         <>
-                                            <p><strong>Request Method:</strong></p>
-                                            <pre>{JSON.stringify(selectedLog.request_method, null, 4)}</pre>
-                                            <p><strong>API Requested:</strong></p>
-                                            <pre>{JSON.stringify(selectedLog.api_requested, null, 4)}</pre>
+                                            <p><strong>Error Message:</strong></p>
+                                            <pre>{JSON.stringify(selectedLog.error_message, null, 4)}</pre>
                                             <p><strong>Body:</strong></p>
                                             <pre>{JSON.stringify(selectedLog.body, null, 4)}</pre>
                                             <p><strong>Headers:</strong></p>
                                             <pre>{JSON.stringify(selectedLog.headers, null, 4)}</pre>
-                                            <p><strong>IP Address:</strong></p>
-                                            <pre>{JSON.stringify(selectedLog.user_ip, null, 4)}</pre>
-                                            <p><strong>Operating System:</strong></p>
-                                            <pre>{JSON.stringify(selectedLog.user_os, null, 4)}</pre>
-                                            <p><strong>Error Message:</strong></p>
-                                            <pre>{JSON.stringify(selectedLog.error_message, null, 4)}</pre>
                                         </>
                                     ) : null}
-                                    <p><strong>Created At:</strong> {format(new Date(selectedLog.created_at), 'MMMM do, yyyy, h:mm:ss a')}</p>
-                                    
                                     <button
                                         onClick={() => setExpandedRow(null)}
                                         className="mt-4 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 active:bg-indigo-700"
@@ -852,4 +785,3 @@ const LogsBoard = () => {
 };
 
 export default LogsBoard;
-

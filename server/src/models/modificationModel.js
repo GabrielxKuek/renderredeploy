@@ -2,6 +2,9 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+await prisma.$disconnect();
+await prisma.$connect();
+
 // insert
 
 export const insertModification = async (user_id, site_id, table_name, record_id, field_names, old_values) => {

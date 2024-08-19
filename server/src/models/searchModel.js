@@ -127,11 +127,15 @@ async function searchLogs(tableName, searchValue, site_id, selectedSearchOption)
     case 'log_id':
       if (isNumeric) {
         searchCondition = { log_id: parseInt(searchValue) };
+      } else {
+        throw new Error('Invalid search option provided.');
       }
       break;
     case 'user_id':
       if (isNumeric) {
         searchCondition = { user_id: parseInt(searchValue) };
+      } else {
+        throw new Error('Invalid search option provided.');
       }
       break;
     case 'record_id':
@@ -171,4 +175,49 @@ export async function queryModificationLogs(searchValue, site_id, selectedSearch
 
 export async function queryDeletionLogs(searchValue, site_id, selectedSearchOption) {
   return await searchLogs('um_deletion_log', searchValue, site_id, selectedSearchOption);
+}
+
+export async function queryRequestLogs(searchValue, site_id, selectedSearchOption, selectedMethod) {
+  const isNumeric = !isNaN(parseInt(searchValue));
+
+  let searchCondition = {};
+
+  switch (selectedSearchOption) {
+    case 'log_id':
+      if (isNumeric) {
+        searchCondition = { log_id: parseInt(searchValue) };
+      } else {
+        throw new Error('Invalid search option provided.');
+      }
+      break;
+    case 'user_id':
+      if (isNumeric) {
+        searchCondition = { user_id: parseInt(searchValue) };
+      } else {
+        throw new Error('Invalid search option provided.');
+      }
+      break;
+    case 'api_requested':
+      searchCondition = { api_requested: { equals: searchValue } };
+      break;
+    default:
+      throw new Error('Invalid search option provided.');
+  }
+
+  return await prisma.um_request_log.findMany({
+    where: {
+      AND: [
+        { site_id: parseInt(site_id) },
+        searchCondition,
+        { request_method: selectedMethod }
+      ]
+    },
+    include: {
+      um_user: {
+        select: {
+          email: true,
+        },
+      },
+    },
+  });
 }
