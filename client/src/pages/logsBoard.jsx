@@ -744,6 +744,10 @@ const LogsBoard = () => {
                                     <h2 className="text-xl font-bold mb-4">Log Details</h2>
                                     <p><strong>Log ID:</strong> {selectedLog.log_id}</p>
                                     <p><strong>User:</strong> {selectedLog.email}</p>
+                                    <p><strong>Request Method:</strong> {selectedLog.request_method}</p>
+                                    <p><strong>IP:</strong> {selectedLog.user_ip}</p>
+                                    <p><strong>OS:</strong> {selectedLog.user_os}</p>
+                                    <p><strong>API Requested:</strong> {selectedLog.api_requested}</p>
                                     <p><strong>Table Name:</strong> {selectedLog.table_name}</p>
                                     <p><strong>Record ID:</strong> {selectedLog.record_id}</p>
                                     <p><strong>Created At:</strong> {format(new Date(selectedLog.created_at), 'MMMM do, yyyy, h:mm:ss a')}</p>
