@@ -45,8 +45,10 @@ export async function readModificationByDate(req, res) {
     const site_id = res.locals.site_id;
   //  const site_id = 1;
     const { date } = req.body;
-    const result = await modificationModel.selectModificationByDate(site_id, date);
         
+    date = validator.escape(date);
+
+    const result = await modificationModel.selectModificationByDate(site_id, date);
     const sanitizedResult = result.map(log => {
         return {
             ...log,

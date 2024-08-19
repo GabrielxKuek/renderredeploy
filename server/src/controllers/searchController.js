@@ -9,6 +9,9 @@ export async function searchLogsCreate(req, res) {
     //const site_id = 1;
     console.log(site_id);
     console.log(searchValue);
+
+    searchValue = validator.escape(searchValue);
+    
     try {
         const cleanedSearchValue = validator.trim(searchValue);
         const result = await searchModel.searchCreationLogs(cleanedSearchValue, site_id);
@@ -31,6 +34,9 @@ export async function searchLogsModification(req, res) {
        const site_id = res.locals.site_id;
     //const site_id = 1;
     console.log(searchValue);
+
+    searchValue = validator.escape(searchValue);
+    
     try {
         const cleanedSearchValue = validator.trim(searchValue);
         const result = await searchModel.searchModificationLogs(cleanedSearchValue, site_id);
@@ -52,6 +58,9 @@ export async function searchLogsDelete(req, res) {
     //const site_id = 1;
     console.log(site_id);
     console.log(searchValue);
+
+    searchValue = validator.escape(searchValue);
+
     try {
         const cleanedSearchValue = validator.trim(searchValue);
         const result = await searchModel.searchDeletionLogs(cleanedSearchValue, site_id);
@@ -74,6 +83,9 @@ export async function searchLogsRequest(req, res) {
     //const site_id = 1;
     console.log(site_id);
     console.log(searchValue);
+
+    searchValue = validator.escape(searchValue);
+
     try {
         const cleanedSearchValue = validator.trim(searchValue);
         const result = await searchModel.searchRequestLogs(cleanedSearchValue, site_id);
@@ -105,6 +117,9 @@ export const getCreationLogs = async (req, res) => {
         throw new Error('Missing search parameters');
     }
 
+    searchValue = validator.escape(searchValue);
+    selectedSearchOption = validator.escape(selectedSearchOption);
+
     const logs = await searchModel.queryCreationLogs(searchValue, site_id, selectedSearchOption);
     const sanitizedResult = logs.map(log => {
         return {
@@ -131,6 +146,9 @@ export const getModificationLogs = async (req, res) => {
     if (!searchValue || !selectedSearchOption) {
         throw new Error('Missing search parameters');
     }
+
+    searchValue = validator.escape(searchValue);
+    selectedSearchOption = validator.escape(selectedSearchOption);
 
     const logs = await searchModel.queryModificationLogs(searchValue, site_id, selectedSearchOption);
     const sanitizedResult = logs.map(log => {
@@ -159,6 +177,9 @@ export const getDeletionLogs = async (req, res) => {
         throw new Error('Missing search parameters');
     }
 
+    searchValue = validator.escape(searchValue);
+    selectedSearchOption = validator.escape(selectedSearchOption);
+
     const logs = await searchModel.queryDeletionLogs(searchValue, site_id, selectedSearchOption);    
     const sanitizedResult = logs.map(log => {
         return {
@@ -186,6 +207,10 @@ export const getRequestLogs = async (req, res) => {
         if (!searchValue || !selectedSearchOption || !selectedMethod) {
             throw new Error('Missing search parameters');
         }
+
+        searchValue = validator.escape(searchValue);
+        selectedSearchOption = validator.escape(selectedSearchOption);
+        selectedMethod = validator.escape(selectedMethod);
 
         let logs;
         

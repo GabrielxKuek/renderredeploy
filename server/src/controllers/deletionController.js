@@ -45,6 +45,9 @@ export async function readDeletionByDate(req, res) {
     const site_id = res.locals.site_id;
   //  const site_id = 1;
     const { date } = req.body;
+
+    date = validator.escape(date);
+
     const result = await deletionModel.selectDeletionByDate(site_id, date);
         
     const sanitizedResult = result.map(log => {
