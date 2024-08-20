@@ -135,8 +135,6 @@ export async function readAllRequestBySite(req, res) {
       return res.status(400).json({ error: 'Missing site_id' });
     }
 
-    searchValue = validator.escape(searchValue);
-
     const result = await requestModel.selectAllRequestBySite(site_id);
         
     const sanitizedResult = result.map(log => {
