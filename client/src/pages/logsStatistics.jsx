@@ -9,6 +9,7 @@ import BarChart from '@/components/barChart';
 import DonutChart from '@/components/doughnutChart';
 import DataCard from '@/components/dataCard';
 import { MoveDownLeftIcon } from 'lucide-react';
+import Cookies from 'js-cookie';
 
 const LogStatistics = () => {
 
@@ -20,6 +21,7 @@ const LogStatistics = () => {
         deletionLogs: [],
         requestLogs: []
     });
+    const jwt = Cookies.get('jwt');
     const apiUrl = import.meta.env[`VITE_G6_API_URL`];
     const [error, setError] = useState([]);
     const [creationLogs, setCreationLogs] = useState([]);
