@@ -22,8 +22,8 @@ export async function createModification(req, res) {
 
 export async function readModificationByAll(req, res) {
   try {
-    // const site_id = res.locals.site_id;
-   const site_id = 1;
+    const site_id = res.locals.site_id;
+  //  const site_id = 1;
 
     const result = await modificationModel.selectModificationByAll(site_id);
         
@@ -42,8 +42,8 @@ export async function readModificationByAll(req, res) {
 
 export async function readModificationByDate(req, res) {
   try {
-    // const site_id = res.locals.site_id;
-   const site_id = 1;
+    const site_id = res.locals.site_id;
+  //  const site_id = 1;
     const { date } = req.body;
         
     date = validator.escape(date);
