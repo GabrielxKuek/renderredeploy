@@ -6,7 +6,7 @@ import NavBarGroup1 from './Navbar.jsx';
 import Modal from 'react-modal';
 import Cookies from 'js-cookie';
 import { format, set } from 'date-fns';
-import ReactDatePicker from '../components/datePicker';
+//import ReactDatePicker from '../components/datePicker';
 
 Modal.setAppElement('#root');
 

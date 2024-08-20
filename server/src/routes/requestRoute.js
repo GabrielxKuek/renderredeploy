@@ -11,7 +11,7 @@ router.post('/input', jwtController.verifyToken, requestController.createRequest
 // select all request
 // ===================
 
-router.get('/viewAll', jwtController.verifyToken, requestController.readAllRequestBySite);
+router.get('/viewAll', /*jwtController.verifyToken,*/ requestController.readAllRequestBySite);
 router.get('/viewAllByDate', jwtController.verifyToken, requestController.readAllRequestByDate);
 router.get('/viewAllByIp', jwtController.verifyToken, requestController.readAllRequestByIp);
 router.get('/viewAllByOs', jwtController.verifyToken, requestController.readAllRequestByOs);

@@ -77,7 +77,11 @@ const LogStatistics = () => {
     const handleRadioChange = (event) => {
         setSelectedRadio(event.target.value);
     }
-    
+
+    const handleSearchChange = (searchValue) => {
+        setsearchValue(searchValue.target.value);
+    };
+
     const handleSearchSubmit = async (event) => {
         setLoading(true);
         event.preventDefault();
@@ -223,8 +227,8 @@ const LogStatistics = () => {
                             <input
                                 type="text"
                                 placeholder="Search..."
-                                value={searchValue}
-                                onChange={/*handleSearchChange*/null}
+                                defaultValue={searchValue}
+                                onChange={handleSearchChange}
                                 className="flex-grow px-4 py-2 border border-gray-300 rounded-l-md text-black"
                             />
                             <button

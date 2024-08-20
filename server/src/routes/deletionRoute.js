@@ -26,10 +26,10 @@ import * as jwtController from "../middlewares/jwtMiddleware.js";
 router.post("/input", jwtController.verifyToken, deletionController.createDeletion);
 
 // View all deletion logs
-router.get("/viewAll", jwtController.verifyToken, deletionController.readDeletionByAll);
+router.get("/viewAll", /*jwtController.verifyToken,*/ deletionController.readDeletionByAll);
 
 // View deletion logs by date
-router.get("/viewByDate", jwtController.verifyToken, deletionController.readDeletionByDate);
+router.get("/viewByDate", /*jwtController.verifyToken,*/ deletionController.readDeletionByDate);
 
 // ===================
 // deprecated

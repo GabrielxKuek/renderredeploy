@@ -107,8 +107,8 @@ export async function searchLogsRequest(req, res) {
 // Controller to handle creation logs
 export const getCreationLogs = async (req, res) => {
   try {
-       const site_id = res.locals.site_id;
-    //const site_id = 1;
+    //    const site_id = res.locals.site_id;
+    const site_id = 1;
     let { searchValue, selectedSearchOption } = req.query;
     searchValue = searchValue.trim();
     selectedSearchOption = selectedSearchOption.trim();
@@ -137,8 +137,8 @@ export const getCreationLogs = async (req, res) => {
 // Controller to handle modification logs
 export const getModificationLogs = async (req, res) => {
   try {
-       const site_id = res.locals.site_id;
-    //const site_id = 1;
+    //    const site_id = res.locals.site_id;
+    const site_id = 1;
     let { searchValue, selectedSearchOption } = req.query;
     searchValue = searchValue.trim();
     selectedSearchOption = selectedSearchOption.trim();
@@ -167,8 +167,8 @@ export const getModificationLogs = async (req, res) => {
 // Controller to handle deletion logs
 export const getDeletionLogs = async (req, res) => {
   try {
-       const site_id = res.locals.site_id;
-    //const site_id = 1;
+    //    const site_id = res.locals.site_id;
+    const site_id = 1;
     let { searchValue, selectedSearchOption } = req.query;
     searchValue = searchValue.trim();
     selectedSearchOption = selectedSearchOption.trim();
@@ -197,8 +197,8 @@ export const getDeletionLogs = async (req, res) => {
 // Controller to handle request logs
 export const getRequestLogs = async (req, res) => {
     try {
-        const site_id = res.locals.site_id;
-        // const site_id = 1;
+        // const site_id = res.locals.site_id;
+        const site_id = 1;
         let { searchValue, selectedSearchOption, selectedMethod } = req.query;
         searchValue = searchValue.trim();
         selectedSearchOption = selectedSearchOption.trim();
