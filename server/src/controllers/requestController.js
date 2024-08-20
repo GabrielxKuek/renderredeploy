@@ -9,7 +9,7 @@ import validator from 'validator';
 // export async function createRequest(req, res, next) {
 //   try {
 //     // Ensure req.logData and req.user are correctly set up before this middleware
-//     const { method: request_method, url: api_requested, status, responseTime, remoteAddr: user_ip, error_message } = req.logData || {};
+//     let { method: request_method, url: api_requested, status, responseTime, remoteAddr: user_ip, error_message } = req.logData || {};
 //     const user_id = req.user ? req.user.id : null; // Ensure req.user is set after authentication
 //     const site_id = req.body.site_id;
 //     const user_os = res.locals.user_os;
@@ -55,7 +55,7 @@ import validator from 'validator';
 
 export async function createRequest(req, res) { // note: logger i comment out cause theres no export
   try {
-    const { 
+    let { 
       user_id, 
       site_id, 
       request_method, 
@@ -154,7 +154,7 @@ export async function readAllRequestByDate(req, res) {
   try {
     const site_id = res.locals.site_id;
   //  const site_id = 1;
-    const { searchValue } = req.query;
+    let { searchValue } = req.query;
 
     if (!site_id || !searchValue) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -180,8 +180,8 @@ export async function readAllRequestByDate(req, res) {
 export async function readAllRequestByIp(req, res) {
   try {
     // const site_id = res.locals.site_id;
-   const site_id = 1;
-    const { searchValue } = req.query;
+    const site_id = 1;
+    let { searchValue } = req.query;
 
     if (!searchValue) {
       return res.status(400).json({ error: 'Missing IP address' });
@@ -208,7 +208,7 @@ export async function readAllRequestByOs(req, res) {
   try {
     const site_id = res.locals.site_id;
   //  const site_id = 1;
-    const { searchValue } = req.query;
+    let { searchValue } = req.query;
 
     if (!searchValue) {
       return res.status(400).json({ error: 'Missing OS' });
@@ -239,7 +239,7 @@ export async function readGetRequestByDate(req, res) {
   try {
     const site_id = res.locals.site_id;
   //  const site_id = 1;
-    const { searchValue } = req.query;
+    let { searchValue } = req.query;
 
     if (!site_id || !searchValue) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -266,7 +266,7 @@ export async function readGetRequestByIp(req, res) {
   try {
     const site_id = res.locals.site_id;
 //    const site_id = 1;
-    const { searchValue } = req.query;
+    let { searchValue } = req.query;
 
     if (!searchValue) {
       return res.status(400).json({ error: 'Missing IP address' });
@@ -293,7 +293,7 @@ export async function readGetRequestByOs(req, res) {
   try {
     const site_id = res.locals.site_id;
 //    const site_id = 1;
-    const { searchValue } = req.query;
+    let { searchValue } = req.query;
     console.log(searchValue)
 
     if (!searchValue) {
@@ -326,7 +326,7 @@ export async function readPostRequestByDate(req, res) {
   try {
     const site_id = res.locals.site_id;
 //    const site_id = 1;
-    const { searchValue } = req.query;
+    let { searchValue } = req.query;
 
     if (!site_id || !searchValue) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -353,7 +353,7 @@ export async function readPostRequestByIp(req, res) {
   try {
     const site_id = res.locals.site_id;
 //    const site_id = 1;
-    const { searchValue } = req.query;
+    let { searchValue } = req.query;
 
     if (!searchValue) {
       return res.status(400).json({ error: 'Missing IP address' });
@@ -380,7 +380,7 @@ export async function readPostRequestByOs(req, res) {
   try {
     const site_id = res.locals.site_id;
 //    const site_id = 1;
-    const { searchValue } = req.query;
+    let { searchValue } = req.query;
 
     if (!searchValue) {
       return res.status(400).json({ error: 'Missing OS' });
@@ -411,7 +411,7 @@ export async function readPutRequestByDate(req, res) {
   try {
     const site_id = res.locals.site_id;
 //    const site_id = 1;
-    const { searchValue } = req.query;
+    let { searchValue } = req.query;
 
     if (!site_id || !searchValue) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -438,7 +438,7 @@ export async function readPutRequestByIp(req, res) {
   try {
     const site_id = res.locals.site_id;
 //    const site_id = 1;
-    const { searchValue } = req.query;
+    let { searchValue } = req.query;
 
     if (!searchValue) {
       return res.status(400).json({ error: 'Missing IP address' });
@@ -465,7 +465,7 @@ export async function readPutRequestByOs(req, res) {
   try {
     const site_id = res.locals.site_id;
 //    const site_id = 1;
-    const { searchValue } = req.query;
+    let { searchValue } = req.query;
 
     if (!searchValue) {
       return res.status(400).json({ error: 'Missing OS' });
@@ -496,7 +496,7 @@ export async function readDeleteRequestByDate(req, res) {
   try {
     const site_id = res.locals.site_id;
 //    const site_id = 1;
-    const { searchValue } = req.query;
+    let { searchValue } = req.query;
 
     if (!site_id || !searchValue) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -523,7 +523,7 @@ export async function readDeleteRequestByIp(req, res) {
   try {
     const site_id = res.locals.site_id;
 //    const site_id = 1;
-    const { searchValue } = req.query;
+    let { searchValue } = req.query;
 
     if (!searchValue) {
       return res.status(400).json({ error: 'Missing IP address' });
@@ -550,7 +550,7 @@ export async function readDeleteRequestByOs(req, res) {
   try {
     const site_id = res.locals.site_id;
 //    const site_id = 1;
-    const { searchValue } = req.query;
+    let { searchValue } = req.query;
 
     if (!searchValue) {
       return res.status(400).json({ error: 'Missing OS' });
