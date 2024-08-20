@@ -75,6 +75,8 @@ export async function readCreationByDate (req, res) {
     // const site_id = 1;
     const { date } = req.body;
 
+    date = validator.escape(date);
+
     const result = await creationModel.selectCreationByDate(site_id, date);
         
     const sanitizedResult = result.map(log => {

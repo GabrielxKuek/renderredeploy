@@ -208,10 +208,6 @@ export const getRequestLogs = async (req, res) => {
             throw new Error('Missing search parameters');
         }
 
-        searchValue = validator.escape(searchValue);
-        selectedSearchOption = validator.escape(selectedSearchOption);
-        selectedMethod = validator.escape(selectedMethod);
-
         let logs;
         
         if (selectedMethod) {
