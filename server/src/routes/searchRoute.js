@@ -24,16 +24,16 @@ import * as jwtController from "../middlewares/jwtMiddleware.js";
 // ===================
 
 // Search creation logs
-router.get("/creation", /*jwtController.verifyToken,*/ searchController.getCreationLogs);
+router.get("/creation", jwtController.verifyToken, searchController.getCreationLogs);
 
 // Search modificaton logs
-router.get("/modification", /*jwtController.verifyToken,*/ searchController.getModificationLogs);
+router.get("/modification", jwtController.verifyToken, searchController.getModificationLogs);
 
 // Search deletion logs
-router.get("/deletion", /*jwtController.verifyToken,*/ searchController.getDeletionLogs);
+router.get("/deletion", jwtController.verifyToken, searchController.getDeletionLogs);
 
 // Search request logs
-router.get("/request", /*jwtController.verifyToken,*/ searchController.getRequestLogs);
+router.get("/request", jwtController.verifyToken, searchController.getRequestLogs);
 
 // ===================
 // authentication - deprecated

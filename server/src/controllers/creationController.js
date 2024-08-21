@@ -53,6 +53,8 @@ export async function readCreationByAll (req, res) {
     const site_id = res.locals.site_id;
     // const site_id = 1;
 
+    console.log(site_id)
+
     const result = await creationModel.selectCreationByAll(site_id);
         
     const sanitizedResult = result.map(log => {

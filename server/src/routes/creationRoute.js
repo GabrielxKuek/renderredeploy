@@ -23,10 +23,10 @@ import * as jwtController from "../middlewares/jwtMiddleware.js";
 router.post("/input", jwtController.verifyToken, creationController.createCreation, logRequestMiddleware);
 
 // View all creation logs
-router.get("/viewAll", /*jwtController.verifyToken,*/ creationController.readCreationByAll);
+router.get("/viewAll", jwtController.verifyToken, creationController.readCreationByAll);
 
 // View creation log by date
-router.get("/viewByDate", /*jwtController.verifyToken,*/ creationController.readCreationByDate);
+router.get("/viewByDate", jwtController.verifyToken, creationController.readCreationByDate);
 
 // ===================
 // deprecated
