@@ -179,8 +179,8 @@ export async function readAllRequestByDate(req, res) {
 
 export async function readAllRequestByIp(req, res) {
   try {
-    // const site_id = res.locals.site_id;
-    const site_id = 1;
+    const site_id = res.locals.site_id;
+    // const site_id = 1;
     let { searchValue } = req.query;
 
     if (!searchValue) {
